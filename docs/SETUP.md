@@ -33,6 +33,43 @@ Set these under Settings → Secrets and variables → Actions. The deploy and k
 
 The keep-alive workflow skips itself until they exist.
 
+## Database
+
+The Supabase CLI is a dev dependency, so log in once and link the project in your own terminal:
+
+```bash
+npx supabase login
+npx supabase link --project-ref <project-ref>
+```
+
+```bash
+npm run db:push    # apply supabase/migrations to the linked project
+npm run db:test    # run the pgTAP tests, rolled back after each run, no Docker needed
+npm run db:types   # regenerate src/lib/database.types.ts
+```
+
+Run the migrations on prod before setting the GitHub secrets: the keep-alive workflow calls the `keep_alive` function from them.
+
+## Importing the sheet
+
+The input stays in the gitignored `data/` folder, because the repo is public:
+
+- `dnb events - Data.csv`: the sheet
+- `event-dates.csv`: `year,promoter,event,city,location,date_start,date_end,confidence,source,note`, one row per event
+- `import-overrides.json`: optional `cityCountries`, `venues`, `b2b`, `groups` and `series`
+
+The script only writes `data/import.sql` and `data/import-review.md`. Read the review list, then apply the SQL. Repeating an import doesn't create duplicates.
+
+```bash
+npm run import:sheet -- --dev-admin
+```
+
+```bash
+npx supabase db query --remote -f data/import.sql
+```
+
+`--dev-admin` creates a placeholder admin for the dev project. On prod, log in with Google first and pass `--admin <your profile id>` instead.
+
 ## Keep-alive caveat
 
 GitHub disables scheduled workflows in public repositories after 60 days without repository activity. It warns by email first. If that happens during a quiet stretch, re-enable the workflow under Actions or push a commit.

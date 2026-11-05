@@ -13,7 +13,9 @@ The full specification is in [docs/SPEC.md](docs/SPEC.md). Read the relevant cha
 - `src/styles/index.css`: design tokens as CSS variables, mapped to the Tailwind theme
 - `public/`: generated icons and splash screens (`npm run brand`)
 - `e2e/`: Playwright tests
-- `scripts/`: build and generator scripts
+- `scripts/`: build, generator, database test and import scripts
+- `supabase/migrations/`: the database schema, `supabase/tests/database/`: pgTAP tests
+- `data/`: private import data, gitignored because the repo is public. Never commit it.
 - `.github/workflows/`: deploy to GitHub Pages, Supabase keep-alive
 
 ## Conventions
@@ -38,6 +40,10 @@ npm run test:e2e    # Playwright (builds and serves the app itself)
 npm run build       # production build in dist/, including the 404.html SPA fallback
 npm run preview     # serve the production build locally
 npm run brand       # regenerate logo, icons and splash screens
+npm run db:push     # apply migrations to the linked Supabase project
+npm run db:test     # pgTAP tests against the linked project, rolled back
+npm run db:types    # regenerate src/lib/database.types.ts
+npm run import:sheet # build data/import.sql and the review list
 ```
 
 Deployment happens through GitHub Actions on every push to `main`.

@@ -90,14 +90,16 @@ The core chain is series → event → floor → set → set artists. A user che
 | `venues` | Location | name, city, country\_code, lat, lng, venue\_type (club, warehouse, open\_air, festival\_site, castle, pool, boat, other), status |
 | `promoters` | Promoter or collective | name, slug, instagram\_url, status |
 | `event_series` | Recurring series (Beatpatrol, Error) | name, slug, default\_promoter\_id |
-| `events` | One specific edition | series\_id?, name, date\_start, date\_end (multi-day), venue\_id, event\_tag\_ids\[\], status, lifecycle (scheduled, cancelled, postponed – cancelled and postponed events are neither visible nor available for check-in) |
+| `events` | One specific edition | series\_id?, name, date\_start, date\_end (multi-day), venue\_id, status, lifecycle (scheduled, cancelled, postponed – cancelled and postponed events are neither visible nor available for check-in) |
 | `event_promoters` | n:m for co-hosts | event\_id, promoter\_id |
 | `floors` | Floors or stages of an event | event\_id, name, sort |
-| `artists` | Person or group | name, slug, kind (person, group), country\_code (admin-maintained), instagram\_url, avatar\_path? (only with permission), default\_genre\_ids\[\], claimed\_by\_user\_id?, status |
+| `artists` | Person or group | name, slug, kind (person, group), country\_code (admin-maintained), instagram\_url, avatar\_path? (only with permission), claimed\_by\_user\_id?, status |
 | `artist_aliases` | Spellings | artist\_id, alias (unique, normalized) |
 | `artist_members` | Group → persons | group\_id, member\_id |
 | `genres` | Curated tree | name, parent\_id (Electronic → Drum & Bass → Neurofunk) |
 | `sets` | One performance | event\_id, floor\_id?, set\_type (solo, b2b, b2b2b, f2f, live, hybrid), start\_at?, end\_at?, status |
+| `artist_default_genres` | Artist → genres | artist\_id, genre\_id |
+| `event_event_tags` | Event → tags | event\_id, tag\_id |
 | `set_artists` | Who plays | set\_id, artist\_id, role (dj, live, mc) |
 | `tags` | Curated tags | name, scope (set, event), status (users can propose, admin approves) |
 
@@ -108,8 +110,9 @@ The core chain is series → event → floor → set → set artists. A user che
 | `profiles` | User | username (unique, used in link and QR), display\_name, avatar\_path, home\_city?, birth\_year (minimum age 16), role (user, moderator, admin), language, privacy jsonb |
 | `friendships` | Mutual | user\_a, user\_b, status (pending, accepted), requested\_by |
 | `invite_codes` | Beta access | code, created\_by, max\_uses, used\_count, expires\_at |
-| `event_checkins` | I was there | user\_id, event\_id, rating? (0–5, 0.5 steps), rating\_sound?, rating\_crowd?, rating\_location?, rating\_lineup?, text?, visibility, verified\_gps, verified\_admin, created\_at, client\_uuid (offline dedupe) |
-| `set_checkins` | A set seen | event\_checkin\_id, set\_id, rating (required), text?, genre\_ids\[\] (override), tag\_ids\[\] |
+| `event_checkins` | I was there | user\_id, event\_id, rating? (0–5, 0.5 steps), rating\_sound?, rating\_crowd?, rating\_location?, rating\_lineup?, text?, visibility, verified\_gps, verified\_admin, imported, created\_at, client\_uuid (offline dedupe) |
+| `set_checkins` | A set seen | event\_checkin\_id, set\_id, rating (required, except for imported history), text?, imported |
+| `set_checkin_genres` / `set_checkin_tags` | Genre override and tags of a set check-in | set\_checkin\_id, genre\_id / tag\_id |
 | `checkin_companions` | "with @lisa" | event\_checkin\_id, user\_id, status (tagged, adopted) |
 | `media` | Photo | owner\_id, event\_checkin\_id, set\_checkin\_id?, storage\_path, moderation\_status |
 | `reactions` | Bassface, Dance, Fire | user\_id, target\_type (event\_checkin, set\_checkin), target\_id, kind – unique per user and target |
@@ -133,7 +136,7 @@ The core chain is series → event → floor → set → set artists. A user che
 - **Counting:** a B2B counts as "seen" for every artist involved. A group set counts for the group and additionally for each member (Camo & Krooked → also Camo and Krooked). Members' solo sets and specific B2B combinations stay queryable via `set_artists`.
 - **RLS:** all logged-in users read `approved`; `pending` only the creator, moderators and admins. Check-ins and media follow visibility (public, friends, private), blocks and moderation status. Writes to master data only as `pending` or via `change_requests`.
 - **Stats:** views and materialized views per user (refreshed after check-ins and via `pg_cron`). The explorer calls an RPC with whitelisted dimensions and filters, never free-form SQL from the client.
-- **Import:** a script reads Daniel's sheet as CSV with the columns Date (yyyy-mm-dd), End Date (optional, yyyy-mm-dd), Promoter, Event, City, Location, Artist, Lat, Long (decimal comma in coordinates). It creates venues, promoters, series, events, sets and artists and writes a review list of anomalies (different coordinates per venue, venues sharing coordinates, events without artists, similar names).
+- **Import:** a script reads Daniel's sheet as CSV with the columns Jahr, Promoter, Event, Ort, Location, Artist, Lat, Long (decimal comma in coordinates), a separate list with the exact date of every event, and optional corrections. An event without a valid date stops the import. It creates venues, promoters, series, events, sets and artists plus Daniel's event and set check-ins, which are marked as imported and have no rating, and writes a review list of anomalies (different coordinates per venue, venues sharing coordinates, events without artists, similar names). All of this lives in the gitignored `data/` folder because the repo is public.
 
 ## Features
 
@@ -483,8 +486,8 @@ Read docs/SPEC.md, chapters "Data Model" and "Legal & Compliance". Implement pha
 3. RLS policies exactly as specified (approved readable by all logged-in users, pending only by creator/moderators/admins, check-ins and photos by visibility, blocks and moderation status, private_checkin_data owner-only). pgTAP tests for the key policies.
 4. Merge functions merge_artist, merge_venue, merge_promoter, merge_event (admin only), writing to admin_audit_log.
 5. Seeds: genre tree (Electronic → Drum & Bass with Liquid, Neurofunk, Jump Up, Dancefloor, Jungle, Rollers/Minimal, Deep, Halftime, Crossbreed, Techstep, Drumfunk; plus Techno, House, Dubstep, Trance, Hardstyle, Bass House and Breaks with sensible subgenres), set tags and event tags from the spec.
-6. Import script (Node/TS) for my CSV with the columns Date (yyyy-mm-dd), End Date (optional, yyyy-mm-dd), Promoter, Event, City, Location, Artist, Lat, Long (coordinates use a decimal comma). It creates venues, promoters, series, events and sets. Detect names containing " & " as possible groups, but list them in the review file so I can decide duo vs. B2B. Everything imported is approved and owned by the admin user (from an env var).
-7. The script writes docs/import-review.md with: venues with differing coordinates, different venues sharing coordinates, events without artists, similarly spelled names (trigram > 0.6), and rows with missing or invalid dates.
+6. Import script (Node) for my CSV with the columns Jahr, Promoter, Event, Ort, Location, Artist, Lat, Long (coordinates use a decimal comma) plus a separate date list. It creates venues, promoters, series, events, sets and my imported check-ins. Detect names containing " & " as possible groups, but list them in the review file so I can decide duo vs. B2B. Everything imported is approved and owned by the admin user (from an env var).
+7. The script writes data/import-review.md (gitignored, the repo is public) with: venues with differing coordinates, different venues sharing coordinates, events without artists, similarly spelled names (trigram > 0.6), and rows with missing or invalid dates.
 8. Generate TypeScript types from the schema.
 
 At the end: summary, open points, and how to run the import locally and against dev.

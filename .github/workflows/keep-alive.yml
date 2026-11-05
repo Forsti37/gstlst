@@ -22,13 +22,13 @@ jobs:
             echo "::notice::Supabase secrets are not set yet, skipping."
             exit 0
           fi
-          status=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 \
+          status=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
             -H "apikey: $SUPABASE_KEY" \
-            "$SUPABASE_URL/rest/v1/genres?select=id&limit=1")
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            "$SUPABASE_URL/rest/v1/rpc/keep_alive")
           echo "HTTP $status"
-          # 404 only means the genres table doesn't exist yet: it arrives in phase 1.
-          # Phase 1 should narrow this to 200 only.
-          case "$status" in
-            200|404) exit 0 ;;
-            *) echo "::error::Keep-alive query failed with HTTP $status"; exit 1 ;;
-          esac
+          if [ "$status" != "200" ]; then
+            echo "::error::Keep-alive query failed with HTTP $status"
+            exit 1
+          fi
