@@ -1,0 +1,28 @@
+{
+  "brand": { "tagline": "Every set counts." },
+  "nav": {
+    "label": "Hauptnavigation",
+    "feed": "Feed",
+    "discover": "Entdecken",
+    "checkin": "Check-in",
+    "inbox": "Inbox",
+    "profile": "Profil"
+  },
+  "pages": {
+    "feed": { "body": "Hier landen die Check-ins deiner Freunde." },
+    "discover": { "body": "Hier findest du bald Events, Artists und Venues." },
+    "checkin": { "body": "Bald: in ein Event einchecken und jedes Set in unter 30 Sekunden bewerten." },
+    "inbox": { "body": "Noch nichts da. Freundschaftsanfragen und Reactions landen hier." },
+    "profile": { "body": "Hier wohnen bald deine Stats, Badges und deine Rave-Karte." },
+    "notFound": { "title": "Nicht auf der Liste", "body": "Diese Seite gibt es nicht.", "back": "Zurück zum Feed" }
+  },
+  "language": { "label": "Sprache", "en": "English", "de": "Deutsch" },
+  "install": {
+    "title": "GSTLST installieren",
+    "native": "Füg die App zum Home-Bildschirm hinzu, dann läuft alles rund.",
+    "action": "Installieren",
+    "dismiss": "Schließen",
+    "iosSafari": "Tippe auf <share>Teilen</share>, dann auf „Zum Home-Bildschirm“.",
+    "iosOther": "Öffne diese Seite in Safari, um sie zum Home-Bildschirm hinzuzufügen."
+  }
+}

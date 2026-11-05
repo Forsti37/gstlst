@@ -1,0 +1,28 @@
+{
+  "brand": { "tagline": "Every set counts." },
+  "nav": {
+    "label": "Main navigation",
+    "feed": "Feed",
+    "discover": "Discover",
+    "checkin": "Check-in",
+    "inbox": "Inbox",
+    "profile": "Profile"
+  },
+  "pages": {
+    "feed": { "body": "Your friends' check-ins will land here." },
+    "discover": { "body": "Events, artists and venues will show up here." },
+    "checkin": { "body": "Soon: check in to an event and rate every set in under 30 seconds." },
+    "inbox": { "body": "Nothing yet. Friend requests and reactions will land here." },
+    "profile": { "body": "Your stats, badges and rave map will live here." },
+    "notFound": { "title": "Not on the list", "body": "This page doesn't exist.", "back": "Back to the feed" }
+  },
+  "language": { "label": "Language", "en": "English", "de": "Deutsch" },
+  "install": {
+    "title": "Install GSTLST",
+    "native": "Add the app to your home screen for the full experience.",
+    "action": "Install",
+    "dismiss": "Dismiss",
+    "iosSafari": "Tap <share>Share</share>, then “Add to Home Screen”.",
+    "iosOther": "Open this page in Safari to add it to your home screen."
+  }
+}

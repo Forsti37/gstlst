@@ -1,0 +1,77 @@
+@import 'tailwindcss';
+
+/* Design tokens from docs/SPEC.md, "Design system". Dark is the default. */
+:root {
+  --gst-bg: #000000;
+  --gst-surface-1: #0e0e10;
+  --gst-surface-2: #1a1a1d;
+  --gst-text-primary: #f5f5f5;
+  --gst-text-secondary: #9a9aa0;
+  --gst-red: #ff2d3d; /* own actions: check-in button, own stats */
+  --gst-blue: #2d6bff; /* social: friends, reactions, feed switch */
+  --gst-nav-height: 4.5rem;
+  color-scheme: dark;
+}
+
+/* Optional light mode. Nothing sets this attribute yet. */
+:root[data-theme='light'] {
+  --gst-bg: #ffffff;
+  --gst-surface-1: #f4f4f5;
+  --gst-surface-2: #e8e8ea;
+  --gst-text-primary: #0a0a0b;
+  --gst-text-secondary: #5c5c63;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--gst-bg);
+  --color-surface-1: var(--gst-surface-1);
+  --color-surface-2: var(--gst-surface-2);
+  --color-text-primary: var(--gst-text-primary);
+  --color-text-secondary: var(--gst-text-secondary);
+  --color-red: var(--gst-red);
+  --color-blue: var(--gst-blue);
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --spacing-touch: 3rem; /* minimum touch target: 48px */
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background: var(--gst-bg);
+    color: var(--gst-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--gst-text-primary);
+    outline-offset: 2px;
+  }
+}
+
+@utility brand-offset {
+  /* The recurring brand motif: red and blue as left and right stereo channels. */
+  text-shadow:
+    -0.04em 0 0 var(--gst-red),
+    0.04em 0 0 var(--gst-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
