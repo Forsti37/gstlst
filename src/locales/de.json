@@ -1,5 +1,15 @@
 {
-  "brand": { "tagline": "Every set counts." },
+  "brand": {
+    "tagline": "Every set counts."
+  },
+  "common": {
+    "loading": "Lädt …",
+    "retry": "Nochmal versuchen",
+    "ok": "OK",
+    "save": "Speichern",
+    "saved": "Gespeichert.",
+    "actionFailed": "Das hat nicht geklappt. Bitte versuch es nochmal."
+  },
   "nav": {
     "label": "Hauptnavigation",
     "feed": "Feed",
@@ -9,14 +19,153 @@
     "profile": "Profil"
   },
   "pages": {
-    "feed": { "body": "Hier landen die Check-ins deiner Freunde." },
-    "discover": { "body": "Hier findest du bald Events, Artists und Venues." },
-    "checkin": { "body": "Bald: in ein Event einchecken und jedes Set in unter 30 Sekunden bewerten." },
-    "inbox": { "body": "Noch nichts da. Freundschaftsanfragen und Reactions landen hier." },
-    "profile": { "body": "Hier wohnen bald deine Stats, Badges und deine Rave-Karte." },
-    "notFound": { "title": "Nicht auf der Liste", "body": "Diese Seite gibt es nicht.", "back": "Zurück zum Feed" }
+    "feed": {
+      "body": "Hier landen die Check-ins deiner Freunde."
+    },
+    "discover": {
+      "body": "Hier findest du bald Events, Artists und Venues."
+    },
+    "checkin": {
+      "body": "Bald: in ein Event einchecken und jedes Set in unter 30 Sekunden bewerten."
+    },
+    "inbox": {
+      "body": "Noch nichts da. Freundschaftsanfragen und Reactions landen hier."
+    },
+    "profile": {
+      "body": "Hier wohnen bald deine Stats, Badges und deine Rave-Karte."
+    },
+    "notFound": {
+      "title": "Nicht auf der Liste",
+      "body": "Diese Seite gibt es nicht.",
+      "back": "Zurück zum Feed"
+    }
   },
-  "language": { "label": "Sprache", "en": "English", "de": "Deutsch" },
+  "auth": {
+    "signInWithGoogle": "Weiter mit Google",
+    "inviteOnly": "Vorerst nur mit Einladung. Den Code gibst du nach der Anmeldung ein.",
+    "inviteReady": "Deine Einladung ist gespeichert. Melde dich an, um weiterzumachen.",
+    "notAvailable": "Die Anmeldung ist noch nicht verfügbar.",
+    "signInFailed": "Die Anmeldung hat nicht geklappt. Bitte versuch es nochmal.",
+    "loadFailed": "Wir konnten dein Konto nicht laden."
+  },
+  "onboarding": {
+    "title": "Du stehst auf der Liste",
+    "intro": "Noch ein paar Angaben, dann bist du drin.",
+    "inviteCode": "Einladungscode",
+    "username": "Username",
+    "usernameHint": "Kleinbuchstaben, Zahlen, _ und . Dein Link und QR-Code hängen daran, deshalb kannst du ihn später nicht ändern.",
+    "displayName": "Anzeigename",
+    "birthYear": "Geburtsjahr",
+    "birthYearHint": "GSTLST ist ab 16. Das ersetzt keine Alterskontrollen bei Events.",
+    "accept": "Ich akzeptiere die <terms>Nutzungsbedingungen</terms> und die <privacy>Datenschutzerklärung</privacy>.",
+    "submit": "Reinkommen",
+    "otherAccount": "Anderes Google-Konto verwenden",
+    "tooYoungTitle": "Komm mit 16 wieder",
+    "tooYoungBody": "GSTLST ist für Menschen ab 16. Wir haben dein Geburtsjahr nicht gespeichert, und dein Login wird entfernt.",
+    "errors": {
+      "invalid_invite": "Dieser Einladungscode ist ungültig oder schon aufgebraucht.",
+      "too_young": "GSTLST ist für Menschen ab 16.",
+      "username_taken": "Dieser Username ist schon vergeben.",
+      "invalid_username": "Nimm 3 bis 30 Kleinbuchstaben, Zahlen, _ oder .",
+      "terms_not_accepted": "Bitte akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
+      "unknown": "Das hat nicht geklappt. Bitte versuch es nochmal."
+    }
+  },
+  "profile": {
+    "friends_one": "{{count}} Freund",
+    "friends_other": "{{count}} Freunde",
+    "shareTitle": "Dein Link",
+    "share": "Teilen",
+    "saveQr": "QR-Code speichern",
+    "qrAlt": "QR-Code zum Profil von {{username}}"
+  },
+  "friends": {
+    "title": "Freunde",
+    "search": "Leute finden",
+    "searchHint": "Suche nach Username. Private Profile lassen sich nur per Link oder QR-Code hinzufügen.",
+    "noResults": "Niemand gefunden.",
+    "requests": "Anfragen",
+    "yourFriends": "Deine Freunde",
+    "empty": "Noch keine Freunde. Teil deinen Link, um loszulegen.",
+    "sent": "Gesendet",
+    "blocked": "Blockiert",
+    "accept": "Annehmen",
+    "decline": "Ablehnen",
+    "cancel": "Anfrage zurückziehen",
+    "unblock": "Entblocken"
+  },
+  "user": {
+    "addFriend": "Als Freund hinzufügen",
+    "removeFriend": "Freund entfernen",
+    "block": "Blockieren",
+    "blockConfirm": "{{name}} blockieren? Ihr seid dann gegenseitig ausgeblendet, und eine Freundschaft endet.",
+    "notFoundTitle": "Nicht auf der Liste",
+    "notFoundBody": "Wir konnten diese Person nicht finden."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "profile": "Profil",
+    "changePhoto": "Foto ändern",
+    "homeCity": "Heimatregion",
+    "homeCityHint": "Nur die Stadt, optional. Wird nur für deine gesamte Reisedistanz verwendet und nie einzeln angezeigt.",
+    "privacy": "Privatsphäre",
+    "privacyIntro": "Deine Profil-Einstellung ist die Obergrenze für alle Bereiche. Privat heißt nur du, auch nicht deine Freunde. Für einzelne Check-ins kannst du das überschreiben.",
+    "areas": {
+      "profile": "Profil",
+      "stats": "Stats",
+      "checkins": "Check-ins",
+      "photos": "Fotos",
+      "badges": "Badges",
+      "map": "Karte"
+    },
+    "levels": {
+      "public": "Öffentlich",
+      "friends": "Freunde",
+      "private": "Nur ich"
+    },
+    "yourData": "Deine Daten",
+    "export": "Meine Daten als JSON exportieren",
+    "deleteBody": "Wenn du dein Konto löschst, sind deine Fotos, Check-ins, Reactions und Freundschaften endgültig weg. Von dir angelegte Events und Artists bleiben, aber ohne deinen Namen.",
+    "deleteConfirm": "Tippe {{username}} zur Bestätigung",
+    "delete": "Mein Konto löschen",
+    "signOut": "Abmelden"
+  },
+  "admin": {
+    "title": "Admin",
+    "invites": "Einladungscodes",
+    "maxUses": "Maximale Nutzungen",
+    "expires": "Läuft ab am (optional)",
+    "createInvite": "Einladungscode erstellen",
+    "existing": "Vorhandene Codes",
+    "used": "{{used}} von {{max}} genutzt",
+    "until": "bis {{date}}",
+    "copyLink": "Link kopieren",
+    "delete": "Löschen",
+    "copied": "Kopiert",
+    "copyFailed": "Kopiere diesen Link von Hand:"
+  },
+  "legal": {
+    "label": "Rechtliches",
+    "back": "Zurück",
+    "placeholder": "Platzhalter für die Friends-Beta. Dieser Text ist noch nicht rechtlich geprüft.",
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "body": "Verantwortlich: [Name und Adresse ergänzen]\n\nWas wir speichern: deinen Google-Login, Username, Anzeigenamen, dein Geburtsjahr, optional Heimatregion und Foto sowie deine Check-ins. Dein Standort wird nur geprüft, um festzustellen, ob du in der Nähe einer Venue bist. Gespeichert wird nur das Ergebnis, nie der Standort. Fotos verlieren vor dem Upload ihre Metadaten.\n\nWo: Supabase, EU-Region (Frankfurt). Es gibt kein Tracking und keine Analyse-Cookies.\n\nDeine Rechte: Du kannst deine Daten jederzeit in den Einstellungen als JSON exportieren und dein Konto löschen. Weitere Rechte und die Rechtsgrundlagen hier ergänzen."
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "body": "GSTLST ist ab 16. Die App ersetzt keine Alterskontrollen bei Events.\n\nFotos: Lade nur Fotos hoch, die du teilen darfst, und keine Nahaufnahmen von Fremden ohne deren Zustimmung. Andere sehen Fotos erst nach einer Freigabe, und wir können Inhalte entfernen.\n\nMelden: Nutze den Melden-Button bei Fotos und Profilen. Gemeldete Inhalte sind bis zur Prüfung ausgeblendet.\n\nWeitere Bedingungen hier ergänzen."
+    },
+    "imprint": {
+      "title": "Impressum",
+      "body": "Offenlegung nach österreichischem Recht:\n\n[Name]\n[Adresse]\n[Kontakt]"
+    }
+  },
+  "language": {
+    "label": "Sprache",
+    "en": "English",
+    "de": "Deutsch"
+  },
   "install": {
     "title": "GSTLST installieren",
     "native": "Füg die App zum Home-Bildschirm hinzu, dann läuft alles rund.",

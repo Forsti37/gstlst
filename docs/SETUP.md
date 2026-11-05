@@ -19,7 +19,7 @@ The app shell runs without Supabase. To connect a project, copy `.env.example` t
 
 1. In the Google Cloud Console, create an OAuth client of type "Web application".
 2. Add `https://<project-ref>.supabase.co/auth/v1/callback` as a redirect URI for both projects.
-3. Enter the client ID and secret under Authentication → Providers → Google in Supabase.
+3. Enter the client ID and secret under Authentication → Sign In / Providers → Google in Supabase, and turn off the Email provider there: GSTLST logs in with Google only.
 4. Under Authentication → URL Configuration, allow `https://forsti37.github.io/gstlst/` (prod) and `http://localhost:5173/gstlst/` (dev).
 
 ## GitHub secrets
@@ -69,6 +69,22 @@ npx supabase db query --remote -f data/import.sql
 ```
 
 `--dev-admin` creates a placeholder admin for the dev project. On prod, log in with Google first and pass `--admin <your profile id>` instead.
+
+## The first admin
+
+Nobody can sign up without an invite, and only admins create invites, so the first one comes from SQL:
+
+```bash
+npx supabase db query --remote "insert into public.invite_codes (code) values (encode(extensions.gen_random_bytes(6), 'hex')) returning code"
+```
+
+Sign up with that code, then give your profile the admin role:
+
+```bash
+npx supabase db query --remote "update public.profiles set role = 'admin' where username = '<your username>'"
+```
+
+From then on, create invites under Settings → Admin → Invite codes.
 
 ## Keep-alive caveat
 

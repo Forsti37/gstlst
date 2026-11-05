@@ -1,27 +1,48 @@
+import { Settings, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { PlaceholderPage } from '../../app/PlaceholderPage'
-import { SUPPORTED_LANGUAGES } from '../../lib/i18n'
+import { Link } from 'react-router'
+import { Section } from '../../app/ui'
+import { useMember } from '../auth/auth'
+import { useFriendships } from '../friends/api'
+import { ShareCard } from './ShareCard'
+import { UserAvatar } from './UserAvatar'
+
+const ROW = 'flex min-h-touch items-center gap-3 rounded-lg bg-surface-1 px-4 font-medium'
 
 export function ProfilePage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const me = useMember()
+  const friendships = useFriendships()
+  const friendCount = friendships.data?.filter((f) => f.status === 'accepted').length ?? 0
+  const requestCount = friendships.data?.filter((f) => f.status === 'pending' && f.requested_by !== me.id).length ?? 0
+
   return (
-    <PlaceholderPage title={t('nav.profile')} body={t('pages.profile.body')}>
-      <fieldset className="mt-8">
-        <legend className="mb-2 text-sm text-text-secondary">{t('language.label')}</legend>
-        <div className="flex gap-2">
-          {SUPPORTED_LANGUAGES.map((language) => (
-            <button
-              key={language}
-              type="button"
-              aria-pressed={i18n.resolvedLanguage === language}
-              onClick={() => void i18n.changeLanguage(language)}
-              className="min-h-touch rounded-lg bg-surface-2 px-4 font-medium text-text-secondary aria-pressed:bg-text-primary aria-pressed:text-bg"
-            >
-              {t(`language.${language}`)}
-            </button>
-          ))}
+    <div className="px-4 py-6">
+      <div className="flex items-center gap-4">
+        <UserAvatar path={me.avatar_path} name={me.display_name} size="lg" />
+        <div className="min-w-0">
+          <h1 className="truncate text-2xl font-semibold">{me.display_name}</h1>
+          <p className="truncate text-text-secondary">@{me.username}</p>
         </div>
-      </fieldset>
-    </PlaceholderPage>
+      </div>
+
+      <div className="mt-6 space-y-2">
+        <Link to="/friends" className={ROW}>
+          <Users aria-hidden className="size-5 text-blue" />
+          <span className="flex-1">{t('profile.friends', { count: friendCount })}</span>
+          {requestCount > 0 && <span className="rounded-full bg-blue px-2 text-sm text-white">{requestCount}</span>}
+        </Link>
+        <Link to="/settings" className={ROW}>
+          <Settings aria-hidden className="size-5 text-text-secondary" />
+          <span className="flex-1">{t('settings.title')}</span>
+        </Link>
+      </div>
+
+      <Section title={t('profile.shareTitle')}>
+        <ShareCard username={me.username} />
+      </Section>
+
+      <p className="mt-8 text-text-secondary">{t('pages.profile.body')}</p>
+    </div>
   )
 }

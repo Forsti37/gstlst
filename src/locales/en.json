@@ -1,5 +1,15 @@
 {
-  "brand": { "tagline": "Every set counts." },
+  "brand": {
+    "tagline": "Every set counts."
+  },
+  "common": {
+    "loading": "Loading…",
+    "retry": "Try again",
+    "ok": "OK",
+    "save": "Save",
+    "saved": "Saved.",
+    "actionFailed": "That didn't work. Please try again."
+  },
   "nav": {
     "label": "Main navigation",
     "feed": "Feed",
@@ -9,14 +19,153 @@
     "profile": "Profile"
   },
   "pages": {
-    "feed": { "body": "Your friends' check-ins will land here." },
-    "discover": { "body": "Events, artists and venues will show up here." },
-    "checkin": { "body": "Soon: check in to an event and rate every set in under 30 seconds." },
-    "inbox": { "body": "Nothing yet. Friend requests and reactions will land here." },
-    "profile": { "body": "Your stats, badges and rave map will live here." },
-    "notFound": { "title": "Not on the list", "body": "This page doesn't exist.", "back": "Back to the feed" }
+    "feed": {
+      "body": "Your friends' check-ins will land here."
+    },
+    "discover": {
+      "body": "Events, artists and venues will show up here."
+    },
+    "checkin": {
+      "body": "Soon: check in to an event and rate every set in under 30 seconds."
+    },
+    "inbox": {
+      "body": "Nothing yet. Friend requests and reactions will land here."
+    },
+    "profile": {
+      "body": "Your stats, badges and rave map will live here."
+    },
+    "notFound": {
+      "title": "Not on the list",
+      "body": "This page doesn't exist.",
+      "back": "Back to the feed"
+    }
   },
-  "language": { "label": "Language", "en": "English", "de": "Deutsch" },
+  "auth": {
+    "signInWithGoogle": "Continue with Google",
+    "inviteOnly": "Invite only for now. You'll enter your invite code after signing in.",
+    "inviteReady": "Your invite is saved. Sign in to continue.",
+    "notAvailable": "Sign-in isn't available yet.",
+    "signInFailed": "Sign-in didn't work. Please try again.",
+    "loadFailed": "We couldn't load your account."
+  },
+  "onboarding": {
+    "title": "You're on the list",
+    "intro": "A few details and you're in.",
+    "inviteCode": "Invite code",
+    "username": "Username",
+    "usernameHint": "Lowercase letters, numbers, _ and . Your link and QR code hang on it, so it can't be changed later.",
+    "displayName": "Display name",
+    "birthYear": "Birth year",
+    "birthYearHint": "GSTLST is 16+. This doesn't replace age checks at events.",
+    "accept": "I accept the <terms>terms of use</terms> and the <privacy>privacy policy</privacy>.",
+    "submit": "Get in",
+    "otherAccount": "Use another Google account",
+    "tooYoungTitle": "Come back at 16",
+    "tooYoungBody": "GSTLST is for people aged 16 and over. We didn't store your birth year, and your login will be removed.",
+    "errors": {
+      "invalid_invite": "This invite code isn't valid, or it has already been used up.",
+      "too_young": "GSTLST is for people aged 16 and over.",
+      "username_taken": "That username is taken.",
+      "invalid_username": "Use 3 to 30 lowercase letters, numbers, _ or .",
+      "terms_not_accepted": "Please accept the terms of use and the privacy policy.",
+      "unknown": "That didn't work. Please try again."
+    }
+  },
+  "profile": {
+    "friends_one": "{{count}} friend",
+    "friends_other": "{{count}} friends",
+    "shareTitle": "Your link",
+    "share": "Share",
+    "saveQr": "Save QR code",
+    "qrAlt": "QR code for the profile of {{username}}"
+  },
+  "friends": {
+    "title": "Friends",
+    "search": "Find people",
+    "searchHint": "Search by username. Private profiles can only be added by link or QR code.",
+    "noResults": "Nobody found.",
+    "requests": "Requests",
+    "yourFriends": "Your friends",
+    "empty": "No friends yet. Share your link to get started.",
+    "sent": "Sent",
+    "blocked": "Blocked",
+    "accept": "Accept",
+    "decline": "Decline",
+    "cancel": "Cancel request",
+    "unblock": "Unblock"
+  },
+  "user": {
+    "addFriend": "Add as friend",
+    "removeFriend": "Remove friend",
+    "block": "Block",
+    "blockConfirm": "Block {{name}}? You'll both be hidden from each other and any friendship ends.",
+    "notFoundTitle": "Not on the list",
+    "notFoundBody": "We couldn't find this person."
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "changePhoto": "Change photo",
+    "homeCity": "Home region",
+    "homeCityHint": "City only, optional. Used only for your total travel distance, never shown on its own.",
+    "privacy": "Privacy",
+    "privacyIntro": "Your profile setting is the upper limit for all areas. Private means only you, friends included. You can override this for individual check-ins.",
+    "areas": {
+      "profile": "Profile",
+      "stats": "Stats",
+      "checkins": "Check-ins",
+      "photos": "Photos",
+      "badges": "Badges",
+      "map": "Map"
+    },
+    "levels": {
+      "public": "Public",
+      "friends": "Friends",
+      "private": "Only me"
+    },
+    "yourData": "Your data",
+    "export": "Export my data as JSON",
+    "deleteBody": "Deleting your account removes your photos, check-ins, reactions and friendships for good. Events and artists you added stay, without your name.",
+    "deleteConfirm": "Type {{username}} to confirm",
+    "delete": "Delete my account",
+    "signOut": "Sign out"
+  },
+  "admin": {
+    "title": "Admin",
+    "invites": "Invite codes",
+    "maxUses": "Max uses",
+    "expires": "Expires on (optional)",
+    "createInvite": "Create invite code",
+    "existing": "Existing codes",
+    "used": "{{used}} of {{max}} used",
+    "until": "until {{date}}",
+    "copyLink": "Copy link",
+    "delete": "Delete",
+    "copied": "Copied",
+    "copyFailed": "Copy this link by hand:"
+  },
+  "legal": {
+    "label": "Legal",
+    "back": "Back",
+    "placeholder": "Placeholder for the friends beta. This text has not been legally reviewed yet.",
+    "privacy": {
+      "title": "Privacy policy",
+      "body": "Controller: [name and address to be added]\n\nWhat we store: your Google login, username, display name, birth year, optional home region and photo, and what you check in. Your location is only used to check whether you are near a venue. Only the result is stored, never the location. Photos are stripped of their metadata before upload.\n\nWhere: Supabase, EU region (Frankfurt). There is no tracking and there are no analytics cookies.\n\nYour rights: you can export your data as JSON and delete your account in the settings at any time. Add further rights and the legal bases here."
+    },
+    "terms": {
+      "title": "Terms of use",
+      "body": "GSTLST is 16+. The app doesn't replace age checks at events.\n\nPhotos: upload only photos you may share, and no close-ups of strangers without their consent. Photos are visible to others only after approval, and we can remove content.\n\nReporting: use the report button on photos and profiles. Reported content is hidden until it has been reviewed.\n\nAdd further terms here."
+    },
+    "imprint": {
+      "title": "Imprint",
+      "body": "Disclosure under Austrian law:\n\n[name]\n[address]\n[contact]"
+    }
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "de": "Deutsch"
+  },
   "install": {
     "title": "Install GSTLST",
     "native": "Add the app to your home screen for the full experience.",

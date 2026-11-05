@@ -29,8 +29,9 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npx playwright install --with-deps chromium
-      # Builds the app itself, so dist/ is ready for the upload below.
+      # Runs against its own build with a mocked backend, in dist-e2e/.
       - run: npm run test:e2e
+      - run: npm run build
       - uses: actions/upload-artifact@v7
         if: failure()
         with:

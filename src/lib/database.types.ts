@@ -406,7 +406,7 @@ export type Database = {
           user_id: string
           verified_admin: boolean
           verified_gps: boolean
-          visibility: Database["public"]["Enums"]["visibility"]
+          visibility: Database["public"]["Enums"]["visibility"] | null
         }
         Insert: {
           client_uuid: string
@@ -424,7 +424,7 @@ export type Database = {
           user_id: string
           verified_admin?: boolean
           verified_gps?: boolean
-          visibility?: Database["public"]["Enums"]["visibility"]
+          visibility?: Database["public"]["Enums"]["visibility"] | null
         }
         Update: {
           client_uuid?: string
@@ -442,7 +442,7 @@ export type Database = {
           user_id?: string
           verified_admin?: boolean
           verified_gps?: boolean
-          visibility?: Database["public"]["Enums"]["visibility"]
+          visibility?: Database["public"]["Enums"]["visibility"] | null
         }
         Relationships: [
           {
@@ -980,6 +980,7 @@ export type Database = {
           language: string
           privacy: Json
           role: Database["public"]["Enums"]["user_role"]
+          terms_accepted_at: string | null
           updated_at: string
           username: string
         }
@@ -993,6 +994,7 @@ export type Database = {
           language?: string
           privacy?: Json
           role?: Database["public"]["Enums"]["user_role"]
+          terms_accepted_at?: string | null
           updated_at?: string
           username: string
         }
@@ -1006,6 +1008,7 @@ export type Database = {
           language?: string
           privacy?: Json
           role?: Database["public"]["Enums"]["user_role"]
+          terms_accepted_at?: string | null
           updated_at?: string
           username?: string
         }
@@ -1512,7 +1515,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_create_invite: {
+        Args: { expires_at?: string; max_uses?: number }
+        Returns: {
+          code: string
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          max_uses: number
+          used_count: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "invite_codes"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       are_friends: { Args: { a: string; b: string }; Returns: boolean }
+      can_see_profile: { Args: { profile_id: string }; Returns: boolean }
       can_view_checkin: { Args: { checkin_id: string }; Returns: boolean }
       can_view_reaction_target: {
         Args: {
@@ -1521,6 +1542,38 @@ export type Database = {
         }
         Returns: boolean
       }
+      complete_signup: {
+        Args: {
+          accepted_terms: boolean
+          birth_year: number
+          display_name: string
+          invite_code: string
+          language: string
+          username: string
+        }
+        Returns: {
+          avatar_path: string | null
+          birth_year: number
+          created_at: string
+          display_name: string
+          home_city: string | null
+          id: string
+          language: string
+          privacy: Json
+          role: Database["public"]["Enums"]["user_role"]
+          terms_accepted_at: string | null
+          updated_at: string
+          username: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      delete_own_account: { Args: never; Returns: undefined }
+      export_my_data: { Args: never; Returns: Json }
       get_own_profile: {
         Args: never
         Returns: {
@@ -1533,20 +1586,52 @@ export type Database = {
           language: string
           privacy: Json
           role: Database["public"]["Enums"]["user_role"]
+          terms_accepted_at: string | null
           updated_at: string
           username: string
-        }
+        }[]
         SetofOptions: {
           from: "*"
           to: "profiles"
-          isOneToOne: true
-          isSetofReturn: false
+          isOneToOne: false
+          isSetofReturn: true
         }
       }
+      get_profile_by_username: {
+        Args: { target_username: string }
+        Returns: {
+          avatar_path: string
+          display_name: string
+          id: string
+          username: string
+        }[]
+      }
+      has_profile: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_blocked_between: { Args: { a: string; b: string }; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
+      is_valid_privacy: { Args: { value: Json }; Returns: boolean }
       keep_alive: { Args: never; Returns: boolean }
+      list_blocked: {
+        Args: never
+        Returns: {
+          avatar_path: string
+          display_name: string
+          id: string
+          username: string
+        }[]
+      }
+      list_friendships: {
+        Args: never
+        Returns: {
+          avatar_path: string
+          display_name: string
+          id: string
+          requested_by: string
+          status: Database["public"]["Enums"]["friendship_status"]
+          username: string
+        }[]
+      }
       log_merge: {
         Args: {
           action: string
@@ -1574,6 +1659,14 @@ export type Database = {
         Returns: undefined
       }
       normalize_name: { Args: { value: string }; Returns: string }
+      privacy_allows: {
+        Args: { area: string; owner: string }
+        Returns: boolean
+      }
+      privacy_level: {
+        Args: { area: string; owner: string }
+        Returns: Database["public"]["Enums"]["visibility"]
+      }
       require_admin: { Args: never; Returns: undefined }
       search_entities: {
         Args: { entity_type: string; max_results?: number; query: string }
@@ -1583,6 +1676,22 @@ export type Database = {
           score: number
           status: Database["public"]["Enums"]["entity_status"]
         }[]
+      }
+      search_profiles: {
+        Args: { max_results?: number; query: string }
+        Returns: {
+          avatar_path: string
+          display_name: string
+          id: string
+          username: string
+        }[]
+      }
+      visibility_allows: {
+        Args: {
+          level: Database["public"]["Enums"]["visibility"]
+          owner: string
+        }
+        Returns: boolean
       }
     }
     Enums: {

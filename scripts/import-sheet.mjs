@@ -286,8 +286,8 @@ insert into public.profiles (id, username, display_name, birth_year, role) value
 
   // The user's history: imported check-ins carry no ratings and count as unverified.
   for (const e of events.values()) e.checkinId = stableId('checkin', `${adminId}|${e.key}`)
-  insert('event_checkins', 'id, user_id, event_id, visibility, imported, client_uuid',
-    [...events.values()].map((e) => `'${e.checkinId}', ${admin}, '${e.id}', 'friends', true, '${stableId('client', `${adminId}|${e.key}`)}'`))
+  insert('event_checkins', 'id, user_id, event_id, imported, client_uuid',
+    [...events.values()].map((e) => `'${e.checkinId}', ${admin}, '${e.id}', true, '${stableId('client', `${adminId}|${e.key}`)}'`))
   insert('set_checkins', 'id, event_checkin_id, set_id, imported',
     sets.map((s) => `'${stableId('setcheckin', `${adminId}|${s.id}`)}', '${s.event.checkinId}', '${s.id}', true`))
   out.push('commit;\n')

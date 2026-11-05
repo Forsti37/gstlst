@@ -73,7 +73,7 @@ Sources: [Supabase free tier](https://freetier.co/directory/companies/supabase),
 - **Charts:** ECharts or Recharts. **Map:** MapLibre GL with OpenFreeMap tiles (free, no API key).
 - **Wrapped export:** `html-to-image` → 9:16 PNG, Web Share API for Instagram stories.
 - **Photos:** `browser-image-compression` (max. \~1600 px, WebP, EXIF stripped). No videos.
-- **Backend:** Supabase with Postgres (`pg_trgm`, `unaccent`, `pg_cron`), Auth (Google only; Apple later, needs a paid Apple Developer account), Storage (private bucket, signed URLs), Edge Functions (push sending, GPS verification, invite redemption, feedback → GitHub issue). Region: EU (Frankfurt).
+- **Backend:** Supabase with Postgres (`pg_trgm`, `unaccent`, `pg_cron`), Auth (Google only; Apple later, needs a paid Apple Developer account), Storage (private bucket, signed URLs), Edge Functions (push sending, GPS verification, feedback → GitHub issue); invites are redeemed atomically in the `complete_signup` database function. Region: EU (Frankfurt).
 - **Hosting:** GitHub Pages via GitHub Actions at `forsti37.github.io/gstlst`. SPA routing via a `404.html` fallback so deep links like `/u/daniel` work. Later a custom domain via CNAME (first year free via the GitHub Student Developer Pack).
 - **Keep-alive:** a GitHub Actions cron running a lightweight query every 3 days, against the 7-day pause.
 - **Environments:** two Supabase projects (dev, prod – both free tier), migrations and seeds via the Supabase CLI in the repo, generated TypeScript types.
@@ -207,10 +207,12 @@ Retroactive check-ins for past events use the same flow, just without GPS verifi
 
 ### Privacy
 
-- Profile: public, friends (default), private.
+- Profile: public, friends (default), private. Private means only the user, friends included. The profile setting is the upper limit for all areas.
 - Configurable per area: stats, check-in list, photos, badges, map.
-- Overridable per check-in.
+- Overridable per check-in: a check-in without its own visibility follows the settings, and an explicit visibility wins, even on a private profile.
 - Private profiles don't appear in search or the public feed; friendship only via link or QR.
+- Usernames are permanent, because the link and QR code hang on them.
+- Signing in with Google alone gives no access to any data: only a profile, created with a valid invite, does.
 
 ### Wrapped
 
