@@ -157,7 +157,8 @@
       "catalog": "Catalog",
       "audit": "Log",
       "roles": "Roles",
-      "badges": "Badges"
+      "badges": "Badges",
+      "wrapped": "Wrapped"
     },
     "queueEmpty": "Nothing waiting.",
     "approve": "Approve",
@@ -261,6 +262,13 @@
       "preview_one": "{{count}} person would have it right now",
       "preview_other": "{{count}} people would have it right now",
       "previewRow": "value {{value}} · level {{level}}"
+    },
+    "wrapped": {
+      "intro": "Opens the Community Wrapped of a year for everyone: most-seen artist, top venue and best sound.",
+      "year": "Year",
+      "unlock": "Unlock",
+      "lock": "Lock again",
+      "adminOnly": "Admins only."
     }
   },
   "legal": {
@@ -712,5 +720,136 @@
     "first_subgenre": "First {{genre}} set",
     "series_streak": "{{series}}: {{n}} years in a row",
     "duo_complete": "{{artist}} complete: the duo and both members solo"
+  },
+  "wrapped": {
+    "title": "Wrapped",
+    "intro": "Your raves, boiled down. Pick a period and pass it on.",
+    "years": "Years",
+    "year": "Year",
+    "month": "Month",
+    "season": "Season",
+    "custom": "Custom range",
+    "event": "Event",
+    "open": "Open",
+    "chooseEvent": "Pick an event",
+    "opensDecember": "opens December 1st",
+    "inProgress": "The year isn't over yet. The rest of December gets added by itself.",
+    "locked": "Patience. This year opens on {{date}}.",
+    "notVisible": "This Wrapped isn't visible to you.",
+    "empty": "Nothing checked in here. Dancefloor was empty, or you forgot to log it.",
+    "badPeriod": "That period doesn't exist.",
+    "progress": "Slide {{current}} of {{total}}",
+    "close": "Close",
+    "previous": "Previous slide",
+    "next": "Next slide",
+    "copyLink": "Copy link",
+    "sharePng": "Share as image",
+    "linkCopied": "Link copied",
+    "exportFailed": "The image didn't work out. Try again.",
+    "seasons": {
+      "spring": "Spring {{year}}",
+      "summer": "Summer {{year}}",
+      "autumn": "Autumn {{year}}",
+      "winter": "Winter {{year}}"
+    },
+    "seasonNames": {
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "winter": "Winter"
+    },
+    "slides": {
+      "introOwn": "Here's what you got up to",
+      "introOther": "Here's what {{name}} got up to",
+      "numbers": "The damage",
+      "topArtist": "Most seen",
+      "topArtistCount_one": "{{count}} set. Getting a bit obvious.",
+      "topArtistCount_other": "{{count}} sets. Getting a bit obvious.",
+      "topVenue": "Second home",
+      "topVenueCount_one": "{{count}} event in {{city}}. They know your face.",
+      "topVenueCount_other": "{{count}} events in {{city}}. They know your face.",
+      "genres": "What you were on",
+      "bestSet": "Best set",
+      "bestSetDetail": "{{rating}} out of 5 at {{event}}",
+      "longestNight": "Longest night",
+      "longestNightDetail": "sets at {{event}}, {{date}}. Sleep is overrated.",
+      "activeMonth": "Peak month",
+      "activeMonthCount_one": "{{count}} event. Your liver sends its regards.",
+      "activeMonthCount_other": "{{count}} events. Your liver sends its regards.",
+      "places": "Where it went down",
+      "placesPlot_one": "Map with {{count}} city",
+      "placesPlot_other": "Map with {{count}} cities",
+      "newArtists": "New on your radar",
+      "buddy": "Rave Buddy No. 1",
+      "buddyCount_one": "{{count}} event together. Say thanks.",
+      "buddyCount_other": "{{count}} events together. Say thanks.",
+      "badges": "Badges picked up",
+      "badgesMore_one": "and {{count}} more",
+      "badgesMore_other": "and {{count}} more",
+      "collage": "The evidence",
+      "persona": "Your rave persona",
+      "spending": "What it cost",
+      "spendingPrivate": "Only you can see this",
+      "spendingDetail_one": "{{tickets}} on tickets, {{other}} on the rest, across {{count}} event",
+      "spendingDetail_other": "{{tickets}} on tickets, {{other}} on the rest, across {{count}} events",
+      "placesCities_one": "{{count}} city",
+      "placesCities_other": "{{count}} cities",
+      "placesCountries_one": "{{count}} country",
+      "placesCountries_other": "{{count}} countries"
+    },
+    "personas": {
+      "neuro_purist": {
+        "name": "Neuro Purist",
+        "line": "Melodies are for other people."
+      },
+      "liquid_soul": {
+        "name": "Liquid Soul",
+        "line": "You cried on the dancefloor. Twice."
+      },
+      "jump_up_menace": {
+        "name": "Jump-Up Menace",
+        "line": "Neighbours have filed complaints."
+      },
+      "closing_crew": {
+        "name": "Closing Crew",
+        "line": "Lights on, and you still asked for one more."
+      },
+      "warehouse_rat": {
+        "name": "The Warehouse Rat",
+        "line": "Natural light is a rumour."
+      },
+      "festival_tourist": {
+        "name": "Festival Tourist",
+        "line": "Your tent has seen more than your flat."
+      },
+      "genre_hopper": {
+        "name": "Genre Hopper",
+        "line": "Commitment issues, great taste."
+      },
+      "road_warrior": {
+        "name": "Road Warrior",
+        "line": "The night train knows you by name."
+      },
+      "local_hero": {
+        "name": "Local Hero",
+        "line": "Why travel when the best floor is around the corner?"
+      },
+      "raver": {
+        "name": "Solid Raver",
+        "line": "No gimmick. You just show up and dance."
+      },
+      "fresh": {
+        "name": "Fresh Blood",
+        "line": "Just warming up. Come back with more check-ins."
+      }
+    },
+    "community": {
+      "section": "Community",
+      "title": "Community {{year}}",
+      "totals": "{{ravers}} ravers, {{events}} events, {{sets}} sets",
+      "topArtist": "Most seen",
+      "topVenue": "Top venue",
+      "bestSound": "Best sound"
+    }
   }
 }

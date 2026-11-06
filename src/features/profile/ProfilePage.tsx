@@ -1,4 +1,4 @@
-import { Award, Heart, History, Settings, Trophy, Users } from 'lucide-react'
+import { Award, Heart, History, Settings, Sparkles, Trophy, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Section } from '../../app/ui'
@@ -44,6 +44,10 @@ export function ProfilePage() {
         <Link to="/badges" className={ROW}>
           <Award aria-hidden className="size-5 text-red" />
           <span className="flex-1">{t('badges.title')}</span>
+        </Link>
+        <Link to="/wrapped" className={ROW}>
+          <Sparkles aria-hidden className="size-5 text-red" />
+          <span className="flex-1">{t('wrapped.title')}</span>
         </Link>
         <Link to="/leaderboard" className={ROW}>
           <Trophy aria-hidden className="size-5 text-blue" />

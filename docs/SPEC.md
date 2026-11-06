@@ -217,7 +217,7 @@ Retroactive check-ins for past events use the same flow, just without GPS verifi
 ### Wrapped
 
 - Periods: year, month, season, custom range, per festival or event. The yearly Wrapped unlocks in early December; the rest of December is added afterwards.
-- 9:16 story slides with swipe and a progress bar. Every slide and a summary can be shared as PNG, and as a link `/wrapped/{username}/{period}` that respects privacy settings.
+- 9:16 story slides with swipe and a progress bar. Every slide and a summary can be shared as PNG, and as a link `/wrapped/{username}/{period}` that respects privacy settings. Opening a link needs a member account, like everything else in the app. Period formats: `2025`, `2025-03`, `2025-summer` (winter starts in December of that year), `2025-01-01_2025-03-31`, `event-<id>`.
 - Content: headline numbers, top artist with count, top venue, genre mix, highest-rated set, longest night, most active month, map of cities and countries, new artists, Rave Buddy No. 1 (who you went out with most), badges of the period, rave persona.
 - **Collage:** grid of all own approved photos of the period, filled up with generated tiles (artist name, date, venue) for check-ins without a photo.
 - **Spending slide:** only in the user's own view, never in exports or links.

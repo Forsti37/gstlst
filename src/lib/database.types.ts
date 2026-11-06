@@ -1591,6 +1591,10 @@ export type Database = {
           value: number
         }[]
       }
+      admin_set_community_wrapped: {
+        Args: { for_year: number; unlocked: boolean }
+        Returns: undefined
+      }
       admin_set_moderator: {
         Args: { is_moderator: boolean; target_user: string }
         Returns: undefined
@@ -1723,9 +1727,19 @@ export type Database = {
           value: number
         }[]
       }
+      get_community_wrapped: { Args: { for_year: number }; Returns: Json }
       get_friends_feed: {
         Args: { before_time?: string; page_size?: number }
         Returns: Json
+      }
+      get_my_spending: {
+        Args: { period: string }
+        Returns: {
+          currency: string
+          events: number
+          other: number
+          tickets: number
+        }[]
       }
       get_own_profile: {
         Args: never
@@ -1783,6 +1797,10 @@ export type Database = {
         Returns: Json
       }
       get_venue_stats: { Args: { target_venue: string }; Returns: Json }
+      get_wrapped: {
+        Args: { period: string; target_username: string }
+        Returns: Json
+      }
       has_profile: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_blocked_between: { Args: { a: string; b: string }; Returns: boolean }
@@ -1798,6 +1816,7 @@ export type Database = {
           username: string
         }[]
       }
+      list_community_wrapped: { Args: never; Returns: number[] }
       list_friendships: {
         Args: never
         Returns: {
@@ -1840,6 +1859,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      mark_wrapped_shared: { Args: { period: string }; Returns: undefined }
       merge_artist: {
         Args: { from_id: string; to_id: string }
         Returns: undefined
