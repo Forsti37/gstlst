@@ -260,7 +260,7 @@ export function EventPage() {
 
   const data = event.data
   const venue = data.venue
-  const promoters = data.event_promoters.flatMap((p) => (p.promoter ? [p.promoter.name] : []))
+  const promoters = data.event_promoters.flatMap((p) => (p.promoter ? [p.promoter] : []))
   const tags = data.event_event_tags.flatMap((e) => (e.tag ? [e.tag] : []))
   const sets = lineup.data?.sets ?? []
 
@@ -276,7 +276,14 @@ export function EventPage() {
       ) : (
         <p className="mt-1">{venue.name}, {venue.city}</p>
       ))}
-      {promoters.length > 0 && <p className="text-sm text-text-secondary">{t('events.by', { names: promoters.join(', ') })}</p>}
+      {venue && <Link to={`/venues/${venue.id}`} className="flex min-h-touch items-center text-sm text-blue">{t('events.venueDetails')}</Link>}
+      {promoters.length > 0 && (
+        <p className="flex flex-wrap items-center gap-x-2 text-sm text-text-secondary">
+          {promoters.map((promoter) => (
+            <Link key={promoter.id} to={`/promoters/${promoter.id}`} className="flex min-h-touch items-center">{promoter.name}</Link>
+          ))}
+        </p>
+      )}
       {data.series && <p className="text-sm text-text-secondary">{t('events.series', { name: data.series.name })}</p>}
 
       {tags.length > 0 && (

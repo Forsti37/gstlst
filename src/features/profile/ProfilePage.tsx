@@ -1,9 +1,10 @@
-import { Heart, History, Settings, Users } from 'lucide-react'
+import { Heart, History, Settings, Trophy, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Section } from '../../app/ui'
 import { useMember } from '../auth/auth'
 import { useFriendships } from '../friends/api'
+import { ProfileStatsSection } from '../stats/ProfileStatsSection'
 import { ShareCard } from './ShareCard'
 import { UserAvatar } from './UserAvatar'
 
@@ -40,17 +41,21 @@ export function ProfilePage() {
           <Heart aria-hidden className="size-5 text-blue" />
           <span className="flex-1">{t('wishlist.link')}</span>
         </Link>
+        <Link to="/leaderboard" className={ROW}>
+          <Trophy aria-hidden className="size-5 text-blue" />
+          <span className="flex-1">{t('leaderboard.title')}</span>
+        </Link>
         <Link to="/settings" className={ROW}>
           <Settings aria-hidden className="size-5 text-text-secondary" />
           <span className="flex-1">{t('settings.title')}</span>
         </Link>
       </div>
 
+      <ProfileStatsSection userId={me.id} own />
+
       <Section title={t('profile.shareTitle')}>
         <ShareCard username={me.username} />
       </Section>
-
-      <p className="mt-8 text-text-secondary">{t('pages.profile.body')}</p>
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { Button, ErrorText } from '../../app/ui'
 import { getSupabase } from '../../lib/supabase'
 import { useMember } from '../auth/auth'
 import { UnderReview } from '../checkin/components'
+import { ArtistStatsSections } from '../stats/ArtistStatsSections'
 
 export const wishlistKey = (userId: string) => ['wishlist', userId]
 
@@ -51,7 +52,6 @@ export function WishlistButton({ artistId }: { artistId: string }) {
   )
 }
 
-/** A first version with the wishlist. Stats, partners and top fans arrive in phase 6. */
 export function ArtistPage() {
   const { t } = useTranslation()
   const { artistId } = useParams()
@@ -79,6 +79,7 @@ export function ArtistPage() {
       <div className="mt-4">
         <WishlistButton artistId={artist.data.id} />
       </div>
+      <ArtistStatsSections artistId={artist.data.id} />
     </div>
   )
 }

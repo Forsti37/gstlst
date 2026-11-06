@@ -24,6 +24,11 @@ import { DiscoverPage } from '../features/discover/DiscoverPage'
 import { FeedPage } from '../features/feed/FeedPage'
 import { FriendsPage } from '../features/friends/FriendsPage'
 import { UserPage } from '../features/friends/UserPage'
+import { BestSoundPage } from '../features/stats/BestSoundPage'
+import { ExplorerPage } from '../features/stats/ExplorerPage'
+import { LeaderboardPage } from '../features/stats/LeaderboardPage'
+import { PromoterPage } from '../features/stats/PromoterPage'
+import { VenuePage } from '../features/stats/VenuePage'
 import { ArtistPage } from '../features/social/ArtistPage'
 import { WishlistPage } from '../features/social/WishlistPage'
 import { InboxPage } from '../features/inbox/InboxPage'
@@ -62,6 +67,11 @@ export const router = createBrowserRouter(
             { path: 'friends', element: <FriendsPage /> },
             { path: 'artists/:artistId', element: <ArtistPage /> },
             { path: 'wishlist', element: <WishlistPage /> },
+            { path: 'venues/:venueId', element: <VenuePage /> },
+            { path: 'promoters/:promoterId', element: <PromoterPage /> },
+            { path: 'explore/:userId', element: <ExplorerPage /> },
+            { path: 'leaderboard', element: <LeaderboardPage /> },
+            { path: 'best-sound', element: <BestSoundPage /> },
             { path: 'u/:username', element: <UserPage /> },
             {
               path: 'admin',

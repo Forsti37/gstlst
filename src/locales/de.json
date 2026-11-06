@@ -33,9 +33,6 @@
     "inbox": {
       "body": "Noch nichts da. Freundschaftsanfragen und Reactions landen hier."
     },
-    "profile": {
-      "body": "Hier wohnen bald deine Stats, Badges und deine Rave-Karte."
-    },
     "notFound": {
       "title": "Nicht auf der Liste",
       "body": "Diese Seite gibt es nicht.",
@@ -252,7 +249,7 @@
     "placeholder": "Platzhalter für die Friends-Beta. Dieser Text ist noch nicht rechtlich geprüft.",
     "privacy": {
       "title": "Datenschutzerklärung",
-      "body": "Verantwortlich: [Name und Adresse ergänzen]\n\nWas wir speichern: deinen Google-Login, Username, Anzeigenamen, dein Geburtsjahr, optional Heimatregion und Foto sowie deine Check-ins. Dein Standort wird nur geprüft, um festzustellen, ob du in der Nähe einer Venue bist. Gespeichert wird nur das Ergebnis, nie der Standort. Fotos verlieren vor dem Upload ihre Metadaten.\n\nWo: Supabase, EU-Region (Frankfurt). Es gibt kein Tracking und keine Analyse-Cookies.\n\nDeine Rechte: Du kannst deine Daten jederzeit in den Einstellungen als JSON exportieren und dein Konto löschen. Weitere Rechte und die Rechtsgrundlagen hier ergänzen."
+      "body": "Verantwortlich: [Name und Adresse ergänzen]\n\nWas wir speichern: deinen Google-Login, Username, Anzeigenamen, dein Geburtsjahr, optional Heimatregion und Foto sowie deine Check-ins. Dein Standort wird nur geprüft, um festzustellen, ob du in der Nähe einer Venue bist. Gespeichert wird nur das Ergebnis, nie der Standort. Fotos verlieren vor dem Upload ihre Metadaten.\n\nWo: Supabase, EU-Region (Frankfurt). Es gibt kein Tracking und keine Analyse-Cookies. Die Karte lädt erst, wenn du sie öffnest: Ihre Kacheln kommen von OpenFreeMap, das dann deine IP-Adresse sieht.\n\nDeine Rechte: Du kannst deine Daten jederzeit in den Einstellungen als JSON exportieren und dein Konto löschen. Weitere Rechte und die Rechtsgrundlagen hier ergänzen."
     },
     "terms": {
       "title": "Nutzungsbedingungen",
@@ -403,7 +400,8 @@
     "proposalSent": "Danke! Das ist nach der Freigabe sichtbar.",
     "onlyYou": "Nur du, bis zur Freigabe",
     "proposeCorrection": "Angaben korrigieren",
-    "photoReport": "Melden"
+    "photoReport": "Melden",
+    "venueDetails": "Details zur Location"
   },
   "history": {
     "title": "Meine Check-ins",
@@ -520,5 +518,132 @@
     "quietIntro": "Ruhezeiten: Pushes warten, bis sie vorbei sind.",
     "quietStart": "Von",
     "quietEnd": "Bis"
+  },
+  "stats": {
+    "title": "Deine Zahlen",
+    "events": "Events",
+    "sets": "Sets",
+    "artists": "Artists",
+    "venues": "Locations",
+    "cities": "Städte",
+    "countries": "Länder",
+    "promoters": "Veranstalter",
+    "avgRating": "Ø Bewertung",
+    "verified": "Verifiziert",
+    "streakCurrent": "Wochenend-Serie",
+    "streakLongest": "Längste Serie",
+    "travelKm": "Km gereist",
+    "travelNeedsCheckins": "Deine Reisestrecke erscheint ab 10 Check-ins.",
+    "travelNeedsHome": "Wähle eine Heimatregion mit bekannter Location, um deine Reisestrecke zu sehen.",
+    "hidden": "Diese Statistiken sind für dich nicht sichtbar.",
+    "loadFailed": "Die Statistiken konnten nicht geladen werden.",
+    "openExplorer": "Alle Zahlen erkunden",
+    "genres": "Genres",
+    "bySets": "Nach Sets",
+    "byEvents": "Nach Events",
+    "topArtists": "Top-Artists",
+    "topVenues": "Top-Locations",
+    "topPromoters": "Top-Veranstalter",
+    "b2b": "B2B-Kombinationen",
+    "map": "Karte",
+    "showMap": "Karte anzeigen",
+    "mapHint": "Die Kartenkacheln kommen von OpenFreeMap.",
+    "mapUnavailable": "Die Karte kann auf diesem Gerät nicht angezeigt werden.",
+    "mapGestureMobile": "Karte mit zwei Fingern bewegen",
+    "mapGestureDesktop": "Strg halten und scrollen, um zu zoomen",
+    "calendar": "Kalender",
+    "calendarSummary_one": "{{count}} Event in {{year}}",
+    "calendarSummary_other": "{{count}} Events in {{year}}",
+    "eventCount_one": "{{count}} Event",
+    "eventCount_other": "{{count}} Events",
+    "setCount_one": "{{count}} Set",
+    "setCount_other": "{{count}} Sets",
+    "explorer": "Explorer",
+    "groupBy": "Gruppieren nach",
+    "metric": "Anzeigen",
+    "from": "Von",
+    "to": "Bis",
+    "filterBy": "Filtern nach",
+    "filterValue": "Wert",
+    "filterAny": "Alle",
+    "verifiedOnly": "Nur verifizierte Check-ins",
+    "removeFilter": "Filter {{name}} entfernen",
+    "noResults": "Nichts passt zu diesen Filtern.",
+    "chart": "Diagramm",
+    "table": "Tabelle",
+    "dimensions": {
+      "artist": "Artist",
+      "genre": "Genre",
+      "subgenre": "Subgenre",
+      "venue": "Location",
+      "city": "Stadt",
+      "country": "Land",
+      "promoter": "Veranstalter",
+      "series": "Reihe",
+      "set_type": "Set-Typ",
+      "tag": "Tag",
+      "month": "Monat",
+      "year": "Jahr",
+      "weekday": "Wochentag"
+    },
+    "setTypes": {
+      "solo": "Solo",
+      "b2b": "B2B",
+      "b2b2b": "B2B2B",
+      "f2f": "F2F",
+      "live": "Live",
+      "hybrid": "Hybrid"
+    }
+  },
+  "leaderboard": {
+    "title": "Bestenliste",
+    "verifiedOnly": "Du und deine Freunde. Nur verifizierte Check-ins.",
+    "allTime": "Gesamt",
+    "addFriends": "Füge Freunde hinzu, um dich mit ihnen zu messen."
+  },
+  "compare": {
+    "title": "Du und {{name}}",
+    "taste": "Geschmack",
+    "sets": "Sets zusammen",
+    "events": "Events zusammen",
+    "sharedArtists": "Ihr beide habt gesehen",
+    "counts": "du {{mine}} · andere {{theirs}}"
+  },
+  "venue": {
+    "notFound": "Diese Location gibt es nicht oder sie wird noch geprüft.",
+    "youWere_one": "Du warst hier bei {{count}} Event",
+    "youWere_other": "Du warst hier bei {{count}} Events",
+    "ratings": "Bewertungen",
+    "rating": {
+      "overall": "Gesamt",
+      "sound": "Sound",
+      "crowd": "Crowd",
+      "location": "Location",
+      "lineup": "Lineup"
+    },
+    "soundRank": "Platz {{rank}} beim besten Sound",
+    "resident": "Resident",
+    "events": "Events"
+  },
+  "promoter": {
+    "notFound": "Diesen Veranstalter gibt es nicht oder er wird noch geprüft.",
+    "series": "Reihen"
+  },
+  "bestSound": {
+    "title": "Bester Sound",
+    "hint": "Durchschnittliche Sound-Bewertung in der ganzen App, ab zwei Bewertungen pro Location.",
+    "empty": "Noch nicht genug Bewertungen.",
+    "ratings_one": "{{count}} Bewertung",
+    "ratings_other": "{{count}} Bewertungen"
+  },
+  "artist": {
+    "aliases": "Auch bekannt als {{names}}",
+    "youSaw_one": "Du hast den Act {{count}}-mal gesehen",
+    "youSaw_other": "Du hast den Act {{count}}-mal gesehen",
+    "checkins": "Check-ins",
+    "members": "Mitglieder",
+    "groups": "Teil von",
+    "partners": "Häufigste B2B-Partner",
+    "topFans": "Top-Fans"
   }
 }

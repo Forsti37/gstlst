@@ -135,7 +135,7 @@ The core chain is series → event → floor → set → set artists. A user che
 - **Merge:** an admin function `merge_artist(from, to)` re-points all `set_artists`, keeps the old name as an alias and deletes the duplicate. Same for venues, promoters and events.
 - **Counting:** a B2B counts as "seen" for every artist involved. A group set counts for the group and additionally for each member (Camo & Krooked → also Camo and Krooked). Members' solo sets and specific B2B combinations stay queryable via `set_artists`.
 - **RLS:** all logged-in users read `approved`; `pending` only the creator, moderators and admins. Check-ins and media follow visibility (public, friends, private), blocks and moderation status. Writes to master data only as `pending` or via `change_requests`.
-- **Stats:** views and materialized views per user (refreshed after check-ins and via `pg_cron`). The explorer calls an RPC with whitelisted dimensions and filters, never free-form SQL from the client.
+- **Stats:** a materialized view of facts in a schema the API does not expose, with every read going through functions that apply the viewer's rights. Check-ins mark it as outdated, and a `pg_cron` job refreshes it within a minute. The explorer calls an RPC with whitelisted dimensions and filters, never free-form SQL from the client.
 - **Import:** a script reads Daniel's sheet as CSV with the columns Jahr, Promoter, Event, Ort, Location, Artist, Lat, Long (decimal comma in coordinates), a separate list with the exact date of every event, and optional corrections. An event without a valid date stops the import. It creates venues, promoters, series, events, sets and artists plus Daniel's event and set check-ins, which are marked as imported and have no rating, and writes a review list of anomalies (different coordinates per venue, venues sharing coordinates, events without artists, similar names). All of this lives in the gitignored `data/` folder because the repo is public.
 
 ## Features
@@ -202,7 +202,7 @@ Retroactive check-ins for past events use the same flow, just without GPS verifi
 - Headline numbers: events, sets, unique artists, venues, cities, countries, promoters, average rating, verified check-ins.
 - Genre split by sets and by events, top artists, top venues, top promoters, most frequent B2B combinations.
 - Map of all visited venues, calendar heatmap, streaks (consecutive weekends).
-- Travel km: visible only from 10 check-ins, calculated from a freely chosen home region (city only), shown only as a total – never per event, so the home location can't be inferred.
+- Travel km: visible only from 10 check-ins, calculated from a freely chosen home region (city only, with coordinates taken from the known venues of that city), shown only as a total – never per event, so the home location can't be inferred.
 - **Explorer:** free grouping (artist, genre, subgenre, venue, city, country, promoter, series, set type, tag, month, year, weekday), filters and time range; output as table and chart.
 
 ### Privacy

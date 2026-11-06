@@ -38,7 +38,8 @@ export default defineConfig({
         importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,svg,woff2}'],
         // Only Latin glyphs are precached; other subsets still load on demand when online.
-        globIgnores: ['**/*{cyrillic,greek,vietnamese,hebrew,arabic}*.woff2', '404.html'],
+        // The map library is large and useless offline, since its tiles need a connection anyway.
+        globIgnores: ['**/*{cyrillic,greek,vietnamese,hebrew,arabic}*.woff2', '404.html', '**/VenueMap-*'],
       },
     }),
   ],

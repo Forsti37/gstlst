@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
@@ -80,6 +80,15 @@ function ProfileForm() {
   const update = useUpdateProfile()
   const [displayName, setDisplayName] = useState(me.display_name)
   const [homeCity, setHomeCity] = useState(me.home_city ?? '')
+  // Travel distance takes its coordinates from the venues of this city.
+  const cities = useQuery({
+    queryKey: ['venue-cities'],
+    queryFn: async () => {
+      const { data, error } = await getSupabase().from('venues').select('city').order('city')
+      if (error) throw error
+      return data.map((venue) => venue.city)
+    },
+  })
 
   return (
     <form
@@ -90,7 +99,10 @@ function ProfileForm() {
       }}
     >
       <TextField label={t('onboarding.displayName')} value={displayName} onChange={(e) => setDisplayName(e.target.value)} required maxLength={60} />
-      <TextField label={t('settings.homeCity')} hint={t('settings.homeCityHint')} value={homeCity} onChange={(e) => setHomeCity(e.target.value)} maxLength={80} />
+      <TextField label={t('settings.homeCity')} hint={t('settings.homeCityHint')} list="known-cities" value={homeCity} onChange={(e) => setHomeCity(e.target.value)} maxLength={80} />
+      <datalist id="known-cities">
+        {[...new Set(cities.data ?? [])].map((city) => <option key={city} value={city} />)}
+      </datalist>
       <Button type="submit" variant="primary" disabled={update.isPending}>{t('common.save')}</Button>
       {update.isSuccess && <p className="text-sm text-text-secondary">{t('common.saved')}</p>}
       {update.isError && <ErrorText>{t('common.actionFailed')}</ErrorText>}

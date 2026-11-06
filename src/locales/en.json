@@ -33,9 +33,6 @@
     "inbox": {
       "body": "Nothing yet. Friend requests and reactions will land here."
     },
-    "profile": {
-      "body": "Your stats, badges and rave map will live here."
-    },
     "notFound": {
       "title": "Not on the list",
       "body": "This page doesn't exist.",
@@ -252,7 +249,7 @@
     "placeholder": "Placeholder for the friends beta. This text has not been legally reviewed yet.",
     "privacy": {
       "title": "Privacy policy",
-      "body": "Controller: [name and address to be added]\n\nWhat we store: your Google login, username, display name, birth year, optional home region and photo, and what you check in. Your location is only used to check whether you are near a venue. Only the result is stored, never the location. Photos are stripped of their metadata before upload.\n\nWhere: Supabase, EU region (Frankfurt). There is no tracking and there are no analytics cookies.\n\nYour rights: you can export your data as JSON and delete your account in the settings at any time. Add further rights and the legal bases here."
+      "body": "Controller: [name and address to be added]\n\nWhat we store: your Google login, username, display name, birth year, optional home region and photo, and what you check in. Your location is only used to check whether you are near a venue. Only the result is stored, never the location. Photos are stripped of their metadata before upload.\n\nWhere: Supabase, EU region (Frankfurt). There is no tracking and there are no analytics cookies. The map only loads when you open it: its tiles come from OpenFreeMap, which then sees your IP address.\n\nYour rights: you can export your data as JSON and delete your account in the settings at any time. Add further rights and the legal bases here."
     },
     "terms": {
       "title": "Terms of use",
@@ -403,7 +400,8 @@
     "proposalSent": "Thanks! It goes live once it has been approved.",
     "onlyYou": "Only you, until approved",
     "proposeCorrection": "Correct details",
-    "photoReport": "Report"
+    "photoReport": "Report",
+    "venueDetails": "Venue details"
   },
   "history": {
     "title": "My check-ins",
@@ -520,5 +518,132 @@
     "quietIntro": "Quiet hours: pushes wait until they’re over.",
     "quietStart": "From",
     "quietEnd": "Until"
+  },
+  "stats": {
+    "title": "Your numbers",
+    "events": "Events",
+    "sets": "Sets",
+    "artists": "Artists",
+    "venues": "Venues",
+    "cities": "Cities",
+    "countries": "Countries",
+    "promoters": "Promoters",
+    "avgRating": "Avg. rating",
+    "verified": "Verified",
+    "streakCurrent": "Weekend streak",
+    "streakLongest": "Longest streak",
+    "travelKm": "Km travelled",
+    "travelNeedsCheckins": "Your travel distance appears from 10 check-ins.",
+    "travelNeedsHome": "Choose a home region with a known venue to see your travel distance.",
+    "hidden": "These stats are not visible to you.",
+    "loadFailed": "We couldn't load these stats.",
+    "openExplorer": "Explore all numbers",
+    "genres": "Genres",
+    "bySets": "By sets",
+    "byEvents": "By events",
+    "topArtists": "Top artists",
+    "topVenues": "Top venues",
+    "topPromoters": "Top promoters",
+    "b2b": "B2B combinations",
+    "map": "Map",
+    "showMap": "Show map",
+    "mapHint": "Map tiles load from OpenFreeMap.",
+    "mapUnavailable": "The map can't be shown on this device.",
+    "mapGestureMobile": "Use two fingers to move the map",
+    "mapGestureDesktop": "Hold Ctrl and scroll to zoom the map",
+    "calendar": "Calendar",
+    "calendarSummary_one": "{{count}} event in {{year}}",
+    "calendarSummary_other": "{{count}} events in {{year}}",
+    "eventCount_one": "{{count}} event",
+    "eventCount_other": "{{count}} events",
+    "setCount_one": "{{count}} set",
+    "setCount_other": "{{count}} sets",
+    "explorer": "Explorer",
+    "groupBy": "Group by",
+    "metric": "Show",
+    "from": "From",
+    "to": "To",
+    "filterBy": "Filter by",
+    "filterValue": "Value",
+    "filterAny": "Any",
+    "verifiedOnly": "Verified check-ins only",
+    "removeFilter": "Remove filter {{name}}",
+    "noResults": "Nothing matches these filters.",
+    "chart": "Chart",
+    "table": "Table",
+    "dimensions": {
+      "artist": "Artist",
+      "genre": "Genre",
+      "subgenre": "Subgenre",
+      "venue": "Venue",
+      "city": "City",
+      "country": "Country",
+      "promoter": "Promoter",
+      "series": "Series",
+      "set_type": "Set type",
+      "tag": "Tag",
+      "month": "Month",
+      "year": "Year",
+      "weekday": "Weekday"
+    },
+    "setTypes": {
+      "solo": "Solo",
+      "b2b": "B2B",
+      "b2b2b": "B2B2B",
+      "f2f": "F2F",
+      "live": "Live",
+      "hybrid": "Hybrid"
+    }
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "verifiedOnly": "You and your friends. Verified check-ins only.",
+    "allTime": "All time",
+    "addFriends": "Add friends to compete with them."
+  },
+  "compare": {
+    "title": "You and {{name}}",
+    "taste": "Taste match",
+    "sets": "Sets together",
+    "events": "Events together",
+    "sharedArtists": "You both saw",
+    "counts": "you {{mine}} · them {{theirs}}"
+  },
+  "venue": {
+    "notFound": "This venue doesn't exist or is still under review.",
+    "youWere_one": "You've been here for {{count}} event",
+    "youWere_other": "You've been here for {{count}} events",
+    "ratings": "Ratings",
+    "rating": {
+      "overall": "Overall",
+      "sound": "Sound",
+      "crowd": "Crowd",
+      "location": "Location",
+      "lineup": "Lineup"
+    },
+    "soundRank": "#{{rank}} for best sound",
+    "resident": "Resident",
+    "events": "Events"
+  },
+  "promoter": {
+    "notFound": "This promoter doesn't exist or is still under review.",
+    "series": "Series"
+  },
+  "bestSound": {
+    "title": "Best sound",
+    "hint": "Average sound rating across the app, from two ratings per venue.",
+    "empty": "Not enough ratings yet.",
+    "ratings_one": "{{count}} rating",
+    "ratings_other": "{{count}} ratings"
+  },
+  "artist": {
+    "aliases": "Also known as {{names}}",
+    "youSaw_one": "You've seen them {{count}} time",
+    "youSaw_other": "You've seen them {{count}} times",
+    "checkins": "Check-ins",
+    "members": "Members",
+    "groups": "Part of",
+    "partners": "Most frequent B2B partners",
+    "topFans": "Top fans"
   }
 }

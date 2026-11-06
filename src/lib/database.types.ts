@@ -1592,6 +1592,17 @@ export type Database = {
         Returns: undefined
       }
       are_friends: { Args: { a: string; b: string }; Returns: boolean }
+      best_sound_ranking: {
+        Args: never
+        Returns: {
+          avg_sound: number
+          city: string
+          name: string
+          rank: number
+          ratings: number
+          venue_id: string
+        }[]
+      }
       can_see_profile: { Args: { profile_id: string }; Returns: boolean }
       can_view_checkin: { Args: { checkin_id: string }; Returns: boolean }
       can_view_reaction_target: {
@@ -1601,6 +1612,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      compare_with: { Args: { target_user: string }; Returns: Json }
       complete_signup: {
         Args: {
           accepted_terms: boolean
@@ -1648,9 +1660,39 @@ export type Database = {
           set_id: string
         }[]
       }
+      explore_stats: {
+        Args: {
+          date_from?: string
+          date_to?: string
+          dimension: string
+          filters?: Json
+          target_user: string
+          verified_only?: boolean
+        }
+        Returns: {
+          avg_rating: number
+          events: number
+          key: string
+          label: string
+          sets: number
+        }[]
+      }
       export_my_data: { Args: never; Returns: Json }
       feed_card: { Args: { checkin_id: string }; Returns: Json }
+      friends_leaderboard: {
+        Args: { for_year?: number }
+        Returns: {
+          artists: number
+          avatar_path: string
+          display_name: string
+          events: number
+          sets: number
+          user_id: string
+          username: string
+        }[]
+      }
       friends_of: { Args: { person: string }; Returns: string[] }
+      get_artist_stats: { Args: { target_artist: string }; Returns: Json }
       get_friends_feed: {
         Args: { before_time?: string; page_size?: number }
         Returns: Json
@@ -1689,6 +1731,18 @@ export type Database = {
           username: string
         }[]
       }
+      get_profile_map: {
+        Args: { target_user: string }
+        Returns: {
+          city: string
+          events: number
+          lat: number
+          lng: number
+          name: string
+          venue_id: string
+        }[]
+      }
+      get_profile_stats: { Args: { target_user: string }; Returns: Json }
       get_public_feed: {
         Args: {
           near_lat?: number
@@ -1698,6 +1752,7 @@ export type Database = {
         }
         Returns: Json
       }
+      get_venue_stats: { Args: { target_venue: string }; Returns: Json }
       has_profile: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_blocked_between: { Args: { a: string; b: string }; Returns: boolean }
