@@ -165,6 +165,8 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
             return rows(route, state.tables[table] ?? [])
           case 'venues':
           case 'notifications':
+          case 'checkin_fun_facts':
+          case 'badge_definitions':
             return json(route, 200, state.tables[table] ?? [])
           case 'event_checkins':
             return rows(route, state.checkins)

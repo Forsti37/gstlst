@@ -42,7 +42,7 @@ insert into public.event_checkins (id, user_id, event_id, visibility, client_uui
 
 with badge as (
   insert into public.badge_definitions (name, description, category, rule)
-  values ('Test Badge', 'Test', 'Test', '{}') returning id
+  values ('Test Badge', 'Test', 'Test', '{"metric":"count","subject":"event","levels":[1]}') returning id
 )
 insert into public.user_badges (user_id, badge_id)
 select '00000000-0000-4000-b000-000000000002', id from badge;

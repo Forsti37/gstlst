@@ -1,4 +1,5 @@
 import { BadgeCheck } from 'lucide-react'
+import { BadgeIcon } from '../badges/BadgeIcon'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { formatEventDate, setLabel, useMediaUrls } from '../checkin/api'
@@ -68,6 +69,16 @@ export function FeedCard({ card }: { card: Card }) {
         <p className="mt-1 text-sm text-text-secondary">{t('feed.with', { names: card.companions.map((c) => c.display_name).join(', ') })}</p>
       )}
       {card.text && <p className="mt-2 whitespace-pre-line">{card.text}</p>}
+      {card.badges && card.badges.length > 0 && (
+        <ul className="mt-2 flex flex-wrap gap-2">
+          {card.badges.map((badge) => (
+            <li key={badge.id} className="flex items-center gap-2 rounded-lg bg-surface-2 py-1 pr-3 pl-1 text-sm font-medium">
+              <BadgeIcon category={badge.category} level={badge.level} size={32} />
+              {badge.name}
+            </li>
+          ))}
+        </ul>
+      )}
       {subRatings.some(([, value]) => value !== null) && (
         <ul className="mt-2 flex flex-wrap gap-x-3 text-xs text-text-secondary">
           {subRatings.map(([key, value]) => value !== null && <li key={key}>{t(`checkin.ratings.${key}`)} {value.toFixed(1)}</li>)}

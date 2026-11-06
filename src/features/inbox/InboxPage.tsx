@@ -48,6 +48,8 @@ function useNotificationView() {
         return p.kind === 'plays'
           ? { text: t('inbox.wishlistPlays', { artist: p.artist, event: p.event, city: p.city }), to: event }
           : { text: t('inbox.wishlistSeen', { actor: p.actor, artist: p.artist }), to: p.artist_id ? `/artists/${p.artist_id}` : undefined }
+      case 'badge':
+        return { text: t('inbox.badge', { name: p.name }), to: '/badges' }
       case 'data_decision':
         return { text: t(`inbox.data.${outcome}`, { name: p.name, into: p.merged_into }) }
       case 'request_decision':

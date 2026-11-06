@@ -269,7 +269,7 @@ One reaction per user and target (event check-in or individual set), changeable 
 
 ## Badges
 
-Badges are configured as rules in the admin area, not in code. After each check-in a Postgres function evaluates only the affected rules and awards new levels.
+Badges are configured as rules in the admin area, not in code. Writes leave a note per person and scope, and a Postgres function evaluates only the rules of that scope: at the end of a check-in batch, otherwise within a minute by cron. Other people's check-ins and master data changes are caught by an hourly sweep, in which only the community rules notify.
 
 ### Rule engine
 
@@ -289,8 +289,8 @@ Each badge definition has a name, description, icon, category, an optional valid
 
 Building blocks:
 
-- **metric:** `count`, `count_distinct`, `streak` (consecutive weekends or days), `same_night` (count within one night), `exists` (a specific event happened).
-- **subject:** event, set, artist, venue, city, country, promoter, series, genre, friend.
+- **metric:** `count`, `count_distinct`, `max_count` (highest count for one subject), `streak` (consecutive weekends or days), `same_night` (count within one night), `exists` (a specific event happened).
+- **subject:** event, set, artist, venue, city, country, promoter, series, genre, subgenre, year.
 - **filter:** genre/subgenre, tag, set\_type, venue\_type, event\_tag, weekday, month, date (e.g. 12-31), distance to home region, verified check-ins only, specific entity (artist id, series id).
 - **window:** all\_time, calendar year, rolling 30/365 days, fixed range.
 - **levels / level\_names:** thresholds and a name per level. Each new level = one notification.

@@ -156,7 +156,8 @@
       "verify": "Verify",
       "catalog": "Catalog",
       "audit": "Log",
-      "roles": "Roles"
+      "roles": "Roles",
+      "badges": "Badges"
     },
     "queueEmpty": "Nothing waiting.",
     "approve": "Approve",
@@ -241,7 +242,26 @@
     "revokeModerator": "Remove moderator",
     "auditEmpty": "No entries yet.",
     "details": "Details",
-    "open": "Open admin area"
+    "open": "Open admin area",
+    "badges": {
+      "new": "New badge",
+      "count": "{{count}} badges",
+      "name": "Name",
+      "description": "Description (English)",
+      "descriptionDe": "Description (German)",
+      "category": "Category",
+      "validFrom": "Counts from",
+      "validTo": "Counts until",
+      "rule": "Rule (JSON)",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleteConfirm": "Delete \"{{name}}\" for everyone?",
+      "invalidJson": "This is not valid JSON yet.",
+      "invalidRule": "The rule was rejected: {{message}}",
+      "preview_one": "{{count}} person would have it right now",
+      "preview_other": "{{count}} people would have it right now",
+      "previewRow": "value {{value}} · level {{level}}"
+    }
   },
   "legal": {
     "label": "Legal",
@@ -453,7 +473,8 @@
     "friendGoing": "{{actor}} is also going to {{event}}",
     "wishlistPlays": "{{artist}} plays {{event}} in {{city}}",
     "wishlistSeen": "{{actor}} saw {{artist}}",
-    "generic": "New notification"
+    "generic": "New notification",
+    "badge": "New badge: {{name}}"
   },
   "moderation": {
     "report": "Report",
@@ -645,5 +666,51 @@
     "groups": "Part of",
     "partners": "Most frequent B2B partners",
     "topFans": "Top fans"
+  },
+  "badges": {
+    "title": "Badges",
+    "new": "New badges",
+    "summary": "{{earned}} of {{total}} earned",
+    "all": "All",
+    "loadFailed": "We couldn't load the badges.",
+    "hidden": "These badges are not visible to you.",
+    "showAll_one": "{{count}} badge",
+    "showAll_other": "{{count}} badges",
+    "level_one": "Level {{level}} of {{count}}",
+    "level_other": "Level {{level}} of {{count}}",
+    "progress": "{{value}}/{{next}}",
+    "maxed": "Highest level reached",
+    "categories": {
+      "starter": "Starter",
+      "genre": "Genre",
+      "set_format": "Set format",
+      "time": "Time",
+      "season": "Season",
+      "places": "Places",
+      "loyalty": "Loyalty",
+      "discovery": "Discovery",
+      "community": "Community",
+      "verified": "Verified",
+      "limited": "Limited"
+    }
+  },
+  "funFacts": {
+    "title": "Fun facts",
+    "artist_first": "First time seeing {{artist}}",
+    "artist_seen": "Seen {{artist}} for the {{n}}th time",
+    "artist_gap": "First time seeing {{artist}} in {{months}} months",
+    "artist_same_weekend": "{{artist}} twice on the same weekend",
+    "artist_same_month": "{{artist}} twice in one month",
+    "artist_best_rating": "Your highest rating for {{artist}}",
+    "first_of_friends": "First of your friends to see {{artist}}",
+    "first_venue": "First time at {{venue}}",
+    "first_city": "First time in {{city}}",
+    "first_country": "First time in {{country}}",
+    "first_of_year": "Your first event of {{year}}",
+    "event_milestone": "Your {{n}}th event",
+    "record_sets": "New record: {{n}} sets in one night",
+    "first_subgenre": "First {{genre}} set",
+    "series_streak": "{{series}}: {{n}} years in a row",
+    "duo_complete": "{{artist}} complete: the duo and both members solo"
   }
 }

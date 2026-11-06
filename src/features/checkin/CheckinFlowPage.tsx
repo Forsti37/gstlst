@@ -1,5 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { BadgeCheck, CheckCircle2, CloudOff } from 'lucide-react'
+import { levelName, useBadges } from '../badges/api'
+import { BadgeIcon } from '../badges/BadgeIcon'
+import { FunFacts } from '../badges/FunFacts'
 import { useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -253,7 +256,31 @@ function RateStep({
   )
 }
 
-function DoneStep({ eventId, onAddMore }: { eventId: string; onAddMore: () => void }) {
+/** What this check-in earned. The batch ends by evaluating badges, and the queue then refreshes this. */
+function NewBadges({ userId }: { userId: string }) {
+  const { t } = useTranslation()
+  const badges = useBadges(userId)
+  const [since] = useState(() => Date.now() - 30_000)
+  const fresh = (badges.data ?? []).filter((badge) => badge.awarded_at && Date.parse(badge.awarded_at) >= since)
+  if (fresh.length === 0) return null
+  return (
+    <section className="mt-6 text-left">
+      <h2 className="mb-2 text-sm font-semibold tracking-wide text-text-secondary uppercase">{t('badges.new')}</h2>
+      <ul className="space-y-2">
+        {fresh.map((badge) => (
+          <li key={badge.id}>
+            <Link to="/badges" className="flex min-h-touch items-center gap-3 rounded-lg bg-surface-1 p-2 font-semibold">
+              <BadgeIcon category={badge.category} level={badge.level} size={48} />
+              {levelName(badge, badge.level)}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function DoneStep({ eventId, checkinId, onAddMore }: { eventId: string; checkinId: string | null; onAddMore: () => void }) {
   const { t } = useTranslation()
   const me = useMember()
   const { waiting } = useQueueStatus(me.id)
@@ -263,6 +290,8 @@ function DoneStep({ eventId, onAddMore }: { eventId: string; onAddMore: () => vo
       {waiting > 0 ? <CloudOff aria-hidden className="mx-auto size-16 text-text-secondary" /> : <CheckCircle2 aria-hidden className="mx-auto size-16 text-red" />}
       <p className="font-display mt-4 text-4xl uppercase">{t('checkin.doneTitle')}</p>
       <p className="mt-2 text-text-secondary">{waiting > 0 ? t('checkin.doneOffline') : t('checkin.doneOnline')}</p>
+      <NewBadges userId={me.id} />
+      {checkinId && <FunFacts checkinId={checkinId} limit={5} />}
       {!promptDone && <PushPrompt onAnswered={() => setPromptDone(true)} />}
       <div className="mt-8 space-y-2">
         <Button variant="primary" className="w-full" onClick={onAddMore}>{t('checkin.addMoreSets')}</Button>
@@ -294,6 +323,7 @@ export function CheckinFlowPage() {
   const [failed, setFailed] = useState(false)
   const position = useRef<Promise<Position | null> | null>(null)
   const [preselected, setPreselected] = useState(false)
+  const [doneCheckinId, setDoneCheckinId] = useState<string | null>(null)
 
   const lineup: Lineup = {
     floors: [
@@ -369,6 +399,7 @@ export function CheckinFlowPage() {
       navigator.vibrate?.(30)
       setSubmitted((done) => [...done, ...setDrafts.map((d) => d.setId)])
       setSetDrafts([])
+      setDoneCheckinId(checkinId)
       setStep('done')
       void queryClient.invalidateQueries({ queryKey: ['ownCheckin', me.id, eventId] })
     } catch {
@@ -432,6 +463,7 @@ export function CheckinFlowPage() {
       {current === 'done' && (
         <DoneStep
           eventId={eventId}
+          checkinId={doneCheckinId}
           onAddMore={() => {
             setAddedSets([])
             setStep('lineup')

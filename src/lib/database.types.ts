@@ -206,6 +206,7 @@ export type Database = {
           category: string
           created_at: string
           description: string
+          description_de: string | null
           icon: string | null
           id: string
           name: string
@@ -217,6 +218,7 @@ export type Database = {
           category: string
           created_at?: string
           description: string
+          description_de?: string | null
           icon?: string | null
           id?: string
           name: string
@@ -228,6 +230,7 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string
+          description_de?: string | null
           icon?: string | null
           id?: string
           name?: string
@@ -1579,6 +1582,15 @@ export type Database = {
           username: string
         }[]
       }
+      admin_preview_badge: {
+        Args: { rule: Json; valid_from?: string; valid_to?: string }
+        Returns: {
+          display_name: string
+          level: number
+          username: string
+          value: number
+        }[]
+      }
       admin_set_moderator: {
         Args: { is_moderator: boolean; target_user: string }
         Returns: undefined
@@ -1651,6 +1663,7 @@ export type Database = {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
+      evaluate_my_badges: { Args: never; Returns: undefined }
       event_live_until: { Args: { target_event: string }; Returns: string }
       event_set_ratings: {
         Args: { target_event: string }
@@ -1693,6 +1706,23 @@ export type Database = {
       }
       friends_of: { Args: { person: string }; Returns: string[] }
       get_artist_stats: { Args: { target_artist: string }; Returns: Json }
+      get_badges: {
+        Args: { target_user: string }
+        Returns: {
+          awarded_at: string
+          category: string
+          description: string
+          description_de: string
+          id: string
+          level: number
+          level_names: Json
+          levels: Json
+          name: string
+          valid_from: string
+          valid_to: string
+          value: number
+        }[]
+      }
       get_friends_feed: {
         Args: { before_time?: string; page_size?: number }
         Returns: Json

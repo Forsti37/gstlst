@@ -12,6 +12,7 @@ export type QueuedAction =
   | { kind: 'upload'; path: string; blob: Blob }
   | { kind: 'removeFile'; path: string }
   | { kind: 'gps'; checkinId: string; lat: number; lng: number; capturedAt: string }
-  | { kind: 'rpc'; fn: string; args: Row }
+  /** optional: a failure doesn't hold up the queue, because the server catches up by itself. */
+  | { kind: 'rpc'; fn: string; args: Row; optional?: boolean }
 
 export const insert = (table: TableName, row: Row, onConflict = 'id'): QueuedAction => ({ kind: 'insert', table, row, onConflict })

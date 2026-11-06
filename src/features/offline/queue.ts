@@ -47,9 +47,11 @@ async function send(action: QueuedAction) {
       if (error) check({ error, status: 'statusCode' in error ? Number(error.statusCode) : 0 })
       return
     }
-    case 'rpc':
-      check(await client.rpc(action.fn, action.args))
+    case 'rpc': {
+      const result = await client.rpc(action.fn, action.args)
+      if (!action.optional) check(result)
       return
+    }
     case 'gps': {
       // A check-in without verification is still a check-in, so only connection problems count.
       // The coordinates leave this device only here and disappear with the op afterwards.
@@ -109,11 +111,16 @@ export function syncQueue(): Promise<void> {
   return running
 }
 
+const CHECKIN_TABLES = new Set(['event_checkins', 'set_checkins', 'set_checkin_genres', 'set_checkin_tags'])
+
 /** Writes always go through here, online too, so that there is only one way to save. */
 export async function enqueue(userId: string, actions: QueuedAction[]) {
   const batchId = crypto.randomUUID()
   const createdAt = Date.now()
-  const ops: QueuedOp[] = actions.map((action) => ({ batchId, userId, action, status: 'queued', createdAt }))
+  // Last in the batch, so that new badges and fun facts are ready when it has gone through.
+  const changesCheckins = actions.some((action) => 'table' in action && CHECKIN_TABLES.has(action.table))
+  const all: QueuedAction[] = changesCheckins ? [...actions, { kind: 'rpc', fn: 'evaluate_my_badges', args: {}, optional: true }] : actions
+  const ops: QueuedOp[] = all.map((action) => ({ batchId, userId, action, status: 'queued', createdAt }))
   await offlineDb.ops.bulkAdd(ops)
   void syncQueue()
   return batchId

@@ -5,6 +5,7 @@ import { Button, ErrorText } from '../../app/ui'
 import { useAuth, useMember } from '../auth/auth'
 import { ReportButton } from '../moderation/ReportButton'
 import { UserAvatar } from '../profile/UserAvatar'
+import { BadgeStrip } from '../badges/BadgesPage'
 import { CompareCard } from '../stats/CompareCard'
 import { ProfileStatsSection } from '../stats/ProfileStatsSection'
 import { useFriendActions, useFriendships, useProfileByUsername } from './api'
@@ -61,6 +62,7 @@ export function UserPage() {
       </div>
       {failed && <ErrorText>{t('common.actionFailed')}</ErrorText>}
 
+      <BadgeStrip userId={person.id} />
       <CompareCard userId={person.id} name={person.display_name} />
       <ProfileStatsSection userId={person.id} own={false} />
     </div>

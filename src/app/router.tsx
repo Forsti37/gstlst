@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { AdminLayout } from '../features/admin/AdminLayout'
 import { AuditTab } from '../features/admin/AuditTab'
+import { BadgesTab } from '../features/admin/BadgesTab'
 import { CatalogTab } from '../features/admin/CatalogTab'
 import { DashboardTab } from '../features/admin/DashboardTab'
 import { DataQueueTab } from '../features/admin/DataQueueTab'
@@ -24,6 +25,7 @@ import { DiscoverPage } from '../features/discover/DiscoverPage'
 import { FeedPage } from '../features/feed/FeedPage'
 import { FriendsPage } from '../features/friends/FriendsPage'
 import { UserPage } from '../features/friends/UserPage'
+import { BadgesPage } from '../features/badges/BadgesPage'
 import { BestSoundPage } from '../features/stats/BestSoundPage'
 import { ExplorerPage } from '../features/stats/ExplorerPage'
 import { LeaderboardPage } from '../features/stats/LeaderboardPage'
@@ -71,6 +73,8 @@ export const router = createBrowserRouter(
             { path: 'promoters/:promoterId', element: <PromoterPage /> },
             { path: 'explore/:userId', element: <ExplorerPage /> },
             { path: 'leaderboard', element: <LeaderboardPage /> },
+            { path: 'badges', element: <BadgesPage /> },
+            { path: 'badges/:userId', element: <BadgesPage /> },
             { path: 'best-sound', element: <BestSoundPage /> },
             { path: 'u/:username', element: <UserPage /> },
             {
@@ -84,6 +88,7 @@ export const router = createBrowserRouter(
                 { path: 'reports', element: <ReportsTab /> },
                 { path: 'verify', element: <VerifyTab /> },
                 { path: 'catalog', element: <CatalogTab /> },
+                { path: 'badges', element: <BadgesTab /> },
                 { path: 'audit', element: <AuditTab /> },
                 { path: 'roles', element: <RolesTab /> },
                 { path: 'invites', element: <InvitesPage /> },

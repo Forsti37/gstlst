@@ -50,6 +50,8 @@ function message(type: string, p: Payload, language: Language): { body: string; 
       return p.kind === 'plays'
         ? { body: de ? `${p.artist} spielt bei ${p.event} in ${p.city}` : `${p.artist} plays ${p.event} in ${p.city}`, url: event }
         : { body: de ? `${p.actor} hat ${p.artist} gesehen` : `${p.actor} saw ${p.artist}`, url: `artists/${p.artist_id}` }
+    case 'badge':
+      return { body: de ? `Neues Badge: ${p.name}` : `New badge: ${p.name}`, url: 'badges' }
     case 'data_decision':
       if (p.decision === 'approve') return { body: de ? `„${p.name}“ wurde freigegeben` : `“${p.name}” was approved`, url: 'inbox' }
       if (p.decision === 'merge') return { body: de ? `„${p.name}“ wurde zusammengeführt` : `“${p.name}” was merged`, url: 'inbox' }

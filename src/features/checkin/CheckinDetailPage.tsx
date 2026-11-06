@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { BadgeCheck } from 'lucide-react'
+import { FunFacts } from '../badges/FunFacts'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
@@ -177,6 +178,8 @@ function DetailForm({ checkin }: { checkin: CheckinDetail }) {
           {t('history.verified')}
         </p>
       )}
+
+      <FunFacts checkinId={checkin.id} />
 
       <Section title={t('history.sets_title')}>
         <ul className="space-y-3">

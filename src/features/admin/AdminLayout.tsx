@@ -66,6 +66,7 @@ export function AdminLayout() {
         <Tab to="/admin/reports" label={t('admin.tabs.reports')} count={queues?.reports} />
         <Tab to="/admin/verify" label={t('admin.tabs.verify')} />
         <Tab to="/admin/catalog" label={t('admin.tabs.catalog')} />
+        <Tab to="/admin/badges" label={t('admin.tabs.badges')} />
         <Tab to="/admin/audit" label={t('admin.tabs.audit')} />
         {me.role === 'admin' && <Tab to="/admin/roles" label={t('admin.tabs.roles')} />}
         {me.role === 'admin' && <Tab to="/admin/invites" label={t('admin.invites')} />}
