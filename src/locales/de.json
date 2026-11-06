@@ -130,7 +130,12 @@
     "deleteBody": "Wenn du dein Konto löschst, sind deine Fotos, Check-ins, Reactions und Freundschaften endgültig weg. Von dir angelegte Events und Artists bleiben, aber ohne deinen Namen.",
     "deleteConfirm": "Tippe {{username}} zur Bestätigung",
     "delete": "Mein Konto löschen",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "feedback": "Feedback",
+    "feedbackLabel": "Was funktioniert, und was nicht?",
+    "feedbackPublic": "Dein Text wird als öffentliches GitHub-Issue gepostet, mit App-Version und Gerät, aber ohne deinen Namen.",
+    "feedbackSend": "Feedback senden",
+    "feedbackThanks": "Danke!"
   },
   "admin": {
     "title": "Admin",
@@ -144,7 +149,102 @@
     "copyLink": "Link kopieren",
     "delete": "Löschen",
     "copied": "Kopiert",
-    "copyFailed": "Kopiere diesen Link von Hand:"
+    "copyFailed": "Kopiere diesen Link von Hand:",
+    "tabs": {
+      "dashboard": "Übersicht",
+      "data": "Neue Daten",
+      "requests": "Vorschläge",
+      "photos": "Fotos",
+      "reports": "Meldungen",
+      "verify": "Verifizieren",
+      "catalog": "Katalog",
+      "audit": "Protokoll",
+      "roles": "Rollen"
+    },
+    "queueEmpty": "Nichts offen.",
+    "approve": "Freigeben",
+    "reject": "Ablehnen",
+    "rejectReason": "Grund für die Ablehnung? Die Person, die es angelegt hat, liest ihn.",
+    "reasonRequired": "Eine Ablehnung braucht einen Grund.",
+    "members": "Mitglieder",
+    "activeUsers": "Aktiv in den letzten 7 Tagen",
+    "checkinsPerWeek": "Check-ins pro Woche",
+    "noCheckinsYet": "Noch keine Check-ins. Importierte Historie zählt nicht.",
+    "feedback": "Feedback",
+    "possibleDuplicates": "Mögliche Duplikate",
+    "merge": "Zusammenführen",
+    "mergeConfirm": "„{{from}}“ in „{{to}}“ zusammenführen? „{{from}}“ verschwindet dabei.",
+    "entities": {
+      "events": "Event",
+      "sets": "Set",
+      "floors": "Floor",
+      "venues": "Venue",
+      "artists": "Artist",
+      "promoters": "Promoter",
+      "event_series": "Serie",
+      "tags": "Tag"
+    },
+    "fields": {
+      "name": "Name",
+      "date_start": "Datum",
+      "date_end": "Letzter Tag",
+      "set_type": "Art",
+      "city": "Stadt",
+      "country_code": "Land",
+      "lat": "Breitengrad",
+      "lng": "Längengrad",
+      "venue_type": "Venue-Art",
+      "kind": "Typ",
+      "instagram_url": "Instagram"
+    },
+    "requestTypes": {
+      "event_timetable": "Timetable",
+      "event_tags": "Event-Tags",
+      "event_correction": "Korrektur"
+    },
+    "photoAlt": "Foto zur Prüfung",
+    "reportTargets": {
+      "media": "Gemeldetes Foto",
+      "profile": "Gemeldetes Profil"
+    },
+    "dismiss": "Verwerfen",
+    "uphold": {
+      "media": "Foto entfernen",
+      "profile": "Ausgeblendet lassen"
+    },
+    "verifyHint": "Private Check-ins werden nicht aufgelistet.",
+    "gpsVerified": "Per GPS verifiziert",
+    "verify": "Verifizieren",
+    "unverify": "Zurücknehmen",
+    "noCheckins": "Keine Check-ins gefunden.",
+    "eventStatus": "Event-Status",
+    "lifecycle": {
+      "scheduled": "Geplant",
+      "cancelled": "Abgesagt",
+      "postponed": "Verschoben"
+    },
+    "artists": "Artists",
+    "aliases": "Aliasse",
+    "newAlias": "Neuer Alias",
+    "add": "Hinzufügen",
+    "tagsAndGenres": "Tags und Genres",
+    "newTag": "Neuer Tag",
+    "tagScopes": {
+      "set": "Für Sets",
+      "event": "Für Events"
+    },
+    "newGenre": "Neues Genre",
+    "parentGenre": "Übergeordnetes Genre",
+    "roles": {
+      "user": "Nutzer",
+      "moderator": "Moderator",
+      "admin": "Admin"
+    },
+    "makeModerator": "Zum Moderator machen",
+    "revokeModerator": "Moderator entfernen",
+    "auditEmpty": "Noch keine Einträge.",
+    "details": "Details",
+    "open": "Admin-Bereich öffnen"
   },
   "legal": {
     "label": "Rechtliches",
@@ -300,7 +400,9 @@
     "end": "Ende",
     "sendProposal": "Vorschlag senden",
     "proposalSent": "Danke! Das ist nach der Freigabe sichtbar.",
-    "onlyYou": "Nur du, bis zur Freigabe"
+    "onlyYou": "Nur du, bis zur Freigabe",
+    "proposeCorrection": "Angaben korrigieren",
+    "photoReport": "Melden"
   },
   "history": {
     "title": "Meine Check-ins",
@@ -323,5 +425,27 @@
       "rejected": "Foto: abgelehnt"
     },
     "removePhotoConfirm": "Dieses Foto entfernen?"
+  },
+  "inbox": {
+    "markRead": "Alle als gelesen markieren",
+    "reason": "Grund: {{reason}}",
+    "data": {
+      "approve": "„{{name}}“ wurde freigegeben.",
+      "reject": "„{{name}}“ wurde abgelehnt.",
+      "merge": "„{{name}}“ wurde mit „{{into}}“ zusammengeführt."
+    },
+    "request": {
+      "approve": "Dein Vorschlag wurde angenommen.",
+      "reject": "Dein Vorschlag wurde abgelehnt."
+    },
+    "photo": {
+      "approve": "Dein Foto wurde freigegeben.",
+      "reject": "Dein Foto wurde abgelehnt."
+    }
+  },
+  "moderation": {
+    "report": "Melden",
+    "reportReason": "Was ist das Problem? Der Inhalt bleibt bis zur Prüfung ausgeblendet.",
+    "reported": "Danke. Das bleibt ausgeblendet, bis jemand es geprüft hat."
   }
 }

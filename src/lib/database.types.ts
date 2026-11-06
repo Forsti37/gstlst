@@ -975,6 +975,7 @@ export type Database = {
           birth_year: number
           created_at: string
           display_name: string
+          hidden_for_review: boolean
           home_city: string | null
           id: string
           language: string
@@ -989,6 +990,7 @@ export type Database = {
           birth_year: number
           created_at?: string
           display_name: string
+          hidden_for_review?: boolean
           home_city?: string | null
           id: string
           language?: string
@@ -1003,6 +1005,7 @@ export type Database = {
           birth_year?: number
           created_at?: string
           display_name?: string
+          hidden_for_review?: boolean
           home_city?: string | null
           id?: string
           language?: string
@@ -1123,27 +1126,42 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          previous_status:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           reason: string
           reporter_id: string | null
+          resolution: string | null
           resolved_at: string | null
+          resolved_by: string | null
           target_id: string
           target_type: string
         }
         Insert: {
           created_at?: string
           id?: string
+          previous_status?:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           reason: string
           reporter_id?: string | null
+          resolution?: string | null
           resolved_at?: string | null
+          resolved_by?: string | null
           target_id: string
           target_type: string
         }
         Update: {
           created_at?: string
           id?: string
+          previous_status?:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           reason?: string
           reporter_id?: string | null
+          resolution?: string | null
           resolved_at?: string | null
+          resolved_by?: string | null
           target_id?: string
           target_type?: string
         }
@@ -1151,6 +1169,13 @@ export type Database = {
           {
             foreignKeyName: "reports_reporter_id_fkey"
             columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_resolved_by_fkey"
+            columns: ["resolved_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1532,6 +1557,28 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      admin_list_members: {
+        Args: never
+        Returns: {
+          created_at: string
+          display_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          username: string
+        }[]
+      }
+      admin_set_moderator: {
+        Args: { is_moderator: boolean; target_user: string }
+        Returns: undefined
+      }
+      apply_entity_changes: {
+        Args: { changes: Json; entity_id: string; entity_table: string }
+        Returns: undefined
+      }
+      approve_dependencies: {
+        Args: { entity_id: string; entity_table: string }
+        Returns: undefined
+      }
       are_friends: { Args: { a: string; b: string }; Returns: boolean }
       can_see_profile: { Args: { profile_id: string }; Returns: boolean }
       can_view_checkin: { Args: { checkin_id: string }; Returns: boolean }
@@ -1556,6 +1603,7 @@ export type Database = {
           birth_year: number
           created_at: string
           display_name: string
+          hidden_for_review: boolean
           home_city: string | null
           id: string
           language: string
@@ -1594,6 +1642,7 @@ export type Database = {
           birth_year: number
           created_at: string
           display_name: string
+          hidden_for_review: boolean
           home_city: string | null
           id: string
           language: string
@@ -1645,6 +1694,15 @@ export type Database = {
           username: string
         }[]
       }
+      log_decision: {
+        Args: {
+          action: string
+          details: Json
+          entity_id: string
+          entity_type: string
+        }
+        Returns: undefined
+      }
       log_merge: {
         Args: {
           action: string
@@ -1671,7 +1729,29 @@ export type Database = {
         Args: { from_id: string; to_id: string }
         Returns: undefined
       }
+      moderate_entity: {
+        Args: {
+          changes?: Json
+          decision: string
+          entity_id: string
+          entity_table: string
+          reason?: string
+        }
+        Returns: undefined
+      }
+      moderate_media: {
+        Args: { decision: string; media_id: string; reason?: string }
+        Returns: undefined
+      }
+      moderate_merge: {
+        Args: { entity_table: string; from_id: string; to_id: string }
+        Returns: undefined
+      }
       normalize_name: { Args: { value: string }; Returns: string }
+      notify_decision: {
+        Args: { kind: string; payload: Json; recipient: string }
+        Returns: undefined
+      }
       privacy_allows: {
         Args: { area: string; owner: string }
         Returns: boolean
@@ -1680,7 +1760,20 @@ export type Database = {
         Args: { area: string; owner: string }
         Returns: Database["public"]["Enums"]["visibility"]
       }
+      report_content: {
+        Args: { reason: string; target_id: string; target_type: string }
+        Returns: undefined
+      }
       require_admin: { Args: never; Returns: undefined }
+      require_staff: { Args: never; Returns: undefined }
+      resolve_report: {
+        Args: { decision: string; note?: string; report_id: string }
+        Returns: undefined
+      }
+      review_change_request: {
+        Args: { decision: string; reason?: string; request_id: string }
+        Returns: undefined
+      }
       search_entities: {
         Args: { entity_type: string; max_results?: number; query: string }
         Returns: {
@@ -1710,6 +1803,28 @@ export type Database = {
           id: string
           username: string
         }[]
+      }
+      set_event_lifecycle: {
+        Args: {
+          event_id: string
+          lifecycle: Database["public"]["Enums"]["event_lifecycle"]
+        }
+        Returns: undefined
+      }
+      staff_dashboard: { Args: never; Returns: Json }
+      staff_list_checkins: {
+        Args: { target_username: string }
+        Returns: {
+          date_start: string
+          event_name: string
+          id: string
+          verified_admin: boolean
+          verified_gps: boolean
+        }[]
+      }
+      staff_verify_checkin: {
+        Args: { checkin_id: string; verified: boolean }
+        Returns: undefined
       }
       verify_checkin_gps: {
         Args: {

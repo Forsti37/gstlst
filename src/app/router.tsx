@@ -1,5 +1,15 @@
 import { createBrowserRouter } from 'react-router'
+import { AdminLayout } from '../features/admin/AdminLayout'
+import { AuditTab } from '../features/admin/AuditTab'
+import { CatalogTab } from '../features/admin/CatalogTab'
+import { DashboardTab } from '../features/admin/DashboardTab'
+import { DataQueueTab } from '../features/admin/DataQueueTab'
 import { InvitesPage } from '../features/admin/InvitesPage'
+import { PhotosTab } from '../features/admin/PhotosTab'
+import { ReportsTab } from '../features/admin/ReportsTab'
+import { RequestsTab } from '../features/admin/RequestsTab'
+import { RolesTab } from '../features/admin/RolesTab'
+import { VerifyTab } from '../features/admin/VerifyTab'
 import { RequireMember, RequireOnboarding } from '../features/auth/gates'
 import { InvitePage } from '../features/auth/invite'
 import { LoginPage } from '../features/auth/LoginPage'
@@ -49,7 +59,22 @@ export const router = createBrowserRouter(
             { path: 'settings', element: <SettingsPage /> },
             { path: 'friends', element: <FriendsPage /> },
             { path: 'u/:username', element: <UserPage /> },
-            { path: 'admin/invites', element: <InvitesPage /> },
+            {
+              path: 'admin',
+              element: <AdminLayout />,
+              children: [
+                { index: true, element: <DashboardTab /> },
+                { path: 'data', element: <DataQueueTab /> },
+                { path: 'requests', element: <RequestsTab /> },
+                { path: 'photos', element: <PhotosTab /> },
+                { path: 'reports', element: <ReportsTab /> },
+                { path: 'verify', element: <VerifyTab /> },
+                { path: 'catalog', element: <CatalogTab /> },
+                { path: 'audit', element: <AuditTab /> },
+                { path: 'roles', element: <RolesTab /> },
+                { path: 'invites', element: <InvitesPage /> },
+              ],
+            },
             { path: '*', element: <NotFoundPage /> },
           ],
         },

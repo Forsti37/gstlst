@@ -3,6 +3,7 @@ import { Navigate, useNavigate, useParams } from 'react-router'
 import { PlaceholderPage } from '../../app/PlaceholderPage'
 import { Button, ErrorText } from '../../app/ui'
 import { useAuth, useMember } from '../auth/auth'
+import { ReportButton } from '../moderation/ReportButton'
 import { UserAvatar } from '../profile/UserAvatar'
 import { useFriendActions, useFriendships, useProfileByUsername } from './api'
 
@@ -54,6 +55,7 @@ export function UserPage() {
         {outgoing && <Button onClick={() => remove.mutate(person.id)}>{t('friends.cancel')}</Button>}
         {friendship?.status === 'accepted' && <Button onClick={() => remove.mutate(person.id)}>{t('user.removeFriend')}</Button>}
         <Button variant="danger" onClick={confirmBlock}>{t('user.block')}</Button>
+        <ReportButton targetType="profile" targetId={person.id} />
       </div>
       {failed && <ErrorText>{t('common.actionFailed')}</ErrorText>}
     </div>

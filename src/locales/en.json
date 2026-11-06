@@ -130,7 +130,12 @@
     "deleteBody": "Deleting your account removes your photos, check-ins, reactions and friendships for good. Events and artists you added stay, without your name.",
     "deleteConfirm": "Type {{username}} to confirm",
     "delete": "Delete my account",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "feedback": "Feedback",
+    "feedbackLabel": "What works, and what doesn’t?",
+    "feedbackPublic": "Your text is posted as a public GitHub issue, with the app version and your device but without your name.",
+    "feedbackSend": "Send feedback",
+    "feedbackThanks": "Thanks!"
   },
   "admin": {
     "title": "Admin",
@@ -144,7 +149,102 @@
     "copyLink": "Copy link",
     "delete": "Delete",
     "copied": "Copied",
-    "copyFailed": "Copy this link by hand:"
+    "copyFailed": "Copy this link by hand:",
+    "tabs": {
+      "dashboard": "Overview",
+      "data": "New data",
+      "requests": "Requests",
+      "photos": "Photos",
+      "reports": "Reports",
+      "verify": "Verify",
+      "catalog": "Catalog",
+      "audit": "Log",
+      "roles": "Roles"
+    },
+    "queueEmpty": "Nothing waiting.",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectReason": "Reason for the rejection? The creator gets to read it.",
+    "reasonRequired": "A rejection needs a reason.",
+    "members": "Members",
+    "activeUsers": "Active in the last 7 days",
+    "checkinsPerWeek": "Check-ins per week",
+    "noCheckinsYet": "No check-ins yet. Imported history does not count.",
+    "feedback": "Feedback",
+    "possibleDuplicates": "Possible duplicates",
+    "merge": "Merge",
+    "mergeConfirm": "Merge “{{from}}” into “{{to}}”? “{{from}}” will disappear.",
+    "entities": {
+      "events": "Event",
+      "sets": "Set",
+      "floors": "Floor",
+      "venues": "Venue",
+      "artists": "Artist",
+      "promoters": "Promoter",
+      "event_series": "Series",
+      "tags": "Tag"
+    },
+    "fields": {
+      "name": "Name",
+      "date_start": "Date",
+      "date_end": "Last day",
+      "set_type": "Type",
+      "city": "City",
+      "country_code": "Country",
+      "lat": "Latitude",
+      "lng": "Longitude",
+      "venue_type": "Venue type",
+      "kind": "Kind",
+      "instagram_url": "Instagram"
+    },
+    "requestTypes": {
+      "event_timetable": "Timetable",
+      "event_tags": "Event tags",
+      "event_correction": "Correction"
+    },
+    "photoAlt": "Photo to review",
+    "reportTargets": {
+      "media": "Reported photo",
+      "profile": "Reported profile"
+    },
+    "dismiss": "Dismiss",
+    "uphold": {
+      "media": "Remove photo",
+      "profile": "Keep hidden"
+    },
+    "verifyHint": "Private check-ins are not listed.",
+    "gpsVerified": "GPS verified",
+    "verify": "Verify",
+    "unverify": "Undo",
+    "noCheckins": "No check-ins found.",
+    "eventStatus": "Event status",
+    "lifecycle": {
+      "scheduled": "Scheduled",
+      "cancelled": "Cancelled",
+      "postponed": "Postponed"
+    },
+    "artists": "Artists",
+    "aliases": "Aliases",
+    "newAlias": "New alias",
+    "add": "Add",
+    "tagsAndGenres": "Tags and genres",
+    "newTag": "New tag",
+    "tagScopes": {
+      "set": "For sets",
+      "event": "For events"
+    },
+    "newGenre": "New genre",
+    "parentGenre": "Parent genre",
+    "roles": {
+      "user": "User",
+      "moderator": "Moderator",
+      "admin": "Admin"
+    },
+    "makeModerator": "Make moderator",
+    "revokeModerator": "Remove moderator",
+    "auditEmpty": "No entries yet.",
+    "details": "Details",
+    "open": "Open admin area"
   },
   "legal": {
     "label": "Legal",
@@ -300,7 +400,9 @@
     "end": "End",
     "sendProposal": "Send proposal",
     "proposalSent": "Thanks! It goes live once it has been approved.",
-    "onlyYou": "Only you, until approved"
+    "onlyYou": "Only you, until approved",
+    "proposeCorrection": "Correct details",
+    "photoReport": "Report"
   },
   "history": {
     "title": "My check-ins",
@@ -323,5 +425,27 @@
       "rejected": "Photo: rejected"
     },
     "removePhotoConfirm": "Remove this photo?"
+  },
+  "inbox": {
+    "markRead": "Mark all as read",
+    "reason": "Reason: {{reason}}",
+    "data": {
+      "approve": "“{{name}}” was approved.",
+      "reject": "“{{name}}” was rejected.",
+      "merge": "“{{name}}” was merged into “{{into}}”."
+    },
+    "request": {
+      "approve": "Your proposal was accepted.",
+      "reject": "Your proposal was rejected."
+    },
+    "photo": {
+      "approve": "Your photo was approved.",
+      "reject": "Your photo was rejected."
+    }
+  },
+  "moderation": {
+    "report": "Report",
+    "reportReason": "What is the problem? It stays hidden until someone has reviewed it.",
+    "reported": "Thanks. It is hidden until someone has reviewed it."
   }
 }

@@ -10,6 +10,7 @@ import { getSupabase } from '../../lib/supabase'
 import { ownProfileKey, useAuth, useMember, type OwnProfile } from '../auth/auth'
 import { clearQueue, MEDIA_BUCKET } from '../offline/queue'
 import { UserAvatar } from '../profile/UserAvatar'
+import { FeedbackForm } from './FeedbackForm'
 
 type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
 type Level = 'public' | 'friends' | 'private'
@@ -236,13 +237,15 @@ export function SettingsPage() {
       <Section title={t('language.label')}><LanguagePicker /></Section>
       <Section title={t('settings.privacy')}><PrivacySettings /></Section>
 
-      {me.role === 'admin' && (
+      {(me.role === 'admin' || me.role === 'moderator') && (
         <Section title={t('admin.title')}>
-          <Link to="/admin/invites" className="inline-flex min-h-touch items-center rounded-lg bg-surface-2 px-4 font-semibold">
-            {t('admin.invites')}
+          <Link to="/admin" className="inline-flex min-h-touch items-center rounded-lg bg-surface-2 px-4 font-semibold">
+            {t('admin.open')}
           </Link>
         </Section>
       )}
+
+      <Section title={t('settings.feedback')}><FeedbackForm /></Section>
 
       <Section title={t('settings.yourData')}><DataSection /></Section>
 

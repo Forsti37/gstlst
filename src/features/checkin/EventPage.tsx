@@ -7,6 +7,7 @@ import { Button, Section, TextField } from '../../app/ui'
 import { getSupabase } from '../../lib/supabase'
 import { useMember } from '../auth/auth'
 import { useFriendships } from '../friends/api'
+import { ReportButton } from '../moderation/ReportButton'
 import { UserAvatar } from '../profile/UserAvatar'
 import { insert } from '../offline/actions'
 import { enqueue } from '../offline/queue'
@@ -85,7 +86,7 @@ function EventPhotos({ eventId }: { eventId: string }) {
     queryFn: async () => {
       const { data, error } = await getSupabase()
         .from('media')
-        .select('id, storage_path, moderation_status, checkin:event_checkins!inner(event_id)')
+        .select('id, owner_id, storage_path, moderation_status, checkin:event_checkins!inner(event_id)')
         .eq('checkin.event_id', eventId)
         .or(`moderation_status.eq.approved,owner_id.eq.${me.id}`)
       if (error) throw error
@@ -104,6 +105,11 @@ function EventPhotos({ eventId }: { eventId: string }) {
               <figcaption className="absolute inset-x-0 bottom-0 rounded-b bg-bg/80 px-1 py-0.5 text-center text-xs">
                 {t('events.onlyYou')}
               </figcaption>
+            )}
+            {photo.owner_id !== me.id && (
+              <div className="mt-1">
+                <ReportButton targetType="media" targetId={photo.id} onReported={() => void photos.refetch()} />
+              </div>
             )}
           </figure>
         ))}
@@ -154,6 +160,34 @@ function ProposeTimetable({ eventId, sets, onDone }: { eventId: string; sets: Li
   )
 }
 
+function ProposeCorrection({ event, onDone }: { event: { id: string; name: string; date_start: string; date_end: string | null }; onDone: () => void }) {
+  const { t } = useTranslation()
+  const me = useMember()
+  const [name, setName] = useState(event.name)
+  const [dateStart, setDateStart] = useState(event.date_start)
+  const [dateEnd, setDateEnd] = useState(event.date_end ?? '')
+  const diff = {
+    ...(name.trim() !== event.name ? { name: name.trim() } : {}),
+    ...(dateStart !== event.date_start ? { date_start: dateStart } : {}),
+    ...(dateEnd !== (event.date_end ?? '') ? { date_end: dateEnd } : {}),
+  }
+  const submit = () => {
+    void enqueue(me.id, [
+      insert('change_requests', { id: crypto.randomUUID(), entity_type: 'event_correction', entity_id: event.id, created_by: me.id, diff }),
+    ]).then(onDone)
+  }
+  return (
+    <div className="mt-3 space-y-3 rounded-xl bg-surface-1 p-4">
+      <TextField label={t('checkin.eventName')} value={name} onChange={(e) => setName(e.target.value)} />
+      <div className="grid grid-cols-2 gap-2">
+        <TextField label={t('checkin.dateStart')} type="date" value={dateStart} onChange={(e) => setDateStart(e.target.value)} />
+        <TextField label={t('checkin.dateEnd')} type="date" value={dateEnd} onChange={(e) => setDateEnd(e.target.value)} />
+      </div>
+      <Button variant="primary" disabled={Object.keys(diff).length === 0} onClick={submit}>{t('events.sendProposal')}</Button>
+    </div>
+  )
+}
+
 function ProposeTags({ eventId, currentTagIds, onDone }: { eventId: string; currentTagIds: string[]; onDone: () => void }) {
   const { t } = useTranslation()
   const me = useMember()
@@ -192,7 +226,7 @@ export function EventPage() {
   const event = useEvent(eventId)
   const lineup = useLineup(eventId)
   const ratings = useEventRatings(eventId)
-  const [panel, setPanel] = useState<'timetable' | 'tags' | 'set' | null>(null)
+  const [panel, setPanel] = useState<'timetable' | 'tags' | 'set' | 'correction' | null>(null)
   const [sent, setSent] = useState(false)
 
   const finish = () => {
@@ -267,6 +301,7 @@ export function EventPage() {
           <Button onClick={() => setPanel(panel === 'set' ? null : 'set')}>{t('checkin.addSet')}</Button>
           {sets.length > 0 && <Button onClick={() => setPanel(panel === 'timetable' ? null : 'timetable')}>{t('events.proposeTimetable')}</Button>}
           <Button onClick={() => setPanel(panel === 'tags' ? null : 'tags')}>{t('events.proposeTags')}</Button>
+          <Button onClick={() => setPanel(panel === 'correction' ? null : 'correction')}>{t('events.proposeCorrection')}</Button>
         </div>
         {panel === 'set' && (
           <div className="mt-3">
@@ -279,6 +314,7 @@ export function EventPage() {
         )}
         {panel === 'timetable' && <ProposeTimetable eventId={eventId} sets={sets} onDone={finish} />}
         {panel === 'tags' && <ProposeTags eventId={eventId} currentTagIds={tags.map((tag) => tag.id)} onDone={finish} />}
+        {panel === 'correction' && <ProposeCorrection event={data} onDone={finish} />}
       </Section>
 
       <WhoWasThere eventId={eventId} />

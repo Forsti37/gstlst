@@ -7,6 +7,8 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'n
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
+// The linked project, or another one: npm run db:test -- --remote=<project ref>
+const target = process.argv.find((arg) => arg.startsWith('--remote=')) ?? '--remote'
 const MARKER = 'GSTLST_TAP_OUTPUT'
 const dir = 'supabase/tests/database'
 const files = readdirSync(dir).filter((f) => f.endsWith('.test.sql'))
@@ -44,7 +46,7 @@ let total = 0
 for (const file of files) {
   const sqlPath = join(tmp, file)
   writeFileSync(sqlPath, toCollectingSql(readFileSync(join(dir, file), 'utf8')))
-  const run = spawnSync(`npx --no-install supabase db query --remote --yes -f "${sqlPath}"`, {
+  const run = spawnSync(`npx --no-install supabase db query ${target} --yes -f "${sqlPath}"`, {
     shell: true,
     encoding: 'utf8',
     maxBuffer: 1 << 26,

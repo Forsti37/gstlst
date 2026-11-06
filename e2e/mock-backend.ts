@@ -39,6 +39,11 @@ interface MockState {
   rejectedTables: string[]
   checkins: unknown[]
   media: unknown[]
+  /** Rows for other tables, by table name. */
+  tables: Record<string, unknown[]>
+  /** Answers for other functions, by function name. */
+  rpcResults: Record<string, unknown>
+  feedback: unknown[]
 }
 
 const today = (() => {
@@ -87,6 +92,9 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
     rejectedTables: [],
     checkins: [],
     media: [],
+    tables: {},
+    rpcResults: {},
+    feedback: [],
   }
 
   if (options.signedIn) {
@@ -122,6 +130,10 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
     if (state.offline) return route.abort('internetdisconnected')
     const path = new URL(request.url()).pathname
 
+    if (path === '/functions/v1/feedback') {
+      state.feedback.push(request.postDataJSON())
+      return json(route, 200, { saved: true, issue: null })
+    }
     if (path === '/storage/v1/object/sign/media') {
       const { paths } = request.postDataJSON() as { paths: string[] }
       return json(route, 200, paths.map((p) => ({ path: p, signedURL: `/object/sign/media/${p}?token=e2e`, error: null })))
@@ -138,6 +150,8 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
     if (path.startsWith('/rest/v1/') && !path.startsWith('/rest/v1/rpc/')) {
       const table = path.slice('/rest/v1/'.length)
       if (request.method() === 'GET') {
+        // The moderation queues ask for pending rows only.
+        if (new URL(request.url()).searchParams.get('status') === 'eq.pending') return json(route, 200, state.tables[table] ?? [])
         switch (table) {
           case 'events':
             return rows(route, [tonight])
@@ -147,6 +161,9 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
             return json(route, 200, [])
           case 'media':
             return json(route, 200, state.media)
+          case 'venues':
+          case 'notifications':
+            return json(route, 200, state.tables[table] ?? [])
           case 'event_checkins':
             return rows(route, state.checkins)
           case 'genres':
@@ -167,6 +184,7 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
       const name = path.slice('/rest/v1/rpc/'.length)
       const args = request.postDataJSON() as Record<string, unknown> | null
       state.rpcCalls.push({ name, ...args })
+      if (name in state.rpcResults) return json(route, 200, state.rpcResults[name])
       switch (name) {
         case 'get_own_profile':
           return rows(route, state.profile ? [state.profile] : [])

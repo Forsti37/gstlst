@@ -66,11 +66,9 @@ function Invites() {
   })
 
   return (
-    <div className="px-4 py-6">
-      <h1 className="font-display text-4xl tracking-wide uppercase">{t('admin.invites')}</h1>
-
+    <div>
       <form
-        className="mt-6 space-y-4"
+        className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault()
           create.mutate()
