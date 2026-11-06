@@ -1573,6 +1573,19 @@ export type Database = {
         }
       }
       delete_own_account: { Args: never; Returns: undefined }
+      distance_meters: {
+        Args: { lat1: number; lat2: number; lng1: number; lng2: number }
+        Returns: number
+      }
+      event_live_until: { Args: { target_event: string }; Returns: string }
+      event_set_ratings: {
+        Args: { target_event: string }
+        Returns: {
+          average: number
+          ratings: number
+          set_id: string
+        }[]
+      }
       export_my_data: { Args: never; Returns: Json }
       get_own_profile: {
         Args: never
@@ -1677,6 +1690,18 @@ export type Database = {
           status: Database["public"]["Enums"]["entity_status"]
         }[]
       }
+      search_events: {
+        Args: { max_results?: number; query: string }
+        Returns: {
+          date_end: string
+          date_start: string
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["entity_status"]
+          venue_city: string
+          venue_name: string
+        }[]
+      }
       search_profiles: {
         Args: { max_results?: number; query: string }
         Returns: {
@@ -1685,6 +1710,15 @@ export type Database = {
           id: string
           username: string
         }[]
+      }
+      verify_checkin_gps: {
+        Args: {
+          captured_at: string
+          checkin_id: string
+          lat: number
+          lng: number
+        }
+        Returns: boolean
       }
       visibility_allows: {
         Args: {

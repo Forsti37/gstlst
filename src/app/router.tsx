@@ -4,7 +4,12 @@ import { RequireMember, RequireOnboarding } from '../features/auth/gates'
 import { InvitePage } from '../features/auth/invite'
 import { LoginPage } from '../features/auth/LoginPage'
 import { OnboardingPage } from '../features/auth/OnboardingPage'
+import { CheckinDetailPage } from '../features/checkin/CheckinDetailPage'
+import { CheckinFlowPage } from '../features/checkin/CheckinFlowPage'
 import { CheckinPage } from '../features/checkin/CheckinPage'
+import { EventPage } from '../features/checkin/EventPage'
+import { HistoryPage } from '../features/checkin/HistoryPage'
+import { NewEventPage } from '../features/checkin/NewEventPage'
 import { DiscoverPage } from '../features/discover/DiscoverPage'
 import { FeedPage } from '../features/feed/FeedPage'
 import { FriendsPage } from '../features/friends/FriendsPage'
@@ -34,6 +39,11 @@ export const router = createBrowserRouter(
             { index: true, element: <FeedPage /> },
             { path: 'discover', element: <DiscoverPage /> },
             { path: 'check-in', element: <CheckinPage /> },
+            { path: 'check-in/new', element: <NewEventPage /> },
+            { path: 'check-in/:eventId', element: <CheckinFlowPage /> },
+            { path: 'check-ins', element: <HistoryPage /> },
+            { path: 'check-ins/:checkinId', element: <CheckinDetailPage /> },
+            { path: 'events/:eventId', element: <EventPage /> },
             { path: 'inbox', element: <InboxPage /> },
             { path: 'profile', element: <ProfilePage /> },
             { path: 'settings', element: <SettingsPage /> },

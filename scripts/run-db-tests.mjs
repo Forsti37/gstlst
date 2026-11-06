@@ -18,7 +18,7 @@ function toCollectingSql(sql) {
     .replace(/^select \* from finish\(\);\s*$/m, '')
     .replace(/^rollback;\s*$/m, '')
     // Collect from each top-level pgTAP assertion. Assertions start at the beginning of a line.
-    .replace(/^select (is|lives_ok|throws_ok)\(/gm, 'insert into pg_temp.tap (line) select $1(')
+    .replace(/^select (is|isnt|ok|lives_ok|throws_ok)\(/gm,'insert into pg_temp.tap (line) select $1(')
     .replace(
       /^set local search_path = public, extensions;$/m,
       `set local search_path = public, extensions;

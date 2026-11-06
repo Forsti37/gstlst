@@ -31,7 +31,48 @@ interface MockState {
   rpcCalls: Record<string, unknown>[]
   friendshipInserts: unknown[]
   signupError: string | null
+  /** Every write to a table, in the order it reached the backend. */
+  writes: { method: string; table: string; body: unknown; url: string }[]
+  /** Simulates lost reception: every request to the backend fails. */
+  offline: boolean
+  /** Writes to these tables get rejected, as a constraint or policy would. */
+  rejectedTables: string[]
+  checkins: unknown[]
+  media: unknown[]
 }
+
+const today = (() => {
+  const now = new Date()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
+})()
+
+export const TONIGHT_ID = '10000000-0000-4000-a000-0000000000a1'
+export const SET_ID = '30000000-0000-4000-a000-0000000000a1'
+
+export const tonight = {
+  id: TONIGHT_ID,
+  name: 'Tonight Rave',
+  date_start: today,
+  date_end: null,
+  status: 'approved',
+  venue: { id: 'venue-1', name: 'Flex', city: 'Wien', lat: 48.2178, lng: 16.3709, status: 'approved' },
+  series: null,
+  event_promoters: [],
+  event_event_tags: [],
+}
+
+const lineup = [
+  {
+    id: SET_ID,
+    floor_id: null,
+    set_type: 'solo',
+    start_at: null,
+    end_at: null,
+    status: 'approved',
+    set_artists: [{ role: 'dj', artist: { id: 'artist-1', name: 'Bea', status: 'approved', artist_default_genres: [{ genre_id: 'genre-neuro' }] } }],
+  },
+]
 
 /** Answers Supabase calls in the browser, so that the UI runs without Google or a database. */
 export async function mockBackend(page: Page, options: { signedIn: boolean; profile?: typeof memberProfile | null; signupError?: string }) {
@@ -41,6 +82,11 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
     rpcCalls: [],
     friendshipInserts: [],
     signupError: options.signupError ?? null,
+    writes: [],
+    offline: false,
+    rejectedTables: [],
+    checkins: [],
+    media: [],
   }
 
   if (options.signedIn) {
@@ -73,7 +119,49 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
   await page.route('http://127.0.0.1:54399/**', async (route) => {
     const request = route.request()
     if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS })
+    if (state.offline) return route.abort('internetdisconnected')
     const path = new URL(request.url()).pathname
+
+    if (path === '/storage/v1/object/sign/media') {
+      const { paths } = request.postDataJSON() as { paths: string[] }
+      return json(route, 200, paths.map((p) => ({ path: p, signedURL: `/object/sign/media/${p}?token=e2e`, error: null })))
+    }
+    if (path.startsWith('/storage/v1/object/sign/media/')) {
+      // A 1x1 pixel stands in for the photo.
+      return route.fulfill({
+        status: 200,
+        headers: { ...CORS, 'content-type': 'image/png' },
+        body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/AAAMBAQAY3Y2wAAAAAElFTkSuQmCC', 'base64'),
+      })
+    }
+
+    if (path.startsWith('/rest/v1/') && !path.startsWith('/rest/v1/rpc/')) {
+      const table = path.slice('/rest/v1/'.length)
+      if (request.method() === 'GET') {
+        switch (table) {
+          case 'events':
+            return rows(route, [tonight])
+          case 'sets':
+            return json(route, 200, lineup)
+          case 'floors':
+            return json(route, 200, [])
+          case 'media':
+            return json(route, 200, state.media)
+          case 'event_checkins':
+            return rows(route, state.checkins)
+          case 'genres':
+            return json(route, 200, [{ id: 'genre-neuro', name: 'Neurofunk', parent_id: 'genre-dnb' }])
+          case 'tags':
+            return json(route, 200, [{ id: 'tag-closing', name: 'Closing', scope: 'set', status: 'approved' }])
+        }
+      } else if (!['friendships', 'profiles'].includes(table)) {
+        if (state.rejectedTables.includes(table)) {
+          return json(route, 403, { code: '42501', message: `new row violates row-level security policy for table "${table}"`, details: null, hint: null })
+        }
+        state.writes.push({ method: request.method(), table, body: request.postDataJSON(), url: request.url() })
+        return json(route, 201, null)
+      }
+    }
 
     if (path.startsWith('/rest/v1/rpc/')) {
       const name = path.slice('/rest/v1/rpc/'.length)

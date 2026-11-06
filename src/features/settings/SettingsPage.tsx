@@ -1,13 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import imageCompression from 'browser-image-compression'
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { Button, ErrorText, Section, TextField } from '../../app/ui'
 import type { Database } from '../../lib/database.types'
 import { SUPPORTED_LANGUAGES } from '../../lib/i18n'
+import { compressPhoto } from '../../lib/images'
 import { getSupabase } from '../../lib/supabase'
 import { ownProfileKey, useAuth, useMember, type OwnProfile } from '../auth/auth'
+import { clearQueue, MEDIA_BUCKET } from '../offline/queue'
 import { UserAvatar } from '../profile/UserAvatar'
 
 type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
@@ -45,15 +46,7 @@ function AvatarPicker() {
     setBusy(true)
     setFailed(false)
     try {
-      // Re-encoding through a canvas drops EXIF and GPS data. No web worker, because the
-      // library would load its worker script from a CDN.
-      const compressed = await imageCompression(file, {
-        maxSizeMB: 0.3,
-        maxWidthOrHeight: 512,
-        fileType: 'image/webp',
-        useWebWorker: false,
-        preserveExif: false,
-      })
+      const compressed = await compressPhoto(file, 512, 0.3)
       const path = `${me.id}/${crypto.randomUUID()}.webp`
       const storage = getSupabase().storage.from('avatars')
       const { error } = await storage.upload(path, compressed, { contentType: 'image/webp' })
@@ -181,13 +174,16 @@ function DataSection() {
   const deleteAccount = useMutation({
     mutationFn: async () => {
       const supabase = getSupabase()
-      const storage = supabase.storage.from('avatars')
-      const { data: files, error: listError } = await storage.list(me.id)
-      if (listError) throw listError
-      if (files.length > 0) {
-        const { error } = await storage.remove(files.map((file) => `${me.id}/${file.name}`))
-        if (error) throw error
+      for (const bucket of ['avatars', MEDIA_BUCKET]) {
+        const storage = supabase.storage.from(bucket)
+        const { data: files, error: listError } = await storage.list(me.id, { limit: 10000 })
+        if (listError) throw listError
+        if (files.length > 0) {
+          const { error } = await storage.remove(files.map((file) => `${me.id}/${file.name}`))
+          if (error) throw error
+        }
       }
+      await clearQueue(me.id)
       const { error } = await supabase.rpc('delete_own_account')
       if (error) throw error
       await signOut()

@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Database } from '../../lib/database.types'
 import i18n from '../../lib/i18n'
+import { offlineDb } from '../../lib/offlineDb'
 import { getSupabase, isSupabaseConfigured } from '../../lib/supabase'
 
 export type OwnProfile = Database['public']['Tables']['profiles']['Row']
@@ -39,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const profileQuery = useQuery({
     queryKey: ownProfileKey(userId),
     enabled: Boolean(userId),
+    meta: { persist: true },
     queryFn: async () => {
       const { data, error } = await getSupabase().rpc('get_own_profile').maybeSingle()
       if (error) throw error
@@ -56,9 +58,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let status: AuthStatus
     if (session === undefined) status = 'loading'
     else if (session === null) status = 'signedOut'
+    else if (profileQuery.data !== undefined) status = profile ? 'member' : 'onboarding' // also when a refresh failed offline
     else if (profileQuery.isPending) status = 'loading'
-    else if (profileQuery.isError) status = 'error'
-    else status = profile ? 'member' : 'onboarding'
+    else status = 'error'
 
     return {
       status,
@@ -69,6 +71,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Local scope: this also has to work after the account was deleted on the server.
         await getSupabase().auth.signOut({ scope: 'local' })
         queryClient.clear()
+        // Cached reads belong to this account. Queued writes stay: they are tied to their user.
+        await offlineDb.kv.clear()
       },
     }
   }, [session, profile, profileQuery, queryClient])
