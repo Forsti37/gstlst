@@ -1,14 +1,17 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { BadgeCheck, CheckCircle2, CloudOff } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useParams, useSearchParams } from 'react-router'
 import { PlaceholderPage } from '../../app/PlaceholderPage'
 import { Button, ErrorText, Section, TextField } from '../../app/ui'
 import { getPosition, isLive, type Position } from '../../lib/geo'
+import { getSupabase } from '../../lib/supabase'
 import { useMember } from '../auth/auth'
 import { useFriendships } from '../friends/api'
 import { enqueue, useQueueStatus } from '../offline/queue'
+import { PushPrompt } from '../notifications/PushSettings'
 import { AddSetSheet } from './AddSetSheet'
 import {
   formatEventDate,
@@ -254,11 +257,13 @@ function DoneStep({ eventId, onAddMore }: { eventId: string; onAddMore: () => vo
   const { t } = useTranslation()
   const me = useMember()
   const { waiting } = useQueueStatus(me.id)
+  const [promptDone, setPromptDone] = useState(false)
   return (
     <div className="mt-10 text-center">
       {waiting > 0 ? <CloudOff aria-hidden className="mx-auto size-16 text-text-secondary" /> : <CheckCircle2 aria-hidden className="mx-auto size-16 text-red" />}
       <p className="font-display mt-4 text-4xl uppercase">{t('checkin.doneTitle')}</p>
       <p className="mt-2 text-text-secondary">{waiting > 0 ? t('checkin.doneOffline') : t('checkin.doneOnline')}</p>
+      {!promptDone && <PushPrompt onAnswered={() => setPromptDone(true)} />}
       <div className="mt-8 space-y-2">
         <Button variant="primary" className="w-full" onClick={onAddMore}>{t('checkin.addMoreSets')}</Button>
         <Link to={`/events/${eventId}`} className="flex min-h-touch items-center justify-center rounded-lg bg-surface-2 px-4 font-semibold">{t('checkin.toEvent')}</Link>
@@ -305,6 +310,27 @@ export function CheckinFlowPage() {
         : [...current, newSetDraft(set.id, defaultGenres(set))],
     )
 
+  // A tagged friend adopts the check-in: same event, same sets preselected, own ratings required.
+  const adoptFrom = params.get('adopt')
+  const adoption = useQuery({
+    queryKey: ['taggedCheckin', adoptFrom],
+    enabled: Boolean(adoptFrom),
+    queryFn: async () => {
+      const { data, error } = await getSupabase().rpc('tagged_checkin', { checkin_id: adoptFrom! })
+      if (error) throw error
+      return data as unknown as { event_id: string; set_ids: string[] } | null
+    },
+  })
+  if (adoption.data && lineupQuery.data && !preselected && !own.isPending) {
+    setPreselected(true)
+    const alreadySeen = own.data?.setIds ?? []
+    setSetDrafts(
+      lineupQuery.data.sets
+        .filter((set) => adoption.data!.set_ids.includes(set.id) && !alreadySeen.includes(set.id))
+        .map((set) => newSetDraft(set.id, defaultGenres(set))),
+    )
+  }
+
   // "Check in" next to a set on the event page arrives with that set already selected.
   const wantedSet = params.get('set')
   if (wantedSet && !preselected && lineupQuery.data) {
@@ -336,6 +362,9 @@ export function CheckinFlowPage() {
         ...(hasCheckin ? [] : eventCheckinActions(me.id, eventId, checkinId, eventDraft, coordinates)),
         ...addedSets.flatMap((set) => newSetActions(me.id, eventId, set)),
         ...setDrafts.flatMap((draft) => setCheckinActions(me.id, checkinId, draft)),
+        ...(adoptFrom
+          ? [{ kind: 'update' as const, table: 'checkin_companions' as const, match: { event_checkin_id: adoptFrom, user_id: me.id }, changes: { status: 'adopted' } }]
+          : []),
       ])
       navigator.vibrate?.(30)
       setSubmitted((done) => [...done, ...setDrafts.map((d) => d.setId)])
@@ -357,6 +386,7 @@ export function CheckinFlowPage() {
         {event.venue && ` · ${event.venue.name}, ${event.venue.city}`}
         <UnderReview status={event.status} />
       </p>
+      {adoptFrom && current !== 'done' && <p className="mt-3 text-sm text-text-secondary">{t('checkin.adopting')}</p>}
       {hasCheckin && current !== 'done' && (
         <p className="mt-3 flex items-center gap-2 text-sm">
           <BadgeCheck aria-hidden className="size-5 text-red" />

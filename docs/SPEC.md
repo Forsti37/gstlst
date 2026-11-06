@@ -192,7 +192,7 @@ Retroactive check-ins for past events use the same flow, just without GPS verifi
 
 ### Notifications
 
-- Web Push plus an in-app inbox.
+- Web Push plus an in-app inbox. A cron job checks every minute for waiting notifications and calls the send-push Edge Function.
 - Triggers: friend checks in (bundled per event: "Max is at Beatpatrol – 5 sets"), reaction to my check-in, friend request, being tagged, data point approved or rejected, new badge, a friend is going to an event I'm going to, a wishlist artist plays nearby or was seen by a friend.
 - Bundling: follow-up check-ins to the same event within 60 minutes update the existing notification instead of sending a new one.
 - Settings per type, plus quiet hours.

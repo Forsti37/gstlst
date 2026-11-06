@@ -47,6 +47,9 @@ async function send(action: QueuedAction) {
       if (error) check({ error, status: 'statusCode' in error ? Number(error.statusCode) : 0 })
       return
     }
+    case 'rpc':
+      check(await client.rpc(action.fn, action.args))
+      return
     case 'gps': {
       // A check-in without verification is still a check-in, so only connection problems count.
       // The coordinates leave this device only here and disappear with the op afterwards.

@@ -86,6 +86,21 @@ npx supabase db query --remote "update public.profiles set role = 'admin' where 
 
 From then on, create invites under Settings → Admin → Invite codes.
 
+## Push notifications
+
+Each project needs its own VAPID key pair and shared secret:
+
+1. Generate a VAPID key pair, and a random shared secret.
+2. Set the function secrets `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `PUSH_SHARED_SECRET` on the project.
+3. Store the function URL as `push_function_url` and the secret as `push_shared_secret` in the project's Vault. The cron job does nothing without them.
+4. Deploy the function:
+
+```bash
+npx supabase functions deploy send-push --use-api --no-verify-jwt --project-ref <project-ref>
+```
+
+5. Put the public key into `VITE_VAPID_PUBLIC_KEY`: in `.env.development.local` for dev, and as the GitHub secret `VAPID_PUBLIC_KEY` for prod.
+
 ## Keep-alive caveat
 
 GitHub disables scheduled workflows in public repositories after 60 days without repository activity. It warns by email first. If that happens during a quiet stretch, re-enable the workflow under Actions or push a commit.

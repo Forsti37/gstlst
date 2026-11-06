@@ -24,6 +24,8 @@ import { DiscoverPage } from '../features/discover/DiscoverPage'
 import { FeedPage } from '../features/feed/FeedPage'
 import { FriendsPage } from '../features/friends/FriendsPage'
 import { UserPage } from '../features/friends/UserPage'
+import { ArtistPage } from '../features/social/ArtistPage'
+import { WishlistPage } from '../features/social/WishlistPage'
 import { InboxPage } from '../features/inbox/InboxPage'
 import { LegalPage } from '../features/legal/LegalPage'
 import { ProfilePage } from '../features/profile/ProfilePage'
@@ -58,6 +60,8 @@ export const router = createBrowserRouter(
             { path: 'profile', element: <ProfilePage /> },
             { path: 'settings', element: <SettingsPage /> },
             { path: 'friends', element: <FriendsPage /> },
+            { path: 'artists/:artistId', element: <ArtistPage /> },
+            { path: 'wishlist', element: <WishlistPage /> },
             { path: 'u/:username', element: <UserPage /> },
             {
               path: 'admin',

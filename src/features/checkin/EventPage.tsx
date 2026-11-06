@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
 import { PlaceholderPage } from '../../app/PlaceholderPage'
 import { Button, Section, TextField } from '../../app/ui'
+import { toDateString } from '../../lib/geo'
 import { getSupabase } from '../../lib/supabase'
 import { useMember } from '../auth/auth'
 import { useFriendships } from '../friends/api'
 import { ReportButton } from '../moderation/ReportButton'
+import { GoingSection } from '../social/GoingSection'
 import { UserAvatar } from '../profile/UserAvatar'
 import { insert } from '../offline/actions'
 import { enqueue } from '../offline/queue'
@@ -17,6 +19,24 @@ import { Chip, MapLink, UnderReview } from './components'
 import { newSetActions } from './draft'
 
 const clock = (value: string | null) => value && new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+
+/** The artists of a set as links, joined the way setLabel joins them. */
+function SetArtistLinks({ set }: { set: LineupSet }) {
+  const people = set.set_artists.filter((entry) => entry.artist && entry.role !== 'mc')
+  const mcs = set.set_artists.filter((entry) => entry.artist && entry.role === 'mc')
+  const separator = set.set_type === 'f2f' ? ' f2f ' : ' b2b '
+  return (
+    <span>
+      {people.map((entry, index) => (
+        <span key={entry.artist!.id}>
+          {index > 0 && separator}
+          <Link to={`/artists/${entry.artist!.id}`}>{entry.artist!.name}</Link>
+        </span>
+      ))}
+      {mcs.length > 0 && <> ft. {mcs.map((entry) => entry.artist!.name).join(', ')}</>}
+    </span>
+  )
+}
 
 function PastEditions({ seriesId, eventId }: { seriesId: string; eventId: string }) {
   const { t, i18n } = useTranslation()
@@ -276,7 +296,7 @@ export function EventPage() {
                 <li key={set.id} className="flex items-center gap-3 rounded-lg bg-surface-1 py-2 pr-2 pl-4">
                   <div className="min-w-0 flex-1">
                     <p className="flex flex-wrap items-center gap-2 font-medium">
-                      {setLabel(set)}
+                      <SetArtistLinks set={set} />
                       <UnderReview status={set.status} />
                       {isPlayingNow(set) && <span className="rounded bg-red px-1.5 py-0.5 text-xs text-white">{t('checkin.playingNow')}</span>}
                     </p>
@@ -317,6 +337,7 @@ export function EventPage() {
         {panel === 'correction' && <ProposeCorrection event={data} onDone={finish} />}
       </Section>
 
+      <GoingSection eventId={eventId} upcoming={(data.date_end ?? data.date_start) >= toDateString(new Date())} />
       <WhoWasThere eventId={eventId} />
       <EventPhotos eventId={eventId} />
       {data.series && <PastEditions seriesId={data.series.id} eventId={eventId} />}

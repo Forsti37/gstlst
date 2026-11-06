@@ -35,6 +35,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,svg,woff2}'],
         // Only Latin glyphs are precached; other subsets still load on demand when online.
         globIgnores: ['**/*{cyrillic,greek,vietnamese,hebrew,arabic}*.woff2', '404.html'],

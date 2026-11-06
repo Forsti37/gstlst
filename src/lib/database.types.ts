@@ -907,28 +907,37 @@ export type Database = {
       }
       notifications: {
         Row: {
+          bundle_key: string | null
           created_at: string
           id: string
           payload: Json
+          pushed_at: string | null
           read_at: string | null
           recipient_id: string
           type: string
+          updated_at: string
         }
         Insert: {
+          bundle_key?: string | null
           created_at?: string
           id?: string
           payload?: Json
+          pushed_at?: string | null
           read_at?: string | null
           recipient_id: string
           type: string
+          updated_at?: string
         }
         Update: {
+          bundle_key?: string | null
           created_at?: string
           id?: string
           payload?: Json
+          pushed_at?: string | null
           read_at?: string | null
           recipient_id?: string
           type?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -979,6 +988,7 @@ export type Database = {
           home_city: string | null
           id: string
           language: string
+          notification_settings: Json
           privacy: Json
           role: Database["public"]["Enums"]["user_role"]
           terms_accepted_at: string | null
@@ -994,6 +1004,7 @@ export type Database = {
           home_city?: string | null
           id: string
           language?: string
+          notification_settings?: Json
           privacy?: Json
           role?: Database["public"]["Enums"]["user_role"]
           terms_accepted_at?: string | null
@@ -1009,6 +1020,7 @@ export type Database = {
           home_city?: string | null
           id?: string
           language?: string
+          notification_settings?: Json
           privacy?: Json
           role?: Database["public"]["Enums"]["user_role"]
           terms_accepted_at?: string | null
@@ -1607,6 +1619,7 @@ export type Database = {
           home_city: string | null
           id: string
           language: string
+          notification_settings: Json
           privacy: Json
           role: Database["public"]["Enums"]["user_role"]
           terms_accepted_at: string | null
@@ -1621,6 +1634,7 @@ export type Database = {
         }
       }
       delete_own_account: { Args: never; Returns: undefined }
+      dispatch_push: { Args: never; Returns: undefined }
       distance_meters: {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
@@ -1635,6 +1649,12 @@ export type Database = {
         }[]
       }
       export_my_data: { Args: never; Returns: Json }
+      feed_card: { Args: { checkin_id: string }; Returns: Json }
+      friends_of: { Args: { person: string }; Returns: string[] }
+      get_friends_feed: {
+        Args: { before_time?: string; page_size?: number }
+        Returns: Json
+      }
       get_own_profile: {
         Args: never
         Returns: {
@@ -1646,6 +1666,7 @@ export type Database = {
           home_city: string | null
           id: string
           language: string
+          notification_settings: Json
           privacy: Json
           role: Database["public"]["Enums"]["user_role"]
           terms_accepted_at: string | null
@@ -1667,6 +1688,15 @@ export type Database = {
           id: string
           username: string
         }[]
+      }
+      get_public_feed: {
+        Args: {
+          near_lat?: number
+          near_lng?: number
+          page_offset?: number
+          page_size?: number
+        }
+        Returns: Json
       }
       has_profile: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
@@ -1691,6 +1721,18 @@ export type Database = {
           id: string
           requested_by: string
           status: Database["public"]["Enums"]["friendship_status"]
+          username: string
+        }[]
+      }
+      list_reactions: {
+        Args: {
+          target: Database["public"]["Enums"]["reaction_target"]
+          target_id: string
+        }
+        Returns: {
+          avatar_path: string
+          display_name: string
+          kind: Database["public"]["Enums"]["reaction_kind"]
           username: string
         }[]
       }
@@ -1752,6 +1794,14 @@ export type Database = {
         Args: { kind: string; payload: Json; recipient: string }
         Returns: undefined
       }
+      notify_friend_checkin: {
+        Args: { checkin_id: string }
+        Returns: undefined
+      }
+      notify_wishlist_lineup: {
+        Args: { target_set: string }
+        Returns: undefined
+      }
       privacy_allows: {
         Args: { area: string; owner: string }
         Returns: boolean
@@ -1759,6 +1809,13 @@ export type Database = {
       privacy_level: {
         Args: { area: string; owner: string }
         Returns: Database["public"]["Enums"]["visibility"]
+      }
+      reaction_summary: {
+        Args: {
+          target: Database["public"]["Enums"]["reaction_target"]
+          target_id: string
+        }
+        Returns: Json
       }
       report_content: {
         Args: { reason: string; target_id: string; target_type: string }
@@ -1811,6 +1868,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_reaction: {
+        Args: {
+          kind: Database["public"]["Enums"]["reaction_kind"]
+          target: Database["public"]["Enums"]["reaction_target"]
+          target_id: string
+        }
+        Returns: undefined
+      }
       staff_dashboard: { Args: never; Returns: Json }
       staff_list_checkins: {
         Args: { target_username: string }
@@ -1824,6 +1889,16 @@ export type Database = {
       }
       staff_verify_checkin: {
         Args: { checkin_id: string; verified: boolean }
+        Returns: undefined
+      }
+      tagged_checkin: { Args: { checkin_id: string }; Returns: Json }
+      upsert_notification: {
+        Args: {
+          bundle?: string
+          kind: string
+          payload: Json
+          recipient: string
+        }
         Returns: undefined
       }
       verify_checkin_gps: {

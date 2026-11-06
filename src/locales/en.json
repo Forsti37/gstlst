@@ -382,7 +382,8 @@
     "toEvent": "To the event",
     "alreadyCheckedIn": "You are checked in. Add more sets here.",
     "eventNotFound": "This event does not exist or is no longer available.",
-    "photoAlt": "Your photo"
+    "photoAlt": "Your photo",
+    "adopting": "Your friend’s sets are selected. Rate them yourself."
   },
   "events": {
     "by": "By {{names}}",
@@ -441,11 +442,83 @@
     "photo": {
       "approve": "Your photo was approved.",
       "reject": "Your photo was rejected."
-    }
+    },
+    "friendCheckin": "{{actor}} is at {{event}}",
+    "friendCheckinSets_one": "{{actor}} is at {{event}} – {{count}} set",
+    "friendCheckinSets_other": "{{actor}} is at {{event}} – {{count}} sets",
+    "reaction": "{{actor}} {{emoji}} your check-in at {{event}}",
+    "reactionMany_one": "{{actor}} and {{count}} other reacted to your check-in at {{event}}",
+    "reactionMany_other": "{{actor}} and {{count}} others reacted to your check-in at {{event}}",
+    "friendRequest": "{{actor}} wants to be friends",
+    "friendAccepted": "{{actor}} accepted your request",
+    "tagged": "{{actor}} tagged you at {{event}}. Tap to check in too.",
+    "friendGoing": "{{actor}} is also going to {{event}}",
+    "wishlistPlays": "{{artist}} plays {{event}} in {{city}}",
+    "wishlistSeen": "{{actor}} saw {{artist}}",
+    "generic": "New notification"
   },
   "moderation": {
     "report": "Report",
     "reportReason": "What is the problem? It stays hidden until someone has reviewed it.",
     "reported": "Thanks. It is hidden until someone has reviewed it."
+  },
+  "feed": {
+    "tabs": {
+      "friends": "Friends",
+      "public": "Public"
+    },
+    "reactions": {
+      "bassface": "Bassface",
+      "dance": "Dance",
+      "fire": "Fire"
+    },
+    "whoReacted": "Who reacted",
+    "photoAlt": "Photo from the check-in",
+    "with": "with {{names}}",
+    "pullToRefresh": "Pull to refresh",
+    "releaseToRefresh": "Release to refresh",
+    "offline": "No connection. It will load once you have reception.",
+    "emptyFriends": "Nothing from your friends yet.",
+    "emptyPublic": "No public check-ins yet.",
+    "findFriends": "Find friends"
+  },
+  "going": {
+    "title": "Going",
+    "imGoing": "I’m going",
+    "notGoing": "Not going after all"
+  },
+  "wishlist": {
+    "title": "Want to see",
+    "link": "Want to see",
+    "intro": "You’ll hear when one of these plays near you, or a friend has seen them.",
+    "empty": "Nobody on your list yet.",
+    "add": "Want to see",
+    "remove": "Remove from list",
+    "artistNotFound": "We couldn’t find this artist."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "promptTitle": "Get notified?",
+    "promptBody": "When friends check in or react. You choose what in the settings.",
+    "enable": "Turn on notifications",
+    "disable": "Turn off on this device",
+    "notNow": "Not now",
+    "needsInstall": "On iPhone, notifications only work in the installed app. Add GSTLST to your home screen first.",
+    "unsupported": "This browser doesn’t support notifications.",
+    "denied": "Notifications are blocked in your browser settings.",
+    "typesIntro": "Which ones should reach you as a push? All of them stay in your inbox.",
+    "types": {
+      "friend_checkin": "Friends checking in",
+      "reaction": "Reactions",
+      "friend_request": "Friend requests",
+      "tagged": "Being tagged",
+      "friend_going": "Friends going",
+      "wishlist": "Want to see",
+      "decisions": "Your contributions",
+      "badge": "Badges"
+    },
+    "quietIntro": "Quiet hours: pushes wait until they’re over.",
+    "quietStart": "From",
+    "quietEnd": "Until"
   }
 }

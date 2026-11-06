@@ -1,4 +1,4 @@
-import { History, Settings, Users } from 'lucide-react'
+import { Heart, History, Settings, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Section } from '../../app/ui'
@@ -35,6 +35,10 @@ export function ProfilePage() {
         <Link to="/check-ins" className={ROW}>
           <History aria-hidden className="size-5 text-red" />
           <span className="flex-1">{t('history.link')}</span>
+        </Link>
+        <Link to="/wishlist" className={ROW}>
+          <Heart aria-hidden className="size-5 text-blue" />
+          <span className="flex-1">{t('wishlist.link')}</span>
         </Link>
         <Link to="/settings" className={ROW}>
           <Settings aria-hidden className="size-5 text-text-secondary" />

@@ -10,6 +10,7 @@ import { getSupabase } from '../../lib/supabase'
 import { ownProfileKey, useAuth, useMember, type OwnProfile } from '../auth/auth'
 import { clearQueue, MEDIA_BUCKET } from '../offline/queue'
 import { UserAvatar } from '../profile/UserAvatar'
+import { PushSettings } from '../notifications/PushSettings'
 import { FeedbackForm } from './FeedbackForm'
 
 type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
@@ -236,6 +237,7 @@ export function SettingsPage() {
       </Section>
       <Section title={t('language.label')}><LanguagePicker /></Section>
       <Section title={t('settings.privacy')}><PrivacySettings /></Section>
+      <Section title={t('notifications.title')}><PushSettings /></Section>
 
       {(me.role === 'admin' || me.role === 'moderator') && (
         <Section title={t('admin.title')}>

@@ -382,7 +382,8 @@
     "toEvent": "Zum Event",
     "alreadyCheckedIn": "Du bist eingecheckt. Hier kannst du weitere Sets hinzufügen.",
     "eventNotFound": "Dieses Event gibt es nicht oder nicht mehr.",
-    "photoAlt": "Dein Foto"
+    "photoAlt": "Dein Foto",
+    "adopting": "Die Sets deines Freundes sind ausgewählt. Bewerte sie selbst."
   },
   "events": {
     "by": "Von {{names}}",
@@ -441,11 +442,83 @@
     "photo": {
       "approve": "Dein Foto wurde freigegeben.",
       "reject": "Dein Foto wurde abgelehnt."
-    }
+    },
+    "friendCheckin": "{{actor}} ist bei {{event}}",
+    "friendCheckinSets_one": "{{actor}} ist bei {{event}} – {{count}} Set",
+    "friendCheckinSets_other": "{{actor}} ist bei {{event}} – {{count}} Sets",
+    "reaction": "{{actor}} {{emoji}} auf deinen Check-in bei {{event}}",
+    "reactionMany_one": "{{actor}} und {{count}} weitere Person haben auf deinen Check-in bei {{event}} reagiert",
+    "reactionMany_other": "{{actor}} und {{count}} weitere haben auf deinen Check-in bei {{event}} reagiert",
+    "friendRequest": "{{actor}} möchte mit dir befreundet sein",
+    "friendAccepted": "{{actor}} hat deine Anfrage angenommen",
+    "tagged": "{{actor}} hat dich bei {{event}} markiert. Tippe, um auch einzuchecken.",
+    "friendGoing": "{{actor}} geht auch zu {{event}}",
+    "wishlistPlays": "{{artist}} spielt bei {{event}} in {{city}}",
+    "wishlistSeen": "{{actor}} hat {{artist}} gesehen",
+    "generic": "Neue Benachrichtigung"
   },
   "moderation": {
     "report": "Melden",
     "reportReason": "Was ist das Problem? Der Inhalt bleibt bis zur Prüfung ausgeblendet.",
     "reported": "Danke. Das bleibt ausgeblendet, bis jemand es geprüft hat."
+  },
+  "feed": {
+    "tabs": {
+      "friends": "Freunde",
+      "public": "Öffentlich"
+    },
+    "reactions": {
+      "bassface": "Bassface",
+      "dance": "Dance",
+      "fire": "Fire"
+    },
+    "whoReacted": "Wer reagiert hat",
+    "photoAlt": "Foto vom Check-in",
+    "with": "mit {{names}}",
+    "pullToRefresh": "Zum Aktualisieren ziehen",
+    "releaseToRefresh": "Zum Aktualisieren loslassen",
+    "offline": "Keine Verbindung. Das lädt, sobald du Empfang hast.",
+    "emptyFriends": "Noch nichts von deinen Freunden.",
+    "emptyPublic": "Noch keine öffentlichen Check-ins.",
+    "findFriends": "Freunde finden"
+  },
+  "going": {
+    "title": "Dabei",
+    "imGoing": "Ich bin dabei",
+    "notGoing": "Doch nicht dabei"
+  },
+  "wishlist": {
+    "title": "Will ich sehen",
+    "link": "Will ich sehen",
+    "intro": "Du erfährst es, wenn jemand davon in deiner Nähe spielt oder ein Freund es gesehen hat.",
+    "empty": "Noch niemand auf deiner Liste.",
+    "add": "Will ich sehen",
+    "remove": "Von der Liste nehmen",
+    "artistNotFound": "Wir konnten diesen Artist nicht finden."
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "promptTitle": "Benachrichtigungen an?",
+    "promptBody": "Wenn Freunde einchecken oder reagieren. Was genau, wählst du in den Einstellungen.",
+    "enable": "Benachrichtigungen einschalten",
+    "disable": "Auf diesem Gerät ausschalten",
+    "notNow": "Nicht jetzt",
+    "needsInstall": "Am iPhone gehen Benachrichtigungen nur in der installierten App. Füg GSTLST zuerst zum Home-Bildschirm hinzu.",
+    "unsupported": "Dieser Browser unterstützt keine Benachrichtigungen.",
+    "denied": "Benachrichtigungen sind in deinen Browser-Einstellungen blockiert.",
+    "typesIntro": "Was soll dich als Push erreichen? In der Inbox bleibt alles.",
+    "types": {
+      "friend_checkin": "Freunde checken ein",
+      "reaction": "Reactions",
+      "friend_request": "Freundschaftsanfragen",
+      "tagged": "Markierungen",
+      "friend_going": "Freunde sind dabei",
+      "wishlist": "Will ich sehen",
+      "decisions": "Deine Beiträge",
+      "badge": "Badges"
+    },
+    "quietIntro": "Ruhezeiten: Pushes warten, bis sie vorbei sind.",
+    "quietStart": "Von",
+    "quietEnd": "Bis"
   }
 }

@@ -12,5 +12,6 @@ export type QueuedAction =
   | { kind: 'upload'; path: string; blob: Blob }
   | { kind: 'removeFile'; path: string }
   | { kind: 'gps'; checkinId: string; lat: number; lng: number; capturedAt: string }
+  | { kind: 'rpc'; fn: string; args: Row }
 
 export const insert = (table: TableName, row: Row, onConflict = 'id'): QueuedAction => ({ kind: 'insert', table, row, onConflict })
