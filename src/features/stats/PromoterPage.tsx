@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
 import { PlaceholderPage } from '../../app/PlaceholderPage'
 import { Section } from '../../app/ui'
+import { instagramHandle } from '../../lib/instagram'
 import { getSupabase } from '../../lib/supabase'
 import { formatEventDate } from '../checkin/api'
 import { UnderReview } from '../checkin/components'
@@ -38,7 +39,11 @@ export function PromoterPage() {
     <div className="px-4 py-6">
       <h1 className="font-display text-4xl tracking-wide uppercase">{details.name}</h1>
       <UnderReview status={details.status} />
-      {details.instagram_url && <a href={details.instagram_url} target="_blank" rel="noreferrer" className="mt-2 flex min-h-touch items-center text-blue">Instagram</a>}
+      {details.instagram_url && (
+        <a href={details.instagram_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex min-h-touch items-center text-blue">
+          {t('common.instagram', { handle: instagramHandle(details.instagram_url) })}
+        </a>
+      )}
       {series.length > 0 && (
         <Section title={t('promoter.series')}>
           <ul className="flex flex-wrap gap-2">

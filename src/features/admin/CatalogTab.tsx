@@ -7,6 +7,7 @@ import { getSupabase } from '../../lib/supabase'
 import { formatEventDate, useEventSearch, useReferenceData } from '../checkin/api'
 import { Chip, EntityPicker } from '../checkin/components'
 import type { PickedEntity } from '../checkin/draft'
+import { InstagramField } from './InstagramField'
 import { useDecision } from './shared'
 
 const LIFECYCLES = ['scheduled', 'cancelled', 'postponed'] as const
@@ -88,6 +89,14 @@ function ArtistEditor({ artist }: { artist: PickedEntity }) {
         <TextField label={t('admin.fields.country_code')} maxLength={2} value={country ?? details.data?.country_code ?? ''} onChange={(e) => setCountry(e.target.value.toUpperCase())} />
         <Button disabled={country === null} onClick={() => void run(supabase.from('artists').update({ country_code: country || null }).eq('id', artist.id))}>{t('common.save')}</Button>
       </div>
+      <InstagramField
+        current={details.data?.instagram_url ?? null}
+        onSave={async (url) => {
+          const { error } = await supabase.from('artists').update({ instagram_url: url }).eq('id', artist.id)
+          refresh()
+          return !error
+        }}
+      />
       <div>
         <p className="mb-1 text-sm text-text-secondary">{t('admin.aliases')}</p>
         <ul className="flex flex-wrap gap-2">
@@ -137,6 +146,34 @@ function ArtistEditor({ artist }: { artist: PickedEntity }) {
         </div>
       </div>
       {failed && <ErrorText>{t('common.actionFailed')}</ErrorText>}
+    </div>
+  )
+}
+
+function PromoterEditor({ promoter }: { promoter: PickedEntity }) {
+  const queryClient = useQueryClient()
+  const key = ['admin', 'promoter', promoter.id]
+  const details = useQuery({
+    queryKey: key,
+    queryFn: async () => {
+      const { data, error } = await getSupabase().from('promoters').select('id, instagram_url').eq('id', promoter.id).single()
+      if (error) throw error
+      return data
+    },
+  })
+  return (
+    <div className="mt-3 space-y-4 rounded-lg bg-surface-1 p-3">
+      <p className="font-medium">{promoter.name}</p>
+      {details.data && (
+        <InstagramField
+          current={details.data.instagram_url}
+          onSave={async (url) => {
+            const { error } = await getSupabase().from('promoters').update({ instagram_url: url }).eq('id', promoter.id)
+            void queryClient.invalidateQueries({ queryKey: key })
+            return !error
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -201,12 +238,17 @@ function TagsAndGenres() {
 export function CatalogTab() {
   const { t } = useTranslation()
   const [artist, setArtist] = useState<PickedEntity | null>(null)
+  const [promoter, setPromoter] = useState<PickedEntity | null>(null)
   return (
     <>
       <Section title={t('admin.eventStatus')}><EventLifecycle /></Section>
       <Section title={t('admin.artists')}>
         <EntityPicker type="artist" label={t('checkin.artist')} onPick={(picked) => !picked.isNew && setArtist(picked)} />
         {artist && <ArtistEditor key={artist.id} artist={artist} />}
+      </Section>
+      <Section title={t('admin.promoters')}>
+        <EntityPicker type="promoter" label={t('admin.promoter')} onPick={(picked) => !picked.isNew && setPromoter(picked)} />
+        {promoter && <PromoterEditor key={promoter.id} promoter={promoter} />}
       </Section>
       <Section title={t('admin.tagsAndGenres')}><TagsAndGenres /></Section>
     </>

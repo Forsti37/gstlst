@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 import { PlaceholderPage } from '../../app/PlaceholderPage'
 import { Button, ErrorText } from '../../app/ui'
+import { instagramHandle } from '../../lib/instagram'
 import { getSupabase } from '../../lib/supabase'
 import { useMember } from '../auth/auth'
 import { UnderReview } from '../checkin/components'
@@ -74,7 +75,9 @@ export function ArtistPage() {
         <UnderReview status={artist.data.status} />
       </div>
       {artist.data.instagram_url && (
-        <a href={artist.data.instagram_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex min-h-touch items-center text-blue">Instagram</a>
+        <a href={artist.data.instagram_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex min-h-touch items-center text-blue">
+          {t('common.instagram', { handle: instagramHandle(artist.data.instagram_url) })}
+        </a>
       )}
       <div className="mt-4">
         <WishlistButton artistId={artist.data.id} />

@@ -10,7 +10,8 @@
     "saved": "Gespeichert.",
     "actionFailed": "Das hat nicht geklappt. Bitte versuch es nochmal.",
     "cancel": "Abbrechen",
-    "back": "Zurück"
+    "back": "Zurück",
+    "instagram": "Instagram {{handle}}"
   },
   "nav": {
     "label": "Hauptnavigation",
@@ -269,7 +270,12 @@
       "unlock": "Freischalten",
       "lock": "Wieder sperren",
       "adminOnly": "Nur für Admins."
-    }
+    },
+    "instagram": "Instagram",
+    "instagramHint": "Profil-Link oder @handle. Leer entfernt den Link.",
+    "instagramInvalid": "Das ist kein Instagram-Profil. Nimm einen Profil-Link oder ein @handle.",
+    "promoters": "Veranstalter",
+    "promoter": "Veranstalter"
   },
   "legal": {
     "label": "Rechtliches",

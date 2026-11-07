@@ -162,6 +162,7 @@ export async function mockBackend(page: Page, options: { signedIn: boolean; prof
           case 'media':
             return json(route, 200, state.media)
           case 'artists':
+          case 'promoters':
             return rows(route, state.tables[table] ?? [])
           case 'venues':
           case 'notifications':

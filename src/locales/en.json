@@ -10,7 +10,8 @@
     "saved": "Saved.",
     "actionFailed": "That didn't work. Please try again.",
     "cancel": "Cancel",
-    "back": "Back"
+    "back": "Back",
+    "instagram": "Instagram {{handle}}"
   },
   "nav": {
     "label": "Main navigation",
@@ -269,7 +270,12 @@
       "unlock": "Unlock",
       "lock": "Lock again",
       "adminOnly": "Admins only."
-    }
+    },
+    "instagram": "Instagram",
+    "instagramHint": "Profile link or @handle. Empty removes the link.",
+    "instagramInvalid": "That isn't an Instagram profile. Use a profile link or an @handle.",
+    "promoters": "Promoters",
+    "promoter": "Promoter"
   },
   "legal": {
     "label": "Legal",
