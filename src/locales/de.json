@@ -533,7 +533,11 @@
     "findFriends": "Freunde finden",
     "wasAt": "<person>{{name}}</person> war bei <event>{{event}}</event>",
     "fromHistory": "Historie · {{date}}",
-    "reactToSet": "Reactions für {{name}}"
+    "reactToSet": "Reactions für {{name}}",
+    "wasAtShort": "<person>{{name}}</person> war bei",
+    "fromHistoryShort": "Aus der Historie",
+    "setCount_one": "{{count}} Set",
+    "setCount_other": "{{count}} Sets"
   },
   "going": {
     "title": "Dabei",

@@ -11,10 +11,19 @@ const ORDER = [
 
 export const sortFunFacts = (facts: FunFact[]) => [...facts].sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind))
 
+export function useFunFactText() {
+  const { t } = useTranslation()
+  return (fact: FunFact) =>
+    fact.kind === 'artist_seen' && Number(fact.payload.n) === 1
+      ? t('funFacts.artist_first', fact.payload)
+      : t(`funFacts.${fact.kind}`, { ...fact.payload, defaultValue: '' })
+}
+
 /** Visible only to the owner, which the database enforces. Renders nothing without facts. */
 export function FunFacts({ checkinId, limit }: { checkinId: string; limit?: number }) {
   const { t } = useTranslation()
   const facts = useFunFacts(checkinId)
+  const text = useFunFactText()
   if (!facts.data?.length) return null
   return (
     <section className="mt-6 text-left">
@@ -23,11 +32,7 @@ export function FunFacts({ checkinId, limit }: { checkinId: string; limit?: numb
         {sortFunFacts(facts.data).slice(0, limit).map((fact) => (
           <li key={fact.id} className="flex items-start gap-2 text-sm">
             <Sparkles aria-hidden className="mt-0.5 size-4 shrink-0 text-text-secondary" />
-            <span>
-              {fact.kind === 'artist_seen' && Number(fact.payload.n) === 1
-                ? t('funFacts.artist_first', fact.payload)
-                : t(`funFacts.${fact.kind}`, { ...fact.payload, defaultValue: '' })}
-            </span>
+            <span>{text(fact)}</span>
           </li>
         ))}
       </ul>

@@ -59,12 +59,15 @@ test('the tabs switch between friends and public, by tap and by swipe', async ({
   await expect(page.getByRole('tab', { name: 'Public' })).toHaveAttribute('aria-selected', 'true')
   await expect(page.getByText('Public Event')).toBeInViewport()
 
-  // A swipe to the right goes back to the friends.
+  // A swipe to the right goes back to the friends, done with touch pointers like a finger.
   await page.getByRole('tabpanel', { name: 'Public' }).evaluate((panel) => {
-    const touch = (x: number) => new Touch({ identifier: 1, target: panel, clientX: x, clientY: 300 })
-    panel.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, touches: [touch(60)], changedTouches: [touch(60)] }))
-    panel.dispatchEvent(new TouchEvent('touchmove', { bubbles: true, touches: [touch(300)], changedTouches: [touch(300)] }))
-    panel.dispatchEvent(new TouchEvent('touchend', { bubbles: true, touches: [], changedTouches: [touch(300)] }))
+    const at = (type: string, x: number) =>
+      panel.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerType: 'touch', pointerId: 1, clientX: x, clientY: 300 }))
+    at('pointerdown', 40)
+    at('pointermove', 60)
+    at('pointermove', 200)
+    at('pointermove', 320)
+    at('pointerup', 320)
   })
   await expect(page.getByRole('tab', { name: 'Friends' })).toHaveAttribute('aria-selected', 'true')
   await expect(page.getByText('Friends Event')).toBeInViewport()

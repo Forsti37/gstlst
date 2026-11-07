@@ -533,7 +533,11 @@
     "findFriends": "Find friends",
     "wasAt": "<person>{{name}}</person> was at <event>{{event}}</event>",
     "fromHistory": "History · {{date}}",
-    "reactToSet": "Reactions for {{name}}"
+    "reactToSet": "Reactions for {{name}}",
+    "wasAtShort": "<person>{{name}}</person> was at",
+    "fromHistoryShort": "From the history",
+    "setCount_one": "{{count}} set",
+    "setCount_other": "{{count}} sets"
   },
   "going": {
     "title": "Going",

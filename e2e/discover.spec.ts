@@ -68,6 +68,7 @@ test('your imported history shows up in the friends feed with its event date', a
   }]
   await page.goto('./')
   const card = page.getByRole('article')
-  await expect(card).toContainText('E2E Raver was at Beatpatrol')
-  await expect(card).toContainText('History · Oct 26, 2024')
+  await expect(card).toContainText('E2E Raver was at')
+  await expect(card).toContainText('From the history')
+  await expect(card.getByRole('link', { name: /Beatpatrol/ })).toContainText('2024')
 })
