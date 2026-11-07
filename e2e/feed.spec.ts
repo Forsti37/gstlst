@@ -40,7 +40,7 @@ test('the feed shows a card with its sets, ratings and pending label', async ({ 
   state.rpcResults.get_friends_feed = [card('c1', 'Beatpatrol', { event: { id: TONIGHT_ID, name: 'Kellersession', date_start: '2026-11-06', date_end: null, status: 'pending', venue_name: 'Keller', venue_city: 'Melk' } })]
   state.rpcResults.get_public_feed = []
   await page.goto('./')
-  const friends = page.getByRole('region', { name: 'Friends' })
+  const friends = page.getByRole('tabpanel', { name: 'Friends' })
   await expect(friends.getByText('Kellersession')).toBeVisible()
   await expect(friends.getByText('Under review')).toBeVisible()
   await expect(friends.getByText('Fred V b2b Etherwood')).toBeVisible()
@@ -59,8 +59,13 @@ test('the tabs switch between friends and public, by tap and by swipe', async ({
   await expect(page.getByRole('tab', { name: 'Public' })).toHaveAttribute('aria-selected', 'true')
   await expect(page.getByText('Public Event')).toBeInViewport()
 
-  // Swiping is the browser scrolling the snap container.
-  await page.getByRole('region', { name: 'Public' }).evaluate((pane) => pane.parentElement!.scrollTo({ left: 0 }))
+  // A swipe to the right goes back to the friends.
+  await page.getByRole('tabpanel', { name: 'Public' }).evaluate((panel) => {
+    const touch = (x: number) => new Touch({ identifier: 1, target: panel, clientX: x, clientY: 300 })
+    panel.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, touches: [touch(60)], changedTouches: [touch(60)] }))
+    panel.dispatchEvent(new TouchEvent('touchmove', { bubbles: true, touches: [touch(300)], changedTouches: [touch(300)] }))
+    panel.dispatchEvent(new TouchEvent('touchend', { bubbles: true, touches: [], changedTouches: [touch(300)] }))
+  })
   await expect(page.getByRole('tab', { name: 'Friends' })).toHaveAttribute('aria-selected', 'true')
   await expect(page.getByText('Friends Event')).toBeInViewport()
 })
@@ -73,7 +78,7 @@ test('scrolling loads the next page with a cursor', async ({ page }) => {
   await page.goto('./')
   await expect(page.getByText('Event 0', { exact: true })).toBeVisible()
   state.rpcResults.get_friends_feed = [card('p2-0', 'Second Page')]
-  await page.getByRole('region', { name: 'Friends' }).evaluate((pane) => pane.scrollTo(0, pane.scrollHeight))
+  await page.locator('main').evaluate((main) => main.scrollTo(0, main.scrollHeight))
   await expect(page.getByText('Second Page')).toBeVisible()
   const calls = state.rpcCalls.filter((call) => call.name === 'get_friends_feed')
   expect(calls.at(-1)!.before_time).toBe(first.at(-1)!.created_at)
@@ -84,9 +89,10 @@ test('a reaction answers at once, changes and goes away', async ({ page }) => {
   state.rpcResults.get_friends_feed = [card('c1', 'Reaction Event')]
   state.rpcResults.get_public_feed = []
   await page.goto('./')
-  const pane = page.getByRole('region', { name: 'Friends' })
-  const fire = pane.getByRole('button', { name: 'Fire' }).first()
-  const dance = pane.getByRole('button', { name: 'Dance' }).first()
+  const pane = page.getByRole('tabpanel', { name: 'Friends' })
+  // The check-in's own reactions sit at the bottom of the card, below its sets.
+  const fire = pane.getByRole('button', { name: 'Fire' }).last()
+  const dance = pane.getByRole('button', { name: 'Dance' }).last()
 
   await fire.click()
   await expect(fire).toHaveAttribute('aria-pressed', 'true')
@@ -109,10 +115,11 @@ test('sets can be reacted to on their own, and the list of who reacted opens', a
   state.rpcResults.get_public_feed = []
   state.rpcResults.list_reactions = [{ username: 'max', display_name: 'Max', avatar_path: null, kind: 'fire' }]
   await page.goto('./')
-  const pane = page.getByRole('region', { name: 'Friends' })
+  const pane = page.getByRole('tabpanel', { name: 'Friends' })
   await pane.getByRole('button', { name: 'Who reacted' }).click()
   await expect(pane.getByRole('link', { name: /Max/ })).toBeVisible()
-  await pane.getByRole('button', { name: 'Bassface' }).nth(1).click()
+  await pane.getByRole('button', { name: 'Reactions for Fred V b2b Etherwood' }).click()
+  await pane.getByRole('button', { name: 'Bassface' }).first().click()
   await expect.poll(() => state.rpcCalls.find((call) => call.name === 'set_reaction')).toMatchObject({ target: 'set_checkin', target_id: 'set-checkin-1', kind: 'bassface' })
 })
 
@@ -123,7 +130,7 @@ test('a reaction waits in the queue without reception', async ({ page }) => {
   await page.goto('./')
   await expect(page.getByText('Offline Event')).toBeVisible()
   state.offline = true
-  const fire = page.getByRole('region', { name: 'Friends' }).getByRole('button', { name: 'Fire' }).first()
+  const fire = page.getByRole('tabpanel', { name: 'Friends' }).getByRole('button', { name: 'Fire' }).last()
   await fire.click()
   await expect(fire).toHaveAttribute('aria-pressed', 'true')
   await expect(page.getByText('1 entry waiting to upload')).toBeVisible()

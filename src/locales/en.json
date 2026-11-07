@@ -315,7 +315,24 @@
     "discard": "Discard"
   },
   "discover": {
-    "recent": "Recent events"
+    "recent": "Recent events",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "search": "Search events, artists, venues, promoters",
+    "filter": "Filter",
+    "allEvents": "All events",
+    "allGenres": "All",
+    "allOf": "All {{name}}",
+    "nothing": "Nothing here.",
+    "artistCount_one": "{{count}} artist",
+    "artistCount_other": "{{count}} artists",
+    "categories": {
+      "event": "Events",
+      "artist": "Artists",
+      "genre": "Genres",
+      "venue": "Venues",
+      "promoter": "Promoters"
+    }
   },
   "checkin": {
     "underReview": "Under review",
@@ -513,7 +530,10 @@
     "offline": "No connection. It will load once you have reception.",
     "emptyFriends": "Nothing from your friends yet.",
     "emptyPublic": "No public check-ins yet.",
-    "findFriends": "Find friends"
+    "findFriends": "Find friends",
+    "wasAt": "<person>{{name}}</person> was at <event>{{event}}</event>",
+    "fromHistory": "History · {{date}}",
+    "reactToSet": "Reactions for {{name}}"
   },
   "going": {
     "title": "Going",

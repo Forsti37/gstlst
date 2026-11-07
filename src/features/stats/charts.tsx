@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Chip } from '../checkin/components'
-import { calendarYears, yearGrid, type CalendarCell } from './calendar'
+import { calendarYears, monthGrid, type CalendarCell } from './calendar'
 
 /** Red for your own numbers, blue when looking at someone else or at the community. */
 export type Tone = 'own' | 'social'
@@ -59,34 +59,40 @@ export function CalendarHeatmap({ days, tone }: { days: CalendarCell[]; tone: To
   const { t, i18n } = useTranslation()
   const currentYear = new Date().getFullYear()
   const years = calendarYears(days, currentYear)
-  const [year, setYear] = useState(() => years.find((y) => days.some((day) => day.date.startsWith(String(y)))) ?? currentYear)
-  const grid = yearGrid(year, days)
+  const [year, setYear] = useState(() => years.find((y) => days.some((day) => day.events > 0 && day.date.startsWith(String(y)))) ?? currentYear)
+  const grid = monthGrid(year, days)
   const total = days.filter((day) => day.date.startsWith(String(year))).reduce((sum, day) => sum + day.events, 0)
-  const dateFormat = new Intl.DateTimeFormat(i18n.resolvedLanguage, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
+  const language = i18n.resolvedLanguage
+  const dateFormat = new Intl.DateTimeFormat(language, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
+  const monthFormat = new Intl.DateTimeFormat(language, { month: 'short', timeZone: 'UTC' })
   const summary = t('stats.calendarSummary', { count: total, year })
 
   return (
     <div>
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex flex-wrap gap-2">
         {years.map((y) => (
           <Chip key={y} selected={y === year} onClick={() => setYear(y)}>{y}</Chip>
         ))}
       </div>
-      <div role="img" aria-label={summary} className="flex gap-0.5 overflow-x-auto py-1">
-        {grid.map((week, index) => (
-          <div key={index} className="flex shrink-0 flex-col gap-0.5">
-            {week.map((cell, row) => (
-              <span
-                key={row}
-                title={cell ? `${dateFormat.format(new Date(`${cell.date}T00:00:00Z`))}: ${t('stats.eventCount', { count: cell.events })}` : undefined}
-                className="block size-3 rounded-sm"
-                style={{ background: cell ? cellColor(cell.events, tone) : 'transparent' }}
-              />
-            ))}
+      {/* One row per month and one column per day, so a whole year fits without scrolling. */}
+      <div role="img" aria-label={summary} className="mt-3 grid gap-y-[3px]">
+        {grid.map((month, index) => (
+          <div key={index} className="grid grid-cols-[2.25rem_1fr] items-center gap-1">
+            <span className="text-[11px] text-text-secondary">{monthFormat.format(new Date(Date.UTC(year, index, 1)))}</span>
+            <div className="grid gap-[2px]" style={{ gridTemplateColumns: 'repeat(31, minmax(0, 1fr))' }}>
+              {month.map((cell, day) => (
+                <span
+                  key={day}
+                  title={cell ? `${dateFormat.format(new Date(`${cell.date}T00:00:00Z`))}: ${t('stats.eventCount', { count: cell.events })}` : undefined}
+                  className="block aspect-square rounded-[2px]"
+                  style={{ background: cell ? cellColor(cell.events, tone) : 'transparent' }}
+                />
+              ))}
+            </div>
           </div>
         ))}
       </div>
-      <p className="mt-1 text-sm text-text-secondary">{summary}</p>
+      <p className="mt-2 text-sm text-text-secondary">{summary}</p>
     </div>
   )
 }

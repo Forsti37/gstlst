@@ -315,7 +315,24 @@
     "discard": "Verwerfen"
   },
   "discover": {
-    "recent": "Letzte Events"
+    "recent": "Letzte Events",
+    "upcoming": "Kommend",
+    "past": "Vergangen",
+    "search": "Events, Artists, Locations, Veranstalter suchen",
+    "filter": "Filtern",
+    "allEvents": "Alle Events",
+    "allGenres": "Alle",
+    "allOf": "Alles aus {{name}}",
+    "nothing": "Hier ist nichts.",
+    "artistCount_one": "{{count}} Artist",
+    "artistCount_other": "{{count}} Artists",
+    "categories": {
+      "event": "Events",
+      "artist": "Artists",
+      "genre": "Genres",
+      "venue": "Locations",
+      "promoter": "Veranstalter"
+    }
   },
   "checkin": {
     "underReview": "Wird geprüft",
@@ -513,7 +530,10 @@
     "offline": "Keine Verbindung. Das lädt, sobald du Empfang hast.",
     "emptyFriends": "Noch nichts von deinen Freunden.",
     "emptyPublic": "Noch keine öffentlichen Check-ins.",
-    "findFriends": "Freunde finden"
+    "findFriends": "Freunde finden",
+    "wasAt": "<person>{{name}}</person> war bei <event>{{event}}</event>",
+    "fromHistory": "Historie · {{date}}",
+    "reactToSet": "Reactions für {{name}}"
   },
   "going": {
     "title": "Dabei",

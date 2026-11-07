@@ -116,7 +116,7 @@ create temp table public_ids on commit drop as
 select ok(exists (select 1 from friends_ids where id = '50000000-0000-4000-f000-000000000001'), 'The friends feed has a friend''s check-in');
 select ok(exists (select 1 from friends_ids where id = '50000000-0000-4000-f000-000000000017'), 'The friends feed has the user''s own check-in');
 select ok(not exists (select 1 from friends_ids where id = '50000000-0000-4000-f000-000000000002'), 'The friends feed hides a friend''s private check-in');
-select ok(not exists (select 1 from friends_ids where id = '50000000-0000-4000-f000-000000000003'), 'The friends feed hides imported history');
+select is((select (card ->> 'imported')::boolean from friends_ids where id = '50000000-0000-4000-f000-000000000003'), true, 'The friends feed has imported history, marked as such');
 select ok(not exists (select 1 from friends_ids where id = '50000000-0000-4000-f000-000000000010'), 'The friends feed has no strangers');
 select is(
   (select card -> 'event' ->> 'status' from friends_ids where id = '50000000-0000-4000-f000-000000000016'),

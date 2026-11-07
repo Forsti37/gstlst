@@ -22,6 +22,7 @@ import { CheckinPage } from '../features/checkin/CheckinPage'
 import { EventPage } from '../features/checkin/EventPage'
 import { HistoryPage } from '../features/checkin/HistoryPage'
 import { NewEventPage } from '../features/checkin/NewEventPage'
+import { ArtistsBrowsePage, EventsBrowsePage, GenresBrowsePage, PromotersBrowsePage, VenuesBrowsePage } from '../features/discover/BrowsePages'
 import { DiscoverPage } from '../features/discover/DiscoverPage'
 import { FeedPage } from '../features/feed/FeedPage'
 import { FriendsPage } from '../features/friends/FriendsPage'
@@ -60,6 +61,11 @@ export const router = createBrowserRouter(
           children: [
             { index: true, element: <FeedPage /> },
             { path: 'discover', element: <DiscoverPage /> },
+            { path: 'discover/events', element: <EventsBrowsePage /> },
+            { path: 'discover/artists', element: <ArtistsBrowsePage /> },
+            { path: 'discover/genres', element: <GenresBrowsePage /> },
+            { path: 'discover/venues', element: <VenuesBrowsePage /> },
+            { path: 'discover/promoters', element: <PromotersBrowsePage /> },
             { path: 'check-in', element: <CheckinPage /> },
             { path: 'check-in/new', element: <NewEventPage /> },
             { path: 'check-in/:eventId', element: <CheckinFlowPage /> },

@@ -27,6 +27,10 @@ export interface FeedSet {
 export interface FeedCard {
   id: string
   created_at: string
+  /** History from the import: shown with its event date and sorted by it. */
+  imported?: boolean
+  /** The sort key of the friends feed, and its paging cursor. */
+  feed_time?: string
   rating: number | null
   rating_sound: number | null
   rating_crowd: number | null
@@ -55,7 +59,7 @@ export function useFriendsFeed() {
       if (error) throw error
       return data as unknown as FeedCard[]
     },
-    getNextPageParam: (last) => (last.length === PAGE_SIZE ? last[last.length - 1]!.created_at : undefined),
+    getNextPageParam: (last) => (last.length === PAGE_SIZE ? (last[last.length - 1]!.feed_time ?? last[last.length - 1]!.created_at) : undefined),
   })
 }
 
