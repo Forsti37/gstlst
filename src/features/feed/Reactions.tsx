@@ -56,7 +56,18 @@ function WhoReacted({ target, targetId }: { target: ReactionTarget; targetId: st
 }
 
 /** Answers on the spot, also offline: the write waits in the queue like every other one. */
-export function Reactions({ target, targetId, summary }: { target: ReactionTarget; targetId: string; summary: ReactionSummary }) {
+export function Reactions({
+  target,
+  targetId,
+  summary,
+  readOnly = false,
+}: {
+  target: ReactionTarget
+  targetId: string
+  summary: ReactionSummary
+  /** For your own check-ins: you see what others left, but you don't react yourself. */
+  readOnly?: boolean
+}) {
   const { t } = useTranslation()
   const me = useMember()
   const [local, setLocal] = useState<ReactionSummary | null>(null)
@@ -67,6 +78,21 @@ export function Reactions({ target, targetId, summary }: { target: ReactionTarge
   const react = (kind: ReactionKind) => {
     setLocal(applyReaction(current, kind))
     void enqueue(me.id, [reactionAction(me.id, target, targetId, current.mine, kind)])
+  }
+
+  if (readOnly) {
+    if (total === 0) return null
+    return (
+      <div>
+        <button type="button" onClick={() => setShowList(!showList)} className="flex min-h-touch items-center gap-2 text-sm text-text-secondary">
+          {REACTIONS.filter(({ kind }) => current[kind] > 0).map(({ kind, emoji }) => (
+            <span key={kind} className="tabular-nums"><span aria-hidden>{emoji}</span> {current[kind]}</span>
+          ))}
+          <span>{t('feed.whoReacted')}</span>
+        </button>
+        {showList && <WhoReacted target={target} targetId={targetId} />}
+      </div>
+    )
   }
 
   return (

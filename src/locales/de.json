@@ -537,7 +537,12 @@
     "wasAtShort": "<person>{{name}}</person> war bei",
     "fromHistoryShort": "Aus der Historie",
     "setCount_one": "{{count}} Set",
-    "setCount_other": "{{count}} Sets"
+    "setCount_other": "{{count}} Sets",
+    "openCheckin": "Check-in öffnen",
+    "by": "von",
+    "edit": "Check-in bearbeiten",
+    "checkinNotFound": "Diesen Check-in gibt es nicht oder er ist für dich nicht sichtbar.",
+    "toEvent": "Zum Event"
   },
   "going": {
     "title": "Dabei",

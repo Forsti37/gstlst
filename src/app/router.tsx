@@ -24,6 +24,7 @@ import { HistoryPage } from '../features/checkin/HistoryPage'
 import { NewEventPage } from '../features/checkin/NewEventPage'
 import { ArtistsBrowsePage, EventsBrowsePage, GenresBrowsePage, PromotersBrowsePage, VenuesBrowsePage } from '../features/discover/BrowsePages'
 import { DiscoverPage } from '../features/discover/DiscoverPage'
+import { CheckinViewPage } from '../features/feed/CheckinPage'
 import { FeedPage } from '../features/feed/FeedPage'
 import { FriendsPage } from '../features/friends/FriendsPage'
 import { UserPage } from '../features/friends/UserPage'
@@ -70,7 +71,8 @@ export const router = createBrowserRouter(
             { path: 'check-in/new', element: <NewEventPage /> },
             { path: 'check-in/:eventId', element: <CheckinFlowPage /> },
             { path: 'check-ins', element: <HistoryPage /> },
-            { path: 'check-ins/:checkinId', element: <CheckinDetailPage /> },
+            { path: 'check-ins/:checkinId', element: <CheckinViewPage /> },
+            { path: 'check-ins/:checkinId/edit', element: <CheckinDetailPage /> },
             { path: 'events/:eventId', element: <EventPage /> },
             { path: 'inbox', element: <InboxPage /> },
             { path: 'profile', element: <ProfilePage /> },

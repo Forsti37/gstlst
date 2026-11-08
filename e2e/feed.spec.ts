@@ -121,7 +121,7 @@ test('sets can be reacted to on their own, and the list of who reacted opens', a
   const pane = page.getByRole('tabpanel', { name: 'Friends' })
   await pane.getByRole('button', { name: 'Who reacted' }).click()
   await expect(pane.getByRole('link', { name: /Max/ })).toBeVisible()
-  await pane.getByRole('button', { name: 'Reactions for Fred V b2b Etherwood' }).click()
+  await pane.getByRole('button', { name: 'Reactions for Fred V & Etherwood' }).click()
   await pane.getByRole('button', { name: 'Bassface' }).first().click()
   await expect.poll(() => state.rpcCalls.find((call) => call.name === 'set_reaction')).toMatchObject({ target: 'set_checkin', target_id: 'set-checkin-1', kind: 'bassface' })
 })
@@ -192,4 +192,60 @@ test.describe('notifications', () => {
     await page.goto('./')
     await expect(page.getByText('Get notified?')).toBeHidden()
   })
+})
+
+test('your own check-in has an edit pencil and no reaction buttons', async ({ page }) => {
+  const state = await mockBackend(page, { signedIn: true, profile: memberProfile })
+  state.rpcResults.get_public_feed = []
+  state.rpcResults.get_friends_feed = [
+    card('own', 'My Rave', {
+      user: { id: memberProfile.id, username: memberProfile.username, display_name: memberProfile.display_name, avatar_path: null },
+      reactions: { ...reactions, fire: 2 },
+    }),
+  ]
+  await page.goto('./')
+  const pane = page.getByRole('tabpanel', { name: 'Friends' })
+  await expect(pane.getByRole('link', { name: 'Edit check-in' })).toHaveAttribute('href', /check-ins\/own\/edit$/)
+  await expect(pane.getByRole('button', { name: 'Fire' })).toHaveCount(0)
+  await expect(pane.getByText('Who reacted')).toBeVisible()
+})
+
+test('a card links artists, venue and promoter, and opens its own page', async ({ page }) => {
+  const state = await mockBackend(page, { signedIn: true, profile: memberProfile })
+  const linked = card('c1', 'Linked Event', {
+    event: { id: TONIGHT_ID, name: 'Linked Event', date_start: '2026-11-06', date_end: null, status: 'approved', venue_id: 'v1', venue_name: 'Flex', venue_city: 'Wien', promoters: [{ id: 'p1', name: 'Beatpatrol' }] },
+  })
+  state.rpcResults.get_public_feed = []
+  state.rpcResults.get_friends_feed = [linked]
+  state.rpcResults.get_checkin_card = linked
+  await page.goto('./')
+  const pane = page.getByRole('tabpanel', { name: 'Friends' })
+  await expect(pane.getByRole('link', { name: 'Fred V' })).toHaveAttribute('href', /artists\/a1$/)
+  await expect(pane.getByRole('link', { name: 'Flex · Wien' })).toHaveAttribute('href', /venues\/v1$/)
+  await expect(pane.getByRole('link', { name: 'Beatpatrol' })).toHaveAttribute('href', /promoters\/p1$/)
+
+  await expect(pane.getByRole('link', { name: /1 set/ })).toHaveAttribute('href', /check-ins\/c1$/)
+  await pane.getByRole('link', { name: 'Open check-in' }).click()
+  await expect(page).toHaveURL(/check-ins\/c1$/)
+  // On the check-in page the reactions on sets are open right away.
+  await expect(page.getByRole('button', { name: 'Bassface' })).toHaveCount(2)
+  await expect(page.getByRole('link', { name: 'To the event' })).toBeVisible()
+})
+
+test('a write that keeps failing on the server stops blocking the queue', async ({ page }) => {
+  const state = await mockBackend(page, { signedIn: true, profile: memberProfile })
+  state.rpcResults.get_friends_feed = [card('c1', 'Broken Event')]
+  state.rpcResults.get_public_feed = []
+  await page.route('**/rest/v1/rpc/set_reaction', (route) =>
+    route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ code: '21000', message: 'more than one row', details: null, hint: null }) }),
+  )
+  await page.goto('./')
+  await page.getByRole('tabpanel', { name: 'Friends' }).getByRole('button', { name: 'Fire' }).last().click()
+  await expect(page.getByText('1 entry waiting to upload')).toBeVisible()
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await page.evaluate(() => window.dispatchEvent(new Event('online')))
+    await page.waitForTimeout(150)
+  }
+  await expect(page.getByText('1 entry could not be saved')).toBeVisible()
+  expect(state.writes).toHaveLength(0)
 })

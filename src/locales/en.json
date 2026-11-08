@@ -537,7 +537,12 @@
     "wasAtShort": "<person>{{name}}</person> was at",
     "fromHistoryShort": "From the history",
     "setCount_one": "{{count}} set",
-    "setCount_other": "{{count}} sets"
+    "setCount_other": "{{count}} sets",
+    "openCheckin": "Open check-in",
+    "by": "by",
+    "edit": "Edit check-in",
+    "checkinNotFound": "This check-in doesn't exist or isn't visible to you.",
+    "toEvent": "To the event"
   },
   "going": {
     "title": "Going",

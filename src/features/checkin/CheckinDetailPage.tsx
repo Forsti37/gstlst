@@ -3,7 +3,7 @@ import { BadgeCheck } from 'lucide-react'
 import { FunFacts } from '../badges/FunFacts'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { PlaceholderPage } from '../../app/PlaceholderPage'
 import { Button, Section, TextField } from '../../app/ui'
 import { useMember } from '../auth/auth'
@@ -253,10 +253,13 @@ function DetailForm({ checkin }: { checkin: CheckinDetail }) {
 
 export function CheckinDetailPage() {
   const { t } = useTranslation()
+  const me = useMember()
   const { checkinId } = useParams()
   const checkin = useCheckinDetail(checkinId)
   if (checkin.isPending) return <p className="px-4 py-6 text-text-secondary">{t('common.loading')}</p>
   if (!checkin.data) return <PlaceholderPage title={t('pages.notFound.title')} body={t('checkin.eventNotFound')} />
+  // Someone else's check-in opens as a page to look at, not as a form.
+  if (checkin.data.user_id !== me.id) return <Navigate to={`/check-ins/${checkin.data.id}`} replace />
   // The key resets the form when another check-in opens or fresh data arrives after a save.
   return <DetailForm key={checkin.data.id} checkin={checkin.data} />
 }

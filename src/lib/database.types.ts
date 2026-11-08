@@ -1696,6 +1696,10 @@ export type Database = {
       }
       export_my_data: { Args: never; Returns: Json }
       feed_card: { Args: { checkin_id: string }; Returns: Json }
+      feed_time: {
+        Args: { created_at: string; event_date: string; imported: boolean }
+        Returns: string
+      }
       friends_leaderboard: {
         Args: { for_year?: number }
         Returns: {
@@ -1727,6 +1731,7 @@ export type Database = {
           value: number
         }[]
       }
+      get_checkin_card: { Args: { target_checkin: string }; Returns: Json }
       get_community_wrapped: { Args: { for_year: number }; Returns: Json }
       get_friends_feed: {
         Args: { before_time?: string; page_size?: number }

@@ -8,12 +8,20 @@ import type { QueuedAction } from './actions'
 export const MEDIA_BUCKET = 'media'
 
 /** Stop for now and try again later, as opposed to a rejection that won't change on a retry. */
-class TemporaryError extends Error {}
+class TemporaryError extends Error {
+  constructor(message: string, readonly fromServer = false) {
+    super(message)
+  }
+}
+
+/** A server error that keeps coming back is a bug, not bad reception, and must not block the queue forever. */
+const MAX_SERVER_ERRORS = 3
 
 function check(result: { error: { message: string } | null; status?: number }) {
   if (!result.error) return
   const status = result.status ?? 0
-  const looksOffline = !navigator.onLine || status === 0 || status >= 500 || status === 401 || status === 408 || status === 429
+  if (navigator.onLine && status >= 500) throw new TemporaryError(result.error.message, true)
+  const looksOffline = !navigator.onLine || status === 0 || status === 401 || status === 408 || status === 429
   if (looksOffline || /fetch|network/i.test(result.error.message)) throw new TemporaryError(result.error.message)
   throw new Error(result.error.message)
 }
@@ -91,7 +99,13 @@ async function drain() {
         await offlineDb.ops.delete(op.seq!)
         sent += 1
       } catch (error) {
-        if (error instanceof TemporaryError) return
+        if (error instanceof TemporaryError) {
+          const serverErrors = (op.serverErrors ?? 0) + (error.fromServer ? 1 : 0)
+          if (serverErrors < MAX_SERVER_ERRORS) {
+            if (error.fromServer) await offlineDb.ops.update(op.seq!, { serverErrors })
+            return
+          }
+        }
         // The rest of a batch builds on this op, so it has to wait for a decision too.
         blockedBatches.add(op.batchId)
         await offlineDb.ops.where('batchId').equals(op.batchId).modify({ status: 'failed' })

@@ -198,7 +198,7 @@ test.describe('own photos', () => {
         ],
       },
     ]
-    await page.goto('check-ins/checkin-1')
+    await page.goto('check-ins/checkin-1/edit')
     const photo = page.getByRole('img', { name: 'Your photo' })
     await expect(photo).toBeVisible()
     await expect.poll(() => photo.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0)
@@ -249,8 +249,16 @@ test('imported sets can be rated later in the history', async ({ page }) => {
     ],
   }
   state.checkins = [checkin]
+  state.rpcResults.get_checkin_card = {
+    id: checkin.id, created_at: '2026-01-01T00:00:00Z', imported: true, rating: null, rating_sound: null, rating_crowd: null, rating_location: null, rating_lineup: null,
+    text: null, verified: false, reactions: { bassface: 0, dance: 0, fire: 0, mine: null }, companions: [], photos: [], sets: [],
+    user: { id: memberProfile.id, username: memberProfile.username, display_name: memberProfile.display_name, avatar_path: null },
+    event: { id: TONIGHT_ID, name: 'Old Rave', date_start: '2019-05-04', date_end: null, status: 'approved', venue_name: 'Flex', venue_city: 'Wien' },
+  }
   await page.goto('check-ins')
   await page.getByRole('link', { name: /Old Rave/ }).click()
+  // Your own check-in opens as a page, and the pencil leads to the form.
+  await page.getByRole('link', { name: 'Edit check-in' }).click()
   await page.getByRole('slider', { name: 'Rating for Subsonic' }).fill('4')
   await page.getByRole('button', { name: 'Save', exact: true }).click()
   await expect(page.getByText('Saved.')).toBeVisible()

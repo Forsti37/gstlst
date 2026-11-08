@@ -70,5 +70,7 @@ test('your imported history shows up in the friends feed with its event date', a
   const card = page.getByRole('article')
   await expect(card).toContainText('E2E Raver was at')
   await expect(card).toContainText('From the history')
-  await expect(card.getByRole('link', { name: /Beatpatrol/ })).toContainText('2024')
+  await expect(card.getByRole('link', { name: 'Beatpatrol' })).toHaveAttribute('href', new RegExp(`events/${TONIGHT_ID}$`))
+  await expect(card.getByRole('link', { name: 'Open check-in' })).toContainText('2024')
+  await expect(card.getByRole('link', { name: 'Edit check-in' })).toHaveAttribute('href', /check-ins\/h1\/edit$/)
 })

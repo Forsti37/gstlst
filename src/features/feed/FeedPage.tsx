@@ -9,8 +9,11 @@ type Tab = 'friends' | 'public'
 type FeedQuery = UseInfiniteQueryResult<InfiniteData<Card[], unknown>, Error>
 
 const PULL_THRESHOLD = 70
-/** Share of the width a swipe has to travel before it switches. */
-const SWIPE_SHARE = 0.22
+/** Share of the width a slow swipe has to travel before it switches. */
+const SWIPE_SHARE = 0.12
+/** A short flick switches too: at least this far, at least this fast (px per ms). */
+const FLICK_DISTANCE = 30
+const FLICK_SPEED = 0.3
 
 function FeedList({ query, empty, active }: { query: FeedQuery; empty: string; active: boolean }) {
   const { t } = useTranslation()
@@ -63,7 +66,7 @@ export function FeedPage() {
   const [settled, setSettled] = useState(true)
   const [pull, setPull] = useState(0)
   const root = useRef<HTMLDivElement>(null)
-  const gesture = useRef<{ x: number; y: number; axis: 'x' | 'y' | null; atTop: boolean } | null>(null)
+  const gesture = useRef<{ x: number; y: number; time: number; axis: 'x' | 'y' | null; atTop: boolean } | null>(null)
   const query = active === 'friends' ? friends : publicFeed
 
   const scroller = () => root.current?.closest('main') ?? null
@@ -76,7 +79,7 @@ export function FeedPage() {
 
   const onPointerDown = (event: PointerEvent) => {
     if (event.pointerType === 'mouse') return
-    gesture.current = { x: event.clientX, y: event.clientY, axis: null, atTop: (scroller()?.scrollTop ?? 0) <= 0 }
+    gesture.current = { x: event.clientX, y: event.clientY, time: event.timeStamp, axis: null, atTop: (scroller()?.scrollTop ?? 0) <= 0 }
   }
   const onPointerMove = (event: PointerEvent) => {
     const g = gesture.current
@@ -90,10 +93,13 @@ export function FeedPage() {
     dragRef.current = towardsNothing ? dx / 4 : dx
     setDrag(dragRef.current)
   }
-  const endGesture = () => {
+  const endGesture = (event: PointerEvent) => {
     const width = root.current?.clientWidth ?? 1
     const distance = dragRef.current
-    if (Math.abs(distance) > width * SWIPE_SHARE) show(distance < 0 ? 'public' : 'friends')
+    const elapsed = Math.max(1, event.timeStamp - (gesture.current?.time ?? event.timeStamp))
+    const far = Math.abs(distance) > width * SWIPE_SHARE
+    const flick = Math.abs(distance) > FLICK_DISTANCE && Math.abs(distance) / elapsed > FLICK_SPEED
+    if (far || flick) show(distance < 0 ? 'public' : 'friends')
     dragRef.current = 0
     setDrag(0)
     gesture.current = null

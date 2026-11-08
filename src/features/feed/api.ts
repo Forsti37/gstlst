@@ -39,7 +39,17 @@ export interface FeedCard {
   text: string | null
   verified: boolean
   user: { id: string; username: string; display_name: string; avatar_path: string | null }
-  event: { id: string; name: string; date_start: string; date_end: string | null; status: Status; venue_name: string; venue_city: string }
+  event: {
+    id: string
+    name: string
+    date_start: string
+    date_end: string | null
+    status: Status
+    venue_id?: string
+    venue_name: string
+    venue_city: string
+    promoters?: { id: string; name: string }[]
+  }
   reactions: ReactionSummary
   badges?: { id: string; category: string; level: number; name: string }[]
   companions: { username: string; display_name: string }[]

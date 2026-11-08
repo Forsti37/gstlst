@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions;
 
-select plan(40);
+select plan(46);
 
 insert into auth.users (id, email, aud, role) values
   ('00000000-0000-4000-f000-000000000001', 'me@test.invalid', 'authenticated', 'authenticated'),
@@ -161,6 +161,13 @@ select is((public.reaction_summary('event_checkin', '50000000-0000-4000-f000-000
 select is((public.reaction_summary('event_checkin', '50000000-0000-4000-f000-000000000001') ->> 'bassface')::int, 1, 'There is one reaction per user');
 select is((select count(*)::int from public.list_reactions('event_checkin', '50000000-0000-4000-f000-000000000001')), 1, 'The list of who reacted is visible');
 select is((select username from public.list_reactions('event_checkin', '50000000-0000-4000-f000-000000000001')), 'test_feed_me', 'The list names the person');
+select lives_ok($$ select public.set_reaction('set_checkin', '60000000-0000-4000-f000-000000000001', 'fire') $$, 'A set can be reacted to while other sets exist');
+select is((public.reaction_summary('set_checkin', '60000000-0000-4000-f000-000000000001') ->> 'fire')::int, 1, 'The set reaction counts');
+select public.set_reaction('event_checkin', '50000000-0000-4000-f000-000000000017', 'fire');
+select is((select count(*)::int from public.reactions where target_id = '50000000-0000-4000-f000-000000000017'), 0, 'Reacting to your own check-in is ignored');
+select is(public.get_checkin_card('50000000-0000-4000-f000-000000000001') ->> 'id', '50000000-0000-4000-f000-000000000001', 'A friend''s check-in opens on its own page');
+select ok(public.get_checkin_card('50000000-0000-4000-f000-000000000001') -> 'event' ? 'venue_id' and jsonb_typeof(public.get_checkin_card('50000000-0000-4000-f000-000000000001') -> 'event' -> 'promoters') = 'array', 'The card links venue and promoters');
+select is(public.get_checkin_card('50000000-0000-4000-f000-000000000002'), null, 'A check-in you may not see does not open');
 select throws_ok(
   $$ insert into public.reactions (user_id, target_type, target_id, kind) values ((select auth.uid()), 'event_checkin', '50000000-0000-4000-f000-000000000002', 'fire') $$,
   '42501', null, 'Nobody can react to a check-in they cannot see'
@@ -169,7 +176,7 @@ select throws_ok($$ select public.upsert_notification((select auth.uid()), 'x', 
 reset role;
 
 select is(
-  (select count(*)::int from public.notifications where recipient_id = '00000000-0000-4000-f000-000000000002' and type = 'reaction'),
+  (select count(*)::int from public.notifications where recipient_id = '00000000-0000-4000-f000-000000000002' and type = 'reaction' and bundle_key like 'reaction:event_checkin:%'),
   1, 'A reaction notifies the owner, also when it is changed'
 );
 

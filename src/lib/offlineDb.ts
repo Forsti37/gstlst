@@ -8,6 +8,8 @@ export interface QueuedOp {
   action: QueuedAction
   status: 'queued' | 'failed'
   error?: string
+  /** Server errors so far. A few in a row mean it is not the reception, so the op stops retrying. */
+  serverErrors?: number
   createdAt: number
 }
 
