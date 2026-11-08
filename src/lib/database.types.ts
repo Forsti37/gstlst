@@ -1667,6 +1667,21 @@ export type Database = {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
+      entity_checkins: {
+        Args: { entity: string; target: string }
+        Returns: {
+          checkin_id: string
+          event_date: string
+          event_id: string
+          rating: number
+          sets: number
+          user_id: string
+        }[]
+      }
+      entity_is_visible: {
+        Args: { entity: string; target: string }
+        Returns: boolean
+      }
       evaluate_my_badges: { Args: never; Returns: undefined }
       event_live_until: { Args: { target_event: string }; Returns: string }
       event_set_ratings: {
@@ -1733,6 +1748,31 @@ export type Database = {
       }
       get_checkin_card: { Args: { target_checkin: string }; Returns: Json }
       get_community_wrapped: { Args: { for_year: number }; Returns: Json }
+      get_entity_checkins: {
+        Args: {
+          before_time?: string
+          entity: string
+          page_size?: number
+          target: string
+        }
+        Returns: Json
+      }
+      get_entity_personal: {
+        Args: { entity: string; target: string }
+        Returns: Json
+      }
+      get_entity_upcoming: {
+        Args: { entity: string; target: string }
+        Returns: {
+          date_end: string
+          date_start: string
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["entity_status"]
+          venue_city: string
+          venue_name: string
+        }[]
+      }
       get_friends_feed: {
         Args: { before_time?: string; page_size?: number }
         Returns: Json
@@ -1792,6 +1832,7 @@ export type Database = {
         }[]
       }
       get_profile_stats: { Args: { target_user: string }; Returns: Json }
+      get_promoter_stats: { Args: { target_promoter: string }; Returns: Json }
       get_public_feed: {
         Args: {
           near_lat?: number

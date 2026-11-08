@@ -7,9 +7,9 @@ import type { MapPoint } from './VenueMap'
 const VenueMap = lazy(() => import('./VenueMap'))
 
 /** The map only loads on request: it is large, and its tiles come from OpenFreeMap. */
-export function MapSection({ points, tone }: { points: MapPoint[]; tone: Tone }) {
+export function MapSection({ points, tone, initiallyOpen = false }: { points: MapPoint[]; tone: Tone; initiallyOpen?: boolean }) {
   const { t } = useTranslation()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(initiallyOpen)
   if (points.length === 0) return null
   if (!open) {
     return (

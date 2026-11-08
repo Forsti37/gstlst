@@ -886,5 +886,50 @@
       "topVenue": "Top venue",
       "bestSound": "Best sound"
     }
+  },
+  "entity": {
+    "kicker": {
+      "artist": "Artist",
+      "group": "Group",
+      "venue": "Venue",
+      "promoter": "Promoter"
+    },
+    "upcoming": "Coming up",
+    "going": "Going",
+    "friendsGoing_one": "{{count}} friend going",
+    "friendsGoing_other": "{{count}} friends going",
+    "you": "You",
+    "app": "In the app",
+    "friends": "Friends who were there",
+    "checkins": "Check-ins",
+    "noCheckins": "No check-ins yet.",
+    "last": "Last time:",
+    "pastEvents": "Past events",
+    "route": "Directions",
+    "editions_one": "{{count}} edition",
+    "editions_other": "{{count}} editions",
+    "mostBooked": "Most booked",
+    "homeVenues": "Home venues",
+    "never": {
+      "artist": "You haven't seen them yet.",
+      "venue": "You haven't been here yet.",
+      "promoter": "You haven't been to their events yet."
+    },
+    "count": {
+      "artist_one": "Time seen",
+      "artist_other": "Times seen",
+      "venue_one": "Visit",
+      "venue_other": "Visits",
+      "promoter_one": "Event",
+      "promoter_other": "Events"
+    },
+    "times": {
+      "artist_one": "{{count}}× seen",
+      "artist_other": "{{count}}× seen",
+      "venue_one": "{{count}} visit",
+      "venue_other": "{{count}} visits",
+      "promoter_one": "{{count}} event",
+      "promoter_other": "{{count}} events"
+    }
   }
 }

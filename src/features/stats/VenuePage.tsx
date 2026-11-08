@@ -6,7 +6,8 @@ import { PlaceholderPage } from '../../app/PlaceholderPage'
 import { Section } from '../../app/ui'
 import { getSupabase } from '../../lib/supabase'
 import { formatEventDate } from '../checkin/api'
-import { MapLink, UnderReview } from '../checkin/components'
+import { MapLink } from '../checkin/components'
+import { CheckinsSection, EntityHeader, FriendsSection, PersonalSection, UpcomingSection } from '../entity/parts'
 import { UserAvatar } from '../profile/UserAvatar'
 import { useVenueStats } from './api'
 import { BarList } from './charts'
@@ -21,7 +22,7 @@ export function VenuePage() {
     queryKey: ['venue', venueId],
     enabled: Boolean(venueId),
     queryFn: async () => {
-      const { data, error } = await getSupabase().from('venues').select('id, name, city, country_code, lat, lng, status').eq('id', venueId!).maybeSingle()
+      const { data, error } = await getSupabase().from('venues').select('id, name, city, country_code, venue_type, lat, lng, status').eq('id', venueId!).maybeSingle()
       if (error) throw error
       return data
     },
@@ -30,7 +31,13 @@ export function VenuePage() {
     queryKey: ['venue', venueId, 'events'],
     enabled: Boolean(venueId),
     queryFn: async () => {
-      const { data, error } = await getSupabase().from('events').select('id, name, date_start, date_end').eq('venue_id', venueId!).order('date_start', { ascending: false }).limit(50)
+      const { data, error } = await getSupabase()
+        .from('events')
+        .select('id, name, date_start, date_end')
+        .eq('venue_id', venueId!)
+        .lt('date_start', new Date().toISOString().slice(0, 10))
+        .order('date_start', { ascending: false })
+        .limit(30)
       if (error) throw error
       return data
     },
@@ -49,18 +56,32 @@ export function VenuePage() {
   const format = (value: number) => value.toLocaleString(i18n.resolvedLanguage, { maximumFractionDigits: 1 })
 
   return (
-    <div className="px-4 py-6">
-      <h1 className="font-display text-4xl tracking-wide uppercase">{v.name}</h1>
-      <div className="mt-1 flex flex-wrap items-center gap-2 text-text-secondary">
-        {v.lat != null && v.lng != null ? <MapLink lat={v.lat} lng={v.lng}>{v.city}, {v.country_code}</MapLink> : <span>{v.city}, {v.country_code}</span>}
-        <UnderReview status={v.status} />
-      </div>
-      {stats.data && stats.data.my_events > 0 && <p className="mt-2 font-medium">{t('venue.youWere', { count: stats.data.my_events })}</p>}
+    <div className="px-4 pb-6">
+      <EntityHeader
+        id={v.id}
+        kicker={
+          v.venue_type === 'other'
+            ? t('entity.kicker.venue')
+            : `${t('entity.kicker.venue')} · ${t(`checkin.venueTypes.${v.venue_type}`, { defaultValue: v.venue_type })}`
+        }
+        name={v.name}
+        status={v.status}
+        subline={<p>{v.city}, {v.country_code}</p>}
+      >
+        {v.lat != null && v.lng != null && <MapLink lat={v.lat} lng={v.lng}>{t('entity.route')}</MapLink>}
+      </EntityHeader>
 
-      <div className="mt-4"><MapSection points={points} tone="social" /></div>
+      {points.length > 0 && (
+        <div className="mt-4">
+          <MapSection points={points} tone="social" initiallyOpen />
+        </div>
+      )}
+
+      <UpcomingSection entity="venue" id={v.id} />
+      <PersonalSection entity="venue" id={v.id} />
 
       {rated.length > 0 && averages && (
-        <Section title={t('venue.ratings')}>
+        <Section title={t('entity.app')}>
           <BarList
             tone="social"
             max={5}
@@ -85,8 +106,11 @@ export function VenuePage() {
           <BarList tone="social" rows={stats.data.top_artists.map((a) => ({ key: a.id, label: a.name, value: a.sets, to: `/artists/${a.id}` }))} />
         </Section>
       )}
+
+      <FriendsSection entity="venue" id={v.id} />
+
       {events.data && events.data.length > 0 && (
-        <Section title={t('venue.events')}>
+        <Section title={t('entity.pastEvents')}>
           <ul>
             {events.data.map((event) => (
               <li key={event.id}>
@@ -99,6 +123,8 @@ export function VenuePage() {
           </ul>
         </Section>
       )}
+
+      <CheckinsSection entity="venue" id={v.id} />
     </div>
   )
 }

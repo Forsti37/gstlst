@@ -114,7 +114,7 @@ test('the leaderboard sorts by the chosen number', async ({ page }) => {
   await expect(page.getByRole('listitem').first()).toContainText('Lisa')
 })
 
-test('the artist page shows what the spec lists', async ({ page }) => {
+test('the artist page shows your numbers, the app, friends, upcoming gigs and check-ins', async ({ page }) => {
   const backend = await mockBackend(page, { signedIn: true, profile: memberProfile })
   backend.tables.artists = [{ id: 'a1', name: 'Bea', status: 'approved', kind: 'person', country_code: 'AT', instagram_url: null }]
   backend.rpcResults.get_artist_stats = {
@@ -129,8 +129,25 @@ test('the artist page shows what the spec lists', async ({ page }) => {
     partners: [{ id: 'a2', name: 'Cid', sets: 2 }],
     top_fans: [{ username: 'lisa', display_name: 'Lisa', avatar_path: null, sets: 9 }],
   }
+  backend.rpcResults.get_entity_personal = {
+    count: 3, avg_rating: 4, last: { event_id: 'e1', name: 'Beatpatrol', date_start: '2025-10-25' },
+    friends: [{ username: 'max', display_name: 'Max', avatar_path: null, times: 2 }],
+  }
+  backend.rpcResults.get_entity_upcoming = [{ id: 'e9', name: 'Soon Rave', date_start: '2026-12-12', date_end: null, status: 'approved', venue_name: 'Flex', venue_city: 'Wien' }]
+  backend.rpcResults.get_entity_checkins = []
   await page.goto('artists/a1')
-  await expect(page.getByText("You've seen them 3 times")).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Bea' })).toBeVisible()
+  await expect(page.getByText('Times seen')).toBeVisible()
+  await expect(page.getByRole('link', { name: /Last time: Beatpatrol/ })).toHaveAttribute('href', /events\/e1$/)
+  await expect(page.getByRole('link', { name: /Soon Rave/ })).toBeVisible()
+  await page.getByRole('button', { name: 'Going' }).click()
+  await expect.poll(() => backend.writes.find((write) => write.table === 'going')?.body).toMatchObject({ event_id: 'e9' })
+  await expect(page.getByRole('link', { name: /Max.*2× seen/ })).toBeVisible()
+  await expect(page.getByText('No check-ins yet.')).toBeVisible()
+  // Upcoming gigs sit right under the header, your own numbers follow.
+  const upcomingY = (await page.getByRole('heading', { name: 'Coming up' }).boundingBox())!.y
+  const youY = (await page.getByRole('heading', { name: 'You', exact: true }).boundingBox())!.y
+  expect(upcomingY).toBeLessThan(youY)
   await expect(page.getByText('Also known as B.E.A.')).toBeVisible()
   await expect(page.getByRole('link', { name: 'Bea & Cid' })).toBeVisible()
   await expect(page.getByRole('link', { name: /Lisa/ })).toHaveAttribute('href', /u\/lisa$/)
@@ -147,9 +164,16 @@ test('the venue page shows ratings, resident and rank', async ({ page }) => {
     top_artists: [{ id: 'a1', name: 'Bea', sets: 5 }],
     resident: { username: 'lisa', display_name: 'Lisa', avatar_path: null, checkins: 7 },
   }
+  backend.rpcResults.get_entity_personal = { count: 2, avg_rating: 4.5, last: null, friends: [] }
+  backend.rpcResults.get_entity_upcoming = []
+  backend.rpcResults.get_entity_checkins = []
+  await page.route('https://tiles.openfreemap.org/**', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 8, sources: {}, layers: [] }) }))
   await page.goto('venues/v1')
   await expect(page.getByRole('heading', { name: 'Flex' })).toBeVisible()
-  await expect(page.getByText("You've been here for 2 events")).toBeVisible()
+  await expect(page.getByText('Visits')).toBeVisible()
+  // The map shows right away, without a button.
+  await expect(page.getByRole('button', { name: 'Show map' })).toHaveCount(0)
+  await expect(page.getByTestId('venue-map').or(page.getByText("The map can't be shown on this device."))).toBeVisible()
   await expect(page.getByRole('link', { name: '#1 for best sound' })).toBeVisible()
   await expect(page.getByRole('link', { name: /Lisa/ })).toBeVisible()
   await expect(page.getByText('Crowd')).toHaveCount(0)
