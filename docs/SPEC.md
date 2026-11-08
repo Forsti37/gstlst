@@ -151,7 +151,7 @@ A check-in must work at 3 a.m., one-handed, with bad reception, in under 30 seco
 5. **Add more later:** more sets can be added to the existing event check-in during the night – no second event check-in.
 6. **Finish:** fun facts and new badges are shown. Offline, everything goes into the queue and uploads at the next online moment.
 
-Retroactive check-ins for past events use the same flow, just without GPS verification. A check-in counts as live until 12 hours after the event ends. Check-ins and ratings can be edited or deleted later; GPS verification survives edits. Optional and strictly private: ticket price and other spending, visible only to the user.
+Retroactive check-ins for past events use the same flow, just without GPS verification. A check-in counts as live until 12 hours after the event ends. Check-ins and ratings can be edited or deleted later; GPS verification survives edits. An operation that the server rejects three times in a row is marked as failed and stops blocking the rest of the offline queue. Optional and strictly private: ticket price and other spending, visible only to the user.
 
 ### Event page
 
@@ -161,18 +161,34 @@ Retroactive check-ins for past events use the same flow, just without GPS verifi
 - Anyone can propose a timetable or lineup additions → approval.
 - Cancelled or postponed events are hidden completely.
 
+### Check-in page
+
+- Every event check-in has its own page `/check-ins/{id}`: the full feed card with all sets, ratings, text, photos and reactions. The owner sees an edit pencil at the top right that opens `/check-ins/{id}/edit`; others are sent back to the page.
+- Event, venue, promoters and every artist on a card link to their pages, like on Untappd.
+
 ### Artist, venue and promoter pages
 
-- **Artist:** name, aliases, group members or groups, genres, Instagram link, number of check-ins and average rating, most frequent B2B partners, "you've seen them X times", top fans (public profiles only), country of origin (admin-maintained). Image: generated avatar unless a real photo was uploaded with permission (see Legal).
-- **Venue:** map, events, top artists there, resident (user with the most check-ins, public profiles only), average sub-ratings and an app-wide "best sound" ranking.
-- **Promoter:** events, series.
+All three share one structure, top to bottom:
+
+1. **Header in the look of the event flyers:** the red-blue glow generated per entity, a small kicker (Artist, Group, Venue · type, Promoter), the name in the display font, a subline and action buttons.
+2. **Coming up:** upcoming events with a "Going" toggle in the row and the number of friends going.
+3. **You:** how often you were there or saw the artist, your average rating (hidden while there are no ratings) and a link to the last time. Without any visit a short "never" line instead.
+4. **App:** numbers across all users.
+5. **Friends:** friends who were there, with how often.
+6. **Check-ins:** the check-ins of everyone the viewer may see, as feed cards with infinite scroll.
+
+Per page on top of that:
+
+- **Artist:** aliases, genres and country of origin (admin-maintained) in the subline, wishlist and Instagram buttons, number of check-ins and average rating in the app, group members or groups, most frequent B2B partners, top fans (public profiles only). Image: generated avatar unless a real photo was uploaded with permission (see Legal).
+- **Venue:** "Route" button, the map shown right away, average sub-ratings with the app-wide "best sound" rank, resident (user with the most check-ins, public profiles only), top artists there, past events.
+- **Promoter:** series in the subline, Instagram button, events and check-ins in the app, series with their number of editions, most booked artists, home venues, past events.
 
 ### Admin & moderation
 
 - Queues for new data points, corrections (`change_requests`), timetables, proposed tags, photos and reports.
 - Approve, reject with a reason, edit before approval, merge with duplicate suggestions.
 - Mark check-ins as verified manually (for leaderboards).
-- Set events to cancelled or postponed, maintain artist countries, aliases, genres and tags.
+- Set events to cancelled or postponed, maintain artist countries, aliases, genres, tags and the Instagram profiles of artists and promoters (from a link or an @handle; the database accepts only real Instagram profile links).
 - Create and edit badges (rule editor).
 - Roles: admin (everything, assigns roles in the dashboard), moderator (queues, no role assignment). For the beta Daniel is the only admin and there are no moderators. Later: verified promoter (own events and lineups without approval) and verified artist (claiming their own profile).
 - Admin dashboard: active users, check-ins per week, queue lengths. Every admin action goes to `admin_audit_log`.
@@ -180,15 +196,21 @@ Retroactive check-ins for past events use the same flow, just without GPS verifi
 
 ### Feed & social
 
-- Two feeds, switched by horizontal swipe: **Friends** (chronological) and **Public** (ranked by recency and proximity, public and approved check-ins only). Both require login. Proximity = city of the user's last check-in, current GPS only if permitted.
-- Feed card = one event check-in with its sets below, ratings, photo carousel, badges, reactions. Fun facts do not appear in the feed.
-- **Reactions:** one per user and target, on the event check-in and on individual sets, changeable. The list of who reacted is visible.
+- Two feeds, switched by a segmented control or a horizontal swipe anywhere on the page: **Friends** and **Public** (ranked by recency and proximity, public and approved check-ins only). Both lists stay rendered side by side and follow the finger, so switching is instant; a short or quick swipe is enough. Both require login. Proximity = city of the user's last check-in, current GPS only if permitted.
+- **Friends** is chronological and includes your own check-ins and imported history. Imported check-ins are sorted by the date of their event, not by when they were imported. The public feed leaves imported history out.
+- Feed card = one event check-in, read like an Untappd check-in: the event as a small flyer (red-blue glow per event, ticket-style date, name in the display font), venue and promoters, compact rated sets below, unrated sets as a lineup of artist chips, photo carousel, badges, reactions. Your own cards show your top fun facts; others never see fun facts.
+- **Reactions:** one per user and target, on the event check-in and on individual sets, changeable. The reactions of a set open on tap. The list of who reacted is visible. You can't react to your own check-ins.
 - Mutual friendships. Add via the `/u/{username}` link or QR code (permanent per username), plus search.
 - Tagged friends get a request and can adopt the check-in with one tap (event and sets prefilled, own rating required).
 - **Going** for upcoming events, with the list of friends going too. **Wishlist** ("want to see") for artists.
 - Friends leaderboards per month and year (most events, sets, unique artists). Only verified check-ins count (GPS or admin).
 - Compare with friends: sets and events seen together, taste match in percent (overlap of artists and genres).
 - **Block:** hides both sides from each other and ends a friendship. Muting comes later.
+
+### Discover
+
+- One search for everything: events, artists, venues and promoters. People are found through the friends search.
+- Categories to browse: upcoming events, artists by genre, genres, venues by city, promoters.
 
 ### Notifications
 
@@ -201,7 +223,7 @@ Retroactive check-ins for past events use the same flow, just without GPS verifi
 
 - Headline numbers: events, sets, unique artists, venues, cities, countries, promoters, average rating, verified check-ins.
 - Genre split by sets and by events, top artists, top venues, top promoters, most frequent B2B combinations.
-- Map of all visited venues, calendar heatmap, streaks (consecutive weekends).
+- Map of all visited venues (loads only on request), calendar heatmap with one row per month so a year fits without scrolling, offering only years with events, streaks (consecutive weekends).
 - Travel km: visible only from 10 check-ins, calculated from a freely chosen home region (city only, with coordinates taken from the known venues of that city), shown only as a total – never per event, so the home location can't be inferred.
 - **Explorer:** free grouping (artist, genre, subgenre, venue, city, country, promoter, series, set type, tag, month, year, weekday), filters and time range; output as table and chart.
 
@@ -314,6 +336,7 @@ Rules that can't be expressed this way get a named SQL function (`custom: "duo_c
 | Genre | Bunker Kid | Same for techno | 5, 10, 25, 50, 100 |
 | Genre | House Head | Same for house | 5, 10, 25, 50, 100 |
 | Genre | Wobble Warrior | Same for dubstep | 5, 10, 25, 50 |
+| Genre | 4x4 Fan, Bounce Fan, UKG Fan | Same for 4x4, bounce (under techno) and UKG | 5, 10, 25, 50 |
 | Genre | Genre Hopper | Unique subgenres | 5, 10, 15, 20 |
 | Set format | Back to Back | B2B sets seen | 5, 10, 25 |
 | Set format | Triple Threat | B2B2B set seen | 1 |
